@@ -122,6 +122,82 @@ static void mainwindow_resize_windows(MAIN_WINDOW_REC *window)
 		signal_emit("mainwindow resized", 1, window);
 }
 
+static void print_window_image(void)
+{
+	int max_col, max_row, row, col;
+	int *screen;
+	GSList *tmp;
+
+	max_col = max_row = -1;
+	for (tmp = mainwindows; tmp != NULL; tmp = tmp->next) {
+		MAIN_WINDOW_REC *win = tmp->data;
+		if (win->last_column >= max_col) max_col = win->last_column + 1;
+		if (win->last_line >= max_row) max_row = win->last_line + 1;
+	}
+	
+	fprintf(stderr, "screen size: w%3d h%3d term size: w%3d h%3d win size: w%3d h%3d\n",
+		screen_width, screen_height, term_width, term_height, max_col, max_row);
+	for (tmp = mainwindows; tmp != NULL; tmp = tmp->next) {
+		int num, i;
+		MAIN_WINDOW_REC *win;
+		char out[7] = {0};
+
+		win = tmp->data;
+		num = win->active ? win->active->refnum : -1;
+
+		fprintf(stderr, "window %3d: ", num);
+		if (num == -1) num = 8;
+		g_unichar_to_utf8(0x2800 | (1<<(num-1)), out);
+		for (i = 0; i < 10; i++) fprintf(stderr, "%s", out);
+		fprintf(stderr, " w%3d[%3d..%3d] h%3d[%3d..%3d]\n",
+			win->width, win->first_column, win->last_column,
+			win->height, win->first_line, win->last_line);
+	}
+
+	screen = g_new0(int, max_col * max_row);
+	for (tmp = mainwindows; tmp != NULL; tmp = tmp->next) {
+		int num;
+		MAIN_WINDOW_REC *win;
+		win = tmp->data;
+		num = win->active ? win->active->refnum : 8;
+
+		for (col = win->first_column; col <= win->last_column; ++col) {
+			for (row = win->first_line; row <= win->last_line; ++row) {
+				screen[ col + max_col * row ] |= (1<<(num-1));
+			}
+		}
+	}
+	fprintf(stderr, "   /");
+	for (col = 0; col < max_col; ++col) {
+		fprintf(stderr, "%d", col % 10);
+	}
+	fprintf(stderr, "\\\n");
+	for (row = 0; row < max_row; ++row) {
+		fprintf(stderr, "%3d|", row);
+		for (col = 0; col < max_col; ++col) {
+			char out[7] = {0};
+			g_unichar_to_utf8(0x2800 | screen[ col + max_col * row ], out);
+			fprintf(stderr, "%s", out);
+		}
+		fprintf(stderr, "|%3d\n", row);
+	}
+	fprintf(stderr, "   \\");
+	for (col = 0; col < max_col; ++col) {
+		switch (col % 10) {
+		case 8:
+			if (col+2 >= 100)
+				fprintf(stderr, "%d", (col+2) / 100);
+			else
+				fprintf(stderr, " ");
+			break;
+		case 9: fprintf(stderr, "%d", ((col+1) % 100) / 10); break;
+		case 0: fprintf(stderr, "0"); break;
+		default: fprintf(stderr, "-");
+		}
+	}
+	fprintf(stderr, "/\n\n");
+}
+
 static void mainwindow_resize(MAIN_WINDOW_REC *window, int xdiff, int ydiff)
 {
 	int height, width;
@@ -133,9 +209,11 @@ static void mainwindow_resize(MAIN_WINDOW_REC *window, int xdiff, int ydiff)
 	window->width = window->last_column-window->first_column+1;
 	window->height = window->last_line-window->first_line+1;
 	if (height != window->height || width != window->width) {
-		g_warning("Resizing window %p W:%d expected:%d H:%d expected:%d",
+		fprintf(stderr, "Resizing window %p W:%3d expected:%3d H:%3d expected:%3d\n",
 			  window, window->width, width, window->height, height);
 	}
+	fprintf(stderr, "Resizing window refnum %d\n", window->active ? window->active->refnum : -1);
+	print_window_image();
 	window->size_dirty = TRUE;
 }
 
@@ -276,6 +354,8 @@ MAIN_WINDOW_REC *mainwindow_create(int right)
 
 	mainwindows = g_slist_append(mainwindows, rec);
 	signal_emit("mainwindow created", 1, rec);
+	fprintf(stderr, "created new window %p refnum %d\n", rec, rec->active ? rec->active->refnum : -1);
+	print_window_image();
 	return rec;
 }
 
@@ -1287,6 +1367,13 @@ static void window_balance_vertical(void)
 	for (stmp = sorted; stmp != NULL; stmp = stmp->next) {
 		win = stmp->data;
 		line = mainwindows_get_line(win);
+
+		fprintf(stderr, "bala l w:%d [", win->active ? win->active->refnum : -1);
+		for (ltmp = line; ltmp != NULL; ltmp = ltmp->next) {
+			MAIN_WINDOW_REC *rec = ltmp->data;
+			fprintf(stderr, "%d%c", rec->active ? rec->active->refnum : -1, ltmp->next ? ',' : ']');
+		}
+		fprintf(stderr, "\n");
 
 		for (ltmp = line; ltmp != NULL; ltmp = ltmp->next) {
 			MAIN_WINDOW_REC *rec = ltmp->data;
