@@ -71,7 +71,7 @@ static NETSPLIT_SERVER_REC *netsplit_server_create(IRC_SERVER_REC *server,
 	rec->destserver = g_strdup(destserver);
 
 	server->split_servers = g_slist_append(server->split_servers, rec);
-	signal_emit("netsplit server new", 2, server, rec);
+	signal_emit__netsplit_server_new(server, rec);
 
 	return rec;
 }
@@ -83,7 +83,7 @@ static void netsplit_server_destroy(IRC_SERVER_REC *server,
 
 	server->split_servers = g_slist_remove(server->split_servers, rec);
 
-	signal_emit("netsplit server remove", 2, server, rec);
+	signal_emit__netsplit_server_remove(server, rec);
 
         g_free(rec->server);
 	g_free(rec->destserver);
@@ -145,7 +145,7 @@ static NETSPLIT_REC *netsplit_add(IRC_SERVER_REC *server, const char *nick,
 
 	g_hash_table_insert(server->splits, rec->nick, rec);
 
-	signal_emit("netsplit new", 1, rec);
+	signal_emit__netsplit_new(rec);
 	return rec;
 }
 
@@ -156,7 +156,7 @@ static void netsplit_destroy(IRC_SERVER_REC *server, NETSPLIT_REC *rec)
 	g_return_if_fail(IS_IRC_SERVER(server));
 	g_return_if_fail(rec != NULL);
 
-	signal_emit("netsplit remove", 1, rec);
+	signal_emit__netsplit_remove(rec);
 	for (tmp = rec->channels; tmp != NULL; tmp = tmp->next) {
 		NETSPLIT_CHAN_REC *rec = tmp->data;
 

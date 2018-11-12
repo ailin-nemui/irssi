@@ -212,7 +212,7 @@ char *word_complete(WINDOW_REC *window, const char *line, int *pos, int erase, i
 	}
 
 	if (erase) {
-		signal_emit("complete erase", 3, window, word, linestart);
+		signal_emit__complete_erase(window, word, linestart);
 
                 /* jump to next completion */
                 startpos = old_startpos;
@@ -233,7 +233,7 @@ char *word_complete(WINDOW_REC *window, const char *line, int *pos, int erase, i
 		free_completions();
 
 		want_space = TRUE;
-		signal_emit("complete word", 5, &complist, window, word, linestart, &want_space);
+		signal_emit__complete_word(&complist, window, word, linestart, &want_space);
 		last_want_space = want_space;
 
 		if (complist != NULL) {
@@ -850,7 +850,7 @@ static void cmd_completion(const char *data)
 			    TXT_COMPLETION_REMOVED, key);
 
 		iconfig_set_str("completions", key, NULL);
-		signal_emit("completion removed", 1, key);
+		signal_emit__completion_removed(key);
 	} else if (*key != '\0' && *value != '\0') {
 		int automatic = g_hash_table_lookup(optlist, "auto") != NULL;
 
@@ -865,7 +865,7 @@ static void cmd_completion(const char *data)
 			    TXT_COMPLETION_LINE,
 			    key, value, automatic ? "yes" : "no");
 
-		signal_emit("completion added", 1, key);
+		signal_emit__completion_added(key);
 	} else {
 		printformat(NULL, NULL, MSGLEVEL_CLIENTCRAP,
 			    TXT_COMPLETION_HEADER);

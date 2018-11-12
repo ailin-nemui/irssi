@@ -49,8 +49,7 @@ int cmd_options_get_level(const char *cmd, GHashTable *optlist)
 		level = level_get(list->data);
 		if (level == 0) {
 			/* unknown option */
-			signal_emit("error command", 2,
-				    GINT_TO_POINTER(CMDERR_OPTION_UNKNOWN),
+			signal_emit__error_command(GINT_TO_POINTER(CMDERR_OPTION_UNKNOWN),
 				    list->data);
 			retlevel = -1;
                         break;

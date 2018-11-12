@@ -159,7 +159,6 @@ static char *tls_text_name(X509_NAME *name, int nid)
 	return result;
 }
 
-
 /** check if a hostname in the certificate matches the hostname we used for the connection */
 static gboolean match_hostname(const char *cert_hostname, const char *hostname)
 {
@@ -809,7 +808,6 @@ GIOChannel *net_start_ssl(SERVER_REC *server)
 	return ssl_handle;
 }
 
-
 int irssi_ssl_handshake(GIOChannel *handle)
 {
 	GIOSSLChannel *chan = (GIOSSLChannel *)handle;
@@ -887,7 +885,7 @@ int irssi_ssl_handshake(GIOChannel *handle)
 	set_server_temporary_key_info(tls, chan->ssl);
 
 	/* Emit the TLS rec. */
-	signal_emit("tls handshake finished", 2, chan->server, tls);
+	signal_emit__tls_handshake_finished(chan->server, tls);
 
 	ret = 1;
 

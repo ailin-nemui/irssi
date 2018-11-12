@@ -722,7 +722,7 @@ static void event_connected(IRC_SERVER_REC *server, const char *data, const char
 		server->wanted_usermode = g_strdup(server->connrec->usermode);
 	}
 
-	signal_emit("event connected", 1, server);
+	signal_emit__event_connected(server);
 	g_free(params);
 }
 
@@ -789,7 +789,6 @@ static void parse_prefix(IRC_SERVER_REC *server, const char *sptr)
 		sptr++; eptr++;
 	}
 }
-
 
 static void event_isupport(IRC_SERVER_REC *server, const char *data)
 {

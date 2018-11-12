@@ -74,7 +74,7 @@ static void sig_dcc_request(GET_DCC_REC *dcc, const char *nickaddr)
 			      stat(file, &statbuf) == 0 ?
 			      "RESUME %s \"%s\"" : "GET %s \"%s\"",
 			      dcc->nick, esc_arg);
-	signal_emit("command dcc", 2, str, dcc->server);
+	signal_emit__command_dcc(str, dcc->server);
 	g_free(esc_arg);
         g_free(file);
 	g_free(str);

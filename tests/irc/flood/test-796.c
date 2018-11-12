@@ -55,7 +55,7 @@ static void cmd_echo(const char *data, void *server, WI_ITEM_REC *item)
 
 static void sig_public(SERVER_REC *server, const char *msg, const char *nick, const char *address, const char *target)
 {
-	signal_emit("send command", 3, "/eval echo $tag", server, NULL);
+	signal_emit__send_command("/eval echo $tag", server, NULL);
 }
 
 static void print_disconnect(SERVER_REC *server)
@@ -130,7 +130,6 @@ static void test_server_destroy_flood(ServerDestroyFloodData *fixture, const voi
 	irc_session_deinit();
 	irc_irc_deinit();
 
-
 	server_connect_finished(server);
 
 	/* make up for the skipped session init */
@@ -150,7 +149,7 @@ static void test_server_destroy_flood(ServerDestroyFloodData *fixture, const voi
 	*/
 
 	server_ref(server);
-	signal_emit("event privmsg", 4, server, "#someroom :test message", "nick", "user@host");
+	signal_emit__event_privmsg(server, "#someroom :test message", "nick", "user@host");
 	server_unref(server);
 
 	g_log_set_always_fatal(loglev);

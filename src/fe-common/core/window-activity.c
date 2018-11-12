@@ -46,10 +46,10 @@ void window_activity(WINDOW_REC *window, int data_level,
 		window->data_level = data_level;
                 g_free_not_null(window->hilight_color);
 		window->hilight_color = g_strdup(hilight_color);
-		signal_emit("window hilight", 1, window);
+		signal_emit__window_hilight(window);
 	}
 
-	signal_emit("window activity", 2, window,
+	signal_emit__window_activity(window,
 		    GINT_TO_POINTER(old_data_level));
 }
 
@@ -63,10 +63,10 @@ void window_item_activity(WI_ITEM_REC *item, int data_level,
 		item->data_level = data_level;
                 g_free_not_null(item->hilight_color);
 		item->hilight_color = g_strdup(hilight_color);
-		signal_emit("window item hilight", 1, item);
+		signal_emit__window_item_hilight(item);
 	}
 
-	signal_emit("window item activity", 2, item,
+	signal_emit__window_item_activity(item,
 		    GINT_TO_POINTER(old_data_level));
 }
 

@@ -70,7 +70,7 @@ static void perl_script_destroy(PERL_SCRIPT_REC *script)
 	perl_signal_remove_script(script);
 	perl_source_remove_script(script);
 
-	signal_emit("script destroyed", 1, script);
+	signal_emit__script_destroyed(script);
 
 	g_free(script->name);
 	g_free(script->package);
@@ -250,7 +250,7 @@ static int perl_script_eval(PERL_SCRIPT_REC *script)
 
 		if (error != NULL) {
 			error = g_strdup(error);
-			signal_emit("script error", 2, script, error);
+			signal_emit__script_error(script, error);
 			g_free(error);
 		}
 	}
@@ -279,7 +279,7 @@ static PERL_SCRIPT_REC *script_load(char *name, const char *path,
         script->data = g_strdup(data);
 
 	perl_scripts = g_slist_append(perl_scripts, script);
-	signal_emit("script created", 1, script);
+	signal_emit__script_created(script);
 
 	if (!perl_script_eval(script))
                 script = NULL; /* the script is destroyed in "script error" signal */
@@ -428,8 +428,8 @@ static void sig_script_error(PERL_SCRIPT_REC *script, const char *error)
 	if (print_script_errors) {
 		str = g_strdup_printf("Script '%s' error:",
 				      script == NULL ? "??" : script->name);
-		signal_emit("gui dialog", 2, "error", str);
-		signal_emit("gui dialog", 2, "error", error);
+		signal_emit__gui_dialog("error", str);
+		signal_emit__gui_dialog("error", error);
                 g_free(str);
 	}
 

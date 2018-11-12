@@ -53,7 +53,6 @@ static int screen_width, screen_height;
 			 (window)->width - (window)->statusbar_columns, \
 			 (window)->height - (window)->statusbar_lines);
 
-
 static MAIN_WINDOW_REC *find_window_with_room()
 {
 	MAIN_WINDOW_REC *biggest_rec;
@@ -119,7 +118,7 @@ static void mainwindow_resize_windows(MAIN_WINDOW_REC *window)
 	}
 
 	if (resized)
-		signal_emit("mainwindow resized", 1, window);
+		signal_emit__mainwindow_resized(window);
 }
 
 static void mainwindow_resize(MAIN_WINDOW_REC *window, int xdiff, int ydiff)
@@ -275,7 +274,7 @@ MAIN_WINDOW_REC *mainwindow_create(int right)
 	term_refresh(NULL);
 
 	mainwindows = g_slist_append(mainwindows, rec);
-	signal_emit("mainwindow created", 1, rec);
+	signal_emit__mainwindow_created(rec);
 	return rec;
 }
 
@@ -530,7 +529,7 @@ static void mainwindow_destroy_full(MAIN_WINDOW_REC *window, int respace)
 	g_return_if_fail(window != NULL);
 
 	mainwindows = g_slist_remove(mainwindows, window);
-	signal_emit("mainwindow destroyed", 1, window);
+	signal_emit__mainwindow_destroyed(window);
 
         term_window_destroy(window->screen_win);
 
@@ -696,7 +695,7 @@ static void mainwindows_resize_smaller(int ydiff)
 				win->size_dirty = TRUE;
 				win->first_line += ydiff;
 				win->last_line += ydiff;
-				signal_emit("mainwindow moved", 1, win);
+				signal_emit__mainwindow_moved(win);
 			}
 		} else {
 			if (space > -ydiff) space = -ydiff;

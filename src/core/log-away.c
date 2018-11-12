@@ -90,7 +90,7 @@ static void awaylog_close(void)
 	/* Flush the dirty buffers to disk before showing the away log */
 	write_buffer_flush();
 
-	signal_emit("awaylog show", 3, log, GINT_TO_POINTER(away_msgs),
+	signal_emit__awaylog_show(log, GINT_TO_POINTER(away_msgs),
 		    GINT_TO_POINTER(away_filepos));
 	log_close(log);
 }

@@ -309,7 +309,7 @@ static void channel_checksync(IRC_CHANNEL_REC *channel)
 	}
 
 	channel->synced = TRUE;
-	signal_emit("channel sync", 1, channel);
+	signal_emit__channel_sync(channel);
 }
 
 /* Error occurred when trying to execute query - abort and try again. */
@@ -449,7 +449,7 @@ static void event_end_of_who(IRC_SERVER_REC *server, const char *data)
 			failed = TRUE;
 		} else {
 			chanrec->wholist = TRUE;
-			signal_emit("channel wholist", 1, chanrec);
+			signal_emit__channel_wholist(chanrec);
 			channel_got_query(chanrec, CHANNEL_QUERY_WHO);
 		}
 	}

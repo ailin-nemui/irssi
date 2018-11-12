@@ -171,13 +171,13 @@ void command_bind_full(const char *module, int priority, const char *cmd,
 		g_free(str);
 	}
 
-	signal_emit("commandlist new", 1, rec);
+	signal_emit__commandlist_new(rec);
 }
 
 static void command_free(COMMAND_REC *rec)
 {
 	commands = g_slist_remove(commands, rec);
-	signal_emit("commandlist remove", 1, rec);
+	signal_emit__commandlist_remove(rec);
 
 	g_free_not_null(rec->category);
 	g_strfreev(rec->options);
@@ -285,8 +285,7 @@ static const char *command_expand(char *cmd)
 	}
 
 	if (multiple) {
-		signal_emit("error command", 2,
-			    GINT_TO_POINTER(CMDERR_AMBIGUOUS), cmd);
+		signal_emit__error_command(GINT_TO_POINTER(CMDERR_AMBIGUOUS), cmd);
 		return NULL;
 	}
 
@@ -305,7 +304,7 @@ void command_runsub(const char *cmd, const char *data,
 
 	if (*data == '\0') {
                 /* no subcommand given - list the subcommands */
-		signal_emit("list subcommands", 1, cmd);
+		signal_emit__list_subcommands(cmd);
 		return;
 	}
 
@@ -329,8 +328,7 @@ void command_runsub(const char *cmd, const char *data,
 	if (!signal_emit(subcmd, 3, args, server, item)) {
 		defcmd = g_strdup_printf("default command %s", cmd);
 		if (!signal_emit(defcmd, 3, data, server, item)) {
-			signal_emit("error command", 2,
-				    GINT_TO_POINTER(CMDERR_UNKNOWN), subcmd+8);
+			signal_emit__error_command(GINT_TO_POINTER(CMDERR_UNKNOWN), subcmd+8);
 		}
                 g_free(defcmd);
 	}
@@ -769,7 +767,7 @@ int cmd_get_params(const char *data, gpointer *free_me, int count, ...)
 	va_end(args);
 
 	if (error) {
-                signal_emit("error command", 2, GINT_TO_POINTER(error), datad);
+                signal_emit__error_command(GINT_TO_POINTER(error), datad);
 		signal_stop();
 
                 cmd_params_free(rec);
@@ -891,8 +889,7 @@ static void parse_command(const char *command, int expand_aliases,
 	if (rec != NULL && !cmd_protocol_match(rec, server)) {
 		g_free(orig);
 
-		signal_emit("error command", 1,
-			    GINT_TO_POINTER(server == NULL ?
+		signal_emit__error_command(GINT_TO_POINTER(server == NULL ?
 					    CMDERR_NOT_CONNECTED :
 					    CMDERR_ILLEGAL_PROTO));
 		return;
@@ -935,7 +932,7 @@ static void event_command(const char *line, SERVER_REC *server, void *item)
 	}
 	if (cmdchar == NULL) {
 		/* non-command - let someone else handle this */
-		signal_emit("send text", 3, line, server, item);
+		signal_emit__send_text(line, server, item);
 		return;
 	}
 
@@ -960,7 +957,6 @@ static void cmd_eval(const char *data, SERVER_REC *server, void *item)
 	g_return_if_fail(data != NULL);
 	if (eval_recursion_depth > 100)
 		cmd_return_error(CMDERR_EVAL_MAX_RECURSE);
-
 
 	eval_recursion_depth++;
 	eval_special_string(data, "", server, item);

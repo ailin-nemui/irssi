@@ -138,7 +138,7 @@ void hilight_create(HILIGHT_REC *rec)
 
 	hilight_init_rec(rec);
 
-	signal_emit("hilight created", 1, rec);
+	signal_emit__hilight_created(rec);
 }
 
 void hilight_remove(HILIGHT_REC *rec)
@@ -148,7 +148,7 @@ void hilight_remove(HILIGHT_REC *rec)
 	hilight_remove_config(rec);
 	hilights = g_slist_remove(hilights, rec);
 
-	signal_emit("hilight destroyed", 1, rec);
+	signal_emit__hilight_destroyed(rec);
 	hilight_destroy(rec);
 }
 
@@ -401,7 +401,7 @@ static void sig_print_text(TEXT_DEST_REC *dest, const char *text,
 		g_string_free(tmp, FALSE);
 	}
 
-	signal_emit("print text", 3, dest, newstr, stripped);
+	signal_emit__print_text(dest, newstr, stripped);
 
 	g_free(color);
 	g_free(newstr);

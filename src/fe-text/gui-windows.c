@@ -100,7 +100,7 @@ static void gui_window_created(WINDOW_REC *window, void *automatic)
 	     (new_parent && settings_get_bool("autostick_split_windows"))))
 		gui_window_set_sticky(window);
 
-	signal_emit("gui window created", 1, window);
+	signal_emit__gui_window_created(window);
 }
 
 static void gui_window_destroyed(WINDOW_REC *window)
@@ -115,7 +115,7 @@ static void gui_window_destroyed(WINDOW_REC *window)
 
 	gui_window_set_unsticky(window);
 
-	signal_emit("gui window destroyed", 1, window);
+	signal_emit__gui_window_destroyed(window);
 
 	gui_window_deinit(gui);
 	window->gui_data = NULL;
@@ -146,7 +146,7 @@ void gui_window_scroll(WINDOW_REC *window, int lines)
 	g_return_if_fail(window != NULL);
 
         textbuffer_view_scroll(WINDOW_GUI(window)->view, lines);
-	signal_emit("gui page scrolled", 1, window);
+	signal_emit__gui_page_scrolled(window);
 }
 
 void gui_window_scroll_line(WINDOW_REC *window, LINE_REC *line)
@@ -155,7 +155,7 @@ void gui_window_scroll_line(WINDOW_REC *window, LINE_REC *line)
 	g_return_if_fail(line != NULL);
 
         textbuffer_view_scroll_line(WINDOW_GUI(window)->view, line);
-	signal_emit("gui page scrolled", 1, window);
+	signal_emit__gui_page_scrolled(window);
 }
 
 void gui_window_set_sticky(WINDOW_REC *window)

@@ -128,7 +128,7 @@ void irc_core_init(void)
 
 void irc_core_deinit(void)
 {
-	signal_emit("chat protocol deinit", 1, chat_protocol_find("IRC"));
+	signal_emit__chat_protocol_deinit(chat_protocol_find("IRC"));
 
 	sasl_deinit();
 	cap_deinit();

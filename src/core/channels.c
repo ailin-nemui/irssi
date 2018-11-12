@@ -66,7 +66,7 @@ void channel_init(CHANNEL_REC *channel, SERVER_REC *server, const char *name,
 	channels = g_slist_append(channels, channel);
 	server->channels = g_slist_append(server->channels, channel);
 
-	signal_emit("channel created", 2, channel, GINT_TO_POINTER(automatic));
+	signal_emit__channel_created(channel, GINT_TO_POINTER(automatic));
 }
 
 void channel_destroy(CHANNEL_REC *channel)
@@ -80,7 +80,7 @@ void channel_destroy(CHANNEL_REC *channel)
 	channel->server->channels =
 		g_slist_remove(channel->server->channels, channel);
 
-	signal_emit("channel destroyed", 1, channel);
+	signal_emit__channel_destroyed(channel);
 
         MODULE_DATA_DEINIT(channel);
 	g_free_not_null(channel->hilight_color);
@@ -138,7 +138,7 @@ void channel_change_name(CHANNEL_REC *channel, const char *name)
 	g_free(channel->name);
 	channel->name = g_strdup(name);
 
-	signal_emit("channel name changed", 1, channel);
+	signal_emit__channel_name_changed(channel);
 }
 
 void channel_change_visible_name(CHANNEL_REC *channel, const char *name)
@@ -148,7 +148,7 @@ void channel_change_visible_name(CHANNEL_REC *channel, const char *name)
 	g_free(channel->visible_name);
 	channel->visible_name = g_strdup(name);
 
-	signal_emit("window item name changed", 1, channel);
+	signal_emit__window_item_name_changed(channel);
 }
 
 static CHANNEL_REC *channel_find_servers(GSList *servers, const char *name)

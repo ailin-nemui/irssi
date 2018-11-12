@@ -54,8 +54,7 @@ static void dcc_queue_send_next(int queue)
 
 		if (server == NULL && qrec->chat == NULL) {
 			/* no way to send this request */
-			signal_emit("dcc error send no route", 2,
-				    qrec->nick, qrec->file);
+			signal_emit__dcc_error_send_no_route(qrec->nick, qrec->file);
 		} else {
 			send_started = dcc_send_one_file(queue, qrec->nick,
 							 qrec->file, server,
@@ -129,8 +128,7 @@ static void dcc_send_add(const char *servertag, CHAT_DCC_REC *chat,
 		}
 
 		if (ret < 0) {
-			signal_emit("dcc error file open", 3,
-				    nick, fname, errno);
+			signal_emit__dcc_error_file_open(nick, fname, errno);
 			g_free(fname);
 			continue;
 		}
@@ -278,7 +276,7 @@ static void dcc_send_data(SEND_DCC_REC *dcc)
 
 	lseek(dcc->fhandle, dcc->transfd, SEEK_SET);
 
-	signal_emit("dcc transfer update", 1, dcc);
+	signal_emit__dcc_transfer_update(dcc);
 }
 
 /* input function: DCC SEND - received some data */
@@ -341,7 +339,7 @@ static void dcc_send_connected(SEND_DCC_REC *dcc)
 	dcc->tagwrite = g_input_add(handle, G_INPUT_WRITE,
 				    (GInputFunction) dcc_send_data, dcc);
 
-	signal_emit("dcc connected", 1, dcc);
+	signal_emit__dcc_connected(dcc);
 }
 
 /* input function: DCC SEND - connect to the receiver (passive protocol) */
@@ -358,10 +356,10 @@ static void dcc_send_connect(SEND_DCC_REC *dcc)
 		dcc->tagwrite = g_input_add(dcc->handle, G_INPUT_WRITE,
 					    (GInputFunction) dcc_send_data,
 					    dcc);
-		signal_emit("dcc connected", 1, dcc);
+		signal_emit__dcc_connected(dcc);
 	} else {
 		/* error connecting */
-		signal_emit("dcc error connect", 1, dcc);
+		signal_emit__dcc_error_connect(dcc);
 		dcc_destroy(DCC(dcc));
 	}
 }
@@ -379,7 +377,7 @@ static int dcc_send_one_file(int queue, const char *target, const char *fname,
 	GIOChannel *handle;
 
 	if (dcc_find_request(DCC_SEND_TYPE, target, fname)) {
-		signal_emit("dcc error send exists", 2, target, fname);
+		signal_emit__dcc_error_send_exists(target, fname);
 		return FALSE;
 	}
 
@@ -388,7 +386,7 @@ static int dcc_send_one_file(int queue, const char *target, const char *fname,
 	g_free(str);
 
 	if (hfile == -1) {
-		signal_emit("dcc error file open", 3, target, fname,
+		signal_emit__dcc_error_file_open(target, fname,
 			    GINT_TO_POINTER(errno));
 		return FALSE;
 	}
@@ -446,8 +444,7 @@ static int dcc_send_one_file(int queue, const char *target, const char *fname,
 	}
 
 	/* send DCC request */
-	signal_emit("dcc request send", 1, dcc);
-
+	signal_emit__dcc_request_send(dcc);
 
 	dcc_ip2str(&own_ip, host);
 	if (passive == FALSE) {

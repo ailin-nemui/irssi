@@ -474,7 +474,7 @@ static void sig_init_finished(void)
 {
 	fe_initialized = TRUE;
 	if (last_errors != NULL) {
-		signal_emit("settings errors", 1, last_errors->str);
+		signal_emit__settings_errors(last_errors->str);
 		g_string_free(last_errors, TRUE);
 	}
 
@@ -486,7 +486,7 @@ static void sig_init_finished(void)
 		signal_emit("setup changed", 0);
 	}
 
-	signal_emit("settings userinfo changed", 1, GUINT_TO_POINTER(user_settings_changed));
+	signal_emit__settings_userinfo_changed(GUINT_TO_POINTER(user_settings_changed));
 }
 
 static void settings_clean_invalid_module(const char *module)
@@ -613,7 +613,7 @@ void settings_check_module(const char *module)
 					       g_strdup(module));
 		}
 		if (fe_initialized)
-                        signal_emit("settings errors", 1, errors->str);
+                        signal_emit__settings_errors(errors->str);
 		else {
 			if (last_errors == NULL)
 				last_errors = g_string_new(NULL);
@@ -655,7 +655,7 @@ void sig_term(int n)
 	signal(SIGTERM, SIG_DFL);
 
 	/* quit from all servers too.. */
-	signal_emit("command quit", 1, "");
+	signal_emit__command_quit("");
 
 	/* and die */
 	raise(SIGTERM);
@@ -738,7 +738,7 @@ static CONFIG_REC *parse_configfile(const char *fname)
 	if (config == NULL) {
 		str = g_strdup_printf("Error opening configuration file %s: %s",
 				      path, g_strerror(errno));
-		signal_emit("gui dialog", 2, "error", str);
+		signal_emit__gui_dialog("error", str);
                 g_free(str);
 
 		config = config_open(NULL, -1);
@@ -778,7 +778,7 @@ static void init_configfile(void)
 	if (config_last_error(mainconfig) != NULL) {
 		str = g_strdup_printf("Ignored errors in configuration file:\n%s",
 				      config_last_error(mainconfig));
-		signal_emit("gui dialog", 2, "error", str);
+		signal_emit__gui_dialog("error", str);
                 g_free(str);
 	}
 
@@ -795,14 +795,14 @@ int settings_reread(const char *fname)
         g_free_not_null(str);
 
 	if (tempconfig == NULL) {
-		signal_emit("gui dialog", 2, "error", g_strerror(errno));
+		signal_emit__gui_dialog("error", g_strerror(errno));
 		return FALSE;
 	}
 
 	if (config_last_error(tempconfig) != NULL) {
 		str = g_strdup_printf("Errors in configuration file:\n%s",
 				      config_last_error(tempconfig));
-		signal_emit("gui dialog", 2, "error", str);
+		signal_emit__gui_dialog("error", str);
 		g_free(str);
 
 		config_close(tempconfig);
@@ -814,7 +814,7 @@ int settings_reread(const char *fname)
 	config_last_modifycounter = mainconfig->modifycounter;
 
 	signal_emit("setup changed", 0);
-	signal_emit("setup reread", 1, mainconfig->fname);
+	signal_emit__setup_reread(mainconfig->fname);
         return TRUE;
 }
 
@@ -832,10 +832,10 @@ int settings_save(const char *fname, int autosave)
 	if (error) {
 		str = g_strdup_printf("Couldn't save configuration file: %s",
 				      config_last_error(mainconfig));
-		signal_emit("gui dialog", 2, "error", str);
+		signal_emit__gui_dialog("error", str);
 		g_free(str);
 	}
-	signal_emit("setup saved", 2, fname, GINT_TO_POINTER(autosave));
+	signal_emit__setup_saved(fname, GINT_TO_POINTER(autosave));
         return !error;
 }
 
@@ -856,7 +856,7 @@ static int sig_autosave(void)
 				      "configuration to file '%s' instead. "
 				      "Use /SAVE or /RELOAD to get rid of "
 				      "this message.", fname);
-		signal_emit("gui dialog", 2, "warning", str);
+		signal_emit__gui_dialog("warning", str);
 		g_free(str);
 
                 settings_save(fname, TRUE);

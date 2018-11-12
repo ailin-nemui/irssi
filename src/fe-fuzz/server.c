@@ -93,7 +93,7 @@ void event_connected(IRC_SERVER_REC *server, const char *data, const char *from)
 		server->wanted_usermode = g_strdup(server->connrec->usermode);
 	}
 
-	signal_emit("event connected", 1, server);
+	signal_emit__event_connected(server);
 	g_free(params);
 }
 
@@ -165,7 +165,7 @@ int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
 		} else {
 			prefixedLine = g_strdup_printf("%s\n", *lines);
 		}
-		signal_emit("server incoming", 2, server, prefixedLine);
+		signal_emit__server_incoming(server, prefixedLine);
 		g_free(prefixedLine);
 	}
 

@@ -61,8 +61,7 @@ static void event_privmsg(IRC_SERVER_REC *server, const char *data,
 
 		/* pass the original target to the signal, with the @+ here
 		 * the other one is only needed for recode_in*/
-		signal_emit("message irc op_public", 5,
-			    server, recoded, nick, addr, target);
+		signal_emit__message_irc_op_public(server, recoded, nick, addr, target);
 	} else {
 		recoded = recode_in(SERVER(server), msg, server_ischannel(SERVER(server), target) ? target : nick);
 		signal_emit(server_ischannel(SERVER(server), target) ?
@@ -83,8 +82,7 @@ static void ctcp_action(IRC_SERVER_REC *server, const char *data,
 
 	g_return_if_fail(data != NULL);
 	recoded = recode_in(SERVER(server), data, target);
-	signal_emit("message irc action", 5,
-		    server, recoded, nick, addr,
+	signal_emit__message_irc_action(server, recoded, nick, addr,
 		    get_visible_target(server, target));
 	g_free(recoded);
 }
@@ -104,7 +102,7 @@ static void event_notice(IRC_SERVER_REC *server, const char *data,
 			server->real_address;
 	}
 
-	signal_emit("message irc notice", 5, server, recoded, nick, addr,
+	signal_emit__message_irc_notice(server, recoded, nick, addr,
 		    get_visible_target(server, target));
 	g_free(params);
 	g_free(recoded);
@@ -121,7 +119,7 @@ static void event_join(IRC_SERVER_REC *server, const char *data,
 	tmp = strchr(channel, 7); /* ^G does something weird.. */
 	if (tmp != NULL) *tmp = '\0';
 
-	signal_emit("message join", 4, server,
+	signal_emit__message_join(server,
 		    get_visible_target(server, channel), nick, addr);
 	g_free(params);
 }
@@ -136,7 +134,7 @@ static void event_part(IRC_SERVER_REC *server, const char *data,
 	params = event_get_params(data, 2 | PARAM_FLAG_GETREST,
 				  &channel, &reason);
 	recoded = recode_in(SERVER(server), reason, channel);
-	signal_emit("message part", 5, server,
+	signal_emit__message_part(server,
 		    get_visible_target(server, channel), nick, addr, recoded);
 	g_free(params);
 	g_free(recoded);
@@ -151,7 +149,7 @@ static void event_quit(IRC_SERVER_REC *server, const char *data,
 
 	if (*data == ':') data++; /* quit message */
 	recoded = recode_in(SERVER(server), data, nick);
-	signal_emit("message quit", 4, server, nick, addr, recoded);
+	signal_emit__message_quit(server, nick, addr, recoded);
 	g_free(recoded);
 }
 
@@ -165,8 +163,7 @@ static void event_kick(IRC_SERVER_REC *server, const char *data,
 	params = event_get_params(data, 3 | PARAM_FLAG_GETREST,
 				  &channel, &nick, &reason);
 	recoded = recode_in(SERVER(server), reason, channel);
-	signal_emit("message kick", 6,
-		    server, get_visible_target(server, channel),
+	signal_emit__message_kick(server, get_visible_target(server, channel),
 		    nick, kicker, addr, recoded);
 	g_free(params);
 	g_free(recoded);
@@ -231,8 +228,7 @@ static void event_mode(IRC_SERVER_REC *server, const char *data,
 	params = event_get_params(data, 2 | PARAM_FLAG_GETREST,
 				  &channel, &mode);
 
-	signal_emit("message irc mode", 5,
-		    server, get_visible_target(server, channel),
+	signal_emit__message_irc_mode(server, get_visible_target(server, channel),
 		    nick, addr, g_strchomp(mode));
 	g_free(params);
 }
@@ -257,8 +253,7 @@ static void event_invite(IRC_SERVER_REC *server, const char *data,
 	g_return_if_fail(data != NULL);
 
 	params = event_get_params(data, 2, NULL, &channel);
-	signal_emit("message invite", 4,
-		    server, get_visible_target(server, channel), nick, addr);
+	signal_emit__message_invite(server, get_visible_target(server, channel), nick, addr);
 	g_free(params);
 }
 
@@ -272,7 +267,7 @@ static void event_topic(IRC_SERVER_REC *server, const char *data,
 	params = event_get_params(data, 2 | PARAM_FLAG_GETREST,
 				  &channel, &topic);
 	recoded = recode_in(SERVER(server), topic, channel);
-	signal_emit("message topic", 5, server,
+	signal_emit__message_topic(server,
 		    get_visible_target(server, channel), recoded, nick, addr);
 	g_free(params);
 	g_free(recoded);
@@ -414,7 +409,7 @@ static void sig_whowas_event_end(IRC_SERVER_REC *server, const char *data,
 	g_return_if_fail(data != NULL);
 
 	if (server->whowas_found) {
-		signal_emit("event 369", 4, server, data, sender, addr);
+		signal_emit__event_369(server, data, sender, addr);
 		return;
 	}
 
@@ -432,7 +427,7 @@ static void event_received(IRC_SERVER_REC *server, const char *data,
 	}
 
 	/* numeric event. */
-        signal_emit("default event numeric", 4, server, data, nick, addr);
+        signal_emit__default_event_numeric(server, data, nick, addr);
 }
 
 void fe_events_init(void)

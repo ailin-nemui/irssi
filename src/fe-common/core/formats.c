@@ -779,7 +779,6 @@ static char *get_timestamp(THEME_REC *theme, TEXT_DEST_REC *dest, time_t t)
 	    (dest->level & (MSGLEVEL_NEVER|MSGLEVEL_LASTLOG)) != 0)
 		return NULL;
 
-
 	if (timestamp_timeout > 0) {
 		diff = t - dest->window->last_timestamp;
 		dest->window->last_timestamp = t;

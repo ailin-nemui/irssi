@@ -47,13 +47,13 @@ static void window_item_add_signal(WINDOW_REC *window, WI_ITEM_REC *item, int au
 
 	if (!automatic || settings_get_bool("window_auto_change")) {
 		if (automatic)
-			signal_emit("window changed automatic", 1, window);
+			signal_emit__window_changed_automatic(window);
 		window_set_active(window);
 	}
 
 	window->items = g_slist_append(window->items, item);
 	if (send_signal)
-		signal_emit("window item new", 2, window, item);
+		signal_emit__window_item_new(window, item);
 
 	if (g_slist_length(window->items) == 1 ||
 	    (!automatic && settings_get_bool("autofocus_new_items"))) {
@@ -87,7 +87,7 @@ static void window_item_remove_signal(WI_ITEM_REC *item, int emit_signal)
 	}
 
 	if (emit_signal)
-		signal_emit("window item remove", 2, window, item);
+		signal_emit__window_item_remove(window, item);
 }
 
 void window_item_remove(WI_ITEM_REC *item)
@@ -110,7 +110,7 @@ void window_item_change_server(WI_ITEM_REC *item, void *server)
 	window = window_item_window(item);
 	item->server = server;
 
-        signal_emit("window item server changed", 2, window, item);
+        signal_emit__window_item_server_changed(window, item);
 	if (window->active == item) window_change_server(window, item->server);
 }
 
@@ -126,7 +126,7 @@ void window_item_set_active(WINDOW_REC *window, WI_ITEM_REC *item)
                 /* move item to different window */
                 window_item_remove_signal(item, FALSE);
                 window_item_add_signal(window, item, FALSE, FALSE);
-                signal_emit("window item moved", 3, window, item, old_window);
+                signal_emit__window_item_moved(window, item, old_window);
         	}
         }
 
@@ -134,7 +134,7 @@ void window_item_set_active(WINDOW_REC *window, WI_ITEM_REC *item)
 		window->active = item;
 		if (item != NULL && window->active_server != item->server)
 			window_change_server(window, item->server);
-		signal_emit("window item changed", 2, window, item);
+		signal_emit__window_item_changed(window, item);
 	}
 }
 
@@ -313,8 +313,7 @@ void window_item_create(WI_ITEM_REC *item, int automatic)
 	if (window == NULL) {
 		/* create new window to use */
 		if (settings_get_bool("autocreate_split_windows")) {
-			signal_emit("gui window create override", 1,
-				    GINT_TO_POINTER(MAIN_WINDOW_TYPE_SPLIT));
+			signal_emit__gui_window_create_override(GINT_TO_POINTER(MAIN_WINDOW_TYPE_SPLIT));
 		}
 		window = window_create(item, automatic);
 	} else {

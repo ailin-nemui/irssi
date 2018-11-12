@@ -390,7 +390,7 @@ void ignore_add_rec(IGNORE_REC *rec)
 	ignores = g_slist_append(ignores, rec);
 	ignore_set_config(rec);
 
-	signal_emit("ignore created", 1, rec);
+	signal_emit__ignore_created(rec);
 	nickmatch_rebuild(nickmatch);
 }
 
@@ -398,7 +398,7 @@ static void ignore_destroy(IGNORE_REC *rec, int send_signal)
 {
 	ignores = g_slist_remove(ignores, rec);
 	if (send_signal)
-		signal_emit("ignore destroyed", 1, rec);
+		signal_emit__ignore_destroyed(rec);
 
 	if (rec->preg != NULL) i_regex_unref(rec->preg);
 	if (rec->channels != NULL) g_strfreev(rec->channels);
@@ -423,7 +423,7 @@ void ignore_update_rec(IGNORE_REC *rec)
 		ignore_set_config(rec);
 
                 ignore_init_rec(rec);
-		signal_emit("ignore changed", 1, rec);
+		signal_emit__ignore_changed(rec);
 	}
         nickmatch_rebuild(nickmatch);
 }

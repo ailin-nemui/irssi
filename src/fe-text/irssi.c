@@ -88,7 +88,6 @@ int quitting;
 static int display_firsttimer = FALSE;
 static unsigned int user_settings_changed = 0;
 
-
 static void sig_exit(void)
 {
         quitting = TRUE;
@@ -337,7 +336,7 @@ int main(int argc, char **argv)
 		if (reload_config) {
 			/* SIGHUP received, do /RELOAD */
 			reload_config = FALSE;
-			signal_emit("command reload", 1, "");
+			signal_emit__command_reload("");
 		}
 
 		dirty_check();

@@ -811,7 +811,7 @@ void otr_status_change(SERVER_REC *server, const char *nick,
 		enum otr_status_event event)
 {
 	statusbar_items_redraw("otr");
-	signal_emit("otr event", 3, server, nick, statusbar_txt[event]);
+	signal_emit__otr_event(server, nick, statusbar_txt[event]);
 }
 
 /*

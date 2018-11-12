@@ -102,7 +102,7 @@ static void dcc_chat_msg(CHAT_DCC_REC *dcc, const char *msg)
 
 	if (query == NULL)
 		completion_last_message_add(sender);
-	signal_emit("message dcc", 2, dcc, msg);
+	signal_emit__message_dcc(dcc, msg);
 
 	g_free_not_null(freemsg);
 	g_free(sender);
@@ -119,7 +119,7 @@ static void dcc_chat_action(CHAT_DCC_REC *dcc, const char *msg)
 	if (query_find(NULL, sender) == NULL)
 		completion_last_message_add(sender);
 
-	signal_emit("message dcc action", 2, dcc, msg);
+	signal_emit__message_dcc_action(dcc, msg);
 	g_free(sender);
 }
 
@@ -127,7 +127,7 @@ static void dcc_chat_ctcp(CHAT_DCC_REC *dcc, const char *cmd, const char *data)
 {
 	g_return_if_fail(IS_DCC_CHAT(dcc));
 
-	signal_emit("message dcc ctcp", 3, dcc, cmd, data);
+	signal_emit__message_dcc_ctcp(dcc, cmd, data);
 }
 
 static void dcc_error_ctcp(const char *type, const char *data,
@@ -257,7 +257,7 @@ static void cmd_msg(const char *data, SERVER_REC *server, WI_ITEM_REC *item)
 		if (query_find(NULL, target) == NULL)
 			completion_last_message_add(target);
 
-		signal_emit("message dcc own", 2, dcc, text);
+		signal_emit__message_dcc_own(dcc, text);
 	}
 
 	cmd_params_free(free_arg);
@@ -269,7 +269,7 @@ static void cmd_me(const char *data, SERVER_REC *server, WI_ITEM_REC *item)
 
 	dcc = item_get_dcc(item);
 	if (dcc != NULL)
-		signal_emit("message dcc own_action", 2, dcc, data);
+		signal_emit__message_dcc_own_action(dcc, data);
 }
 
 static void cmd_action(const char *data, SERVER_REC *server, WI_ITEM_REC *item)
@@ -299,7 +299,7 @@ static void cmd_action(const char *data, SERVER_REC *server, WI_ITEM_REC *item)
 		if (query_find(NULL, target) == NULL)
 			completion_last_message_add(target);
 
-		signal_emit("message dcc own_action", 2, dcc, text);
+		signal_emit__message_dcc_own_action(dcc, text);
 	}
 	cmd_params_free(free_arg);
 }
@@ -332,7 +332,7 @@ static void cmd_ctcp(const char *data, SERVER_REC *server)
 			    IRCTXT_DCC_CHAT_NOT_FOUND, target+1);
 	} else {
 		ascii_strup(ctcpcmd);
-		signal_emit("message dcc own_ctcp", 3, dcc, ctcpcmd, ctcpdata);
+		signal_emit__message_dcc_own_ctcp(dcc, ctcpcmd, ctcpdata);
 	}
 
 	cmd_params_free(free_arg);

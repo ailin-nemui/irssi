@@ -44,7 +44,7 @@ void server_connect_failed(SERVER_REC *server, const char *msg)
 
 	lookup_servers = g_slist_remove(lookup_servers, server);
 
-	signal_emit("server connect failed", 2, server, msg);
+	signal_emit__server_connect_failed(server, msg);
 
 	if (server->connect_tag != -1) {
 		g_source_remove(server->connect_tag);
@@ -121,7 +121,6 @@ static char *server_create_tag(SERVER_CONNECT_REC *conn)
 		return g_strdup(conn->tag);
 	}
 
-
 	/* then just append numbers after tag until unused is found.. */
 	str = g_string_new(tag);
 
@@ -144,7 +143,7 @@ void server_connect_finished(SERVER_REC *server)
 	server->connect_time = time(NULL);
 
 	servers = g_slist_append(servers, server);
-	signal_emit("server connected", 1, server);
+	signal_emit__server_connected(server);
 }
 
 static void server_connect_callback_init(SERVER_REC *server, GIOChannel *handle)
@@ -210,7 +209,7 @@ static void server_real_connect(SERVER_REC *server, IPADDR *ip,
 
 	g_return_if_fail(ip != NULL || unix_socket != NULL);
 
-	signal_emit("server connecting", 2, server, ip);
+	signal_emit__server_connecting(server, ip);
 
 	if (server->connrec->no_connect)
 		return;
@@ -429,7 +428,7 @@ int server_start_connect(SERVER_REC *server)
 		server->connect_time = time(NULL);
 		lookup_servers = g_slist_append(lookup_servers, server);
 
-		signal_emit("server looking", 1, server);
+		signal_emit__server_looking(server);
 	}
 	return TRUE;
 }
@@ -477,7 +476,7 @@ void server_disconnect(SERVER_REC *server)
 	servers = g_slist_remove(servers, server);
 
 	server->disconnected = TRUE;
-	signal_emit("server disconnected", 1, server);
+	signal_emit__server_disconnected(server);
 
 	/* we used to destroy the handle here but it may be still in
 	   use during signal processing, so destroy it on unref
@@ -520,7 +519,7 @@ int server_unref(SERVER_REC *server)
 	   them know that the object got destroyed if the server was
 	   disconnected */
 	if (server->disconnected) {
-		signal_emit("server destroyed", 1, server);
+		signal_emit__server_destroyed(server);
 	}
 
 	if (server->handle != NULL) {
@@ -660,7 +659,7 @@ void server_change_nick(SERVER_REC *server, const char *nick)
 	g_free(server->nick);
 	server->nick = g_strdup(nick);
 
-	signal_emit("server nick changed", 1, server);
+	signal_emit__server_nick_changed(server);
 }
 
 /* Update own IPv4 and IPv6 records */
@@ -705,8 +704,7 @@ SERVER_REC *cmd_options_get_server(const char *cmd,
 	server = server_find_tag(list->data);
 	if (server == NULL || list->next != NULL) {
 		/* unknown option (not server tag) */
-		signal_emit("error command", 2,
-			    GINT_TO_POINTER(CMDERR_OPTION_UNKNOWN),
+		signal_emit__error_command(GINT_TO_POINTER(CMDERR_OPTION_UNKNOWN),
 			    server == NULL ? list->data : list->next->data);
 		signal_stop();
 

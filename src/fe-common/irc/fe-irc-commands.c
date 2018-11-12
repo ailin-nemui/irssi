@@ -59,7 +59,7 @@ static void cmd_me(const char *data, IRC_SERVER_REC *server, WI_ITEM_REC *item)
 	splitdata = irc_server_split_action(server, target, data);
 	while ((subdata = splitdata[n++])) {
 		irc_server_send_action(server, target, subdata);
-		signal_emit("message irc own_action", 3, server, subdata,
+		signal_emit__message_irc_own_action(server, subdata,
 			    item->visible_name);
 	}
 	g_strfreev(splitdata);
@@ -91,7 +91,7 @@ static void cmd_action(const char *data, IRC_SERVER_REC *server)
 	splittexts = irc_server_split_action(server, target, text);
 	while ((subtext = splittexts[n++])) {
 		irc_server_send_action(server, target, subtext);
-		signal_emit("message irc own_action", 3, server, subtext,
+		signal_emit__message_irc_own_action(server, subtext,
 			    target);
 	}
 
@@ -116,7 +116,7 @@ static void cmd_notice(const char *data, IRC_SERVER_REC *server,
 	if (*target == '\0' || *msg == '\0')
 		cmd_param_error(CMDERR_NOT_ENOUGH_PARAMS);
 
-	signal_emit("message irc own_notice", 3, server, msg, target);
+	signal_emit__message_irc_own_notice(server, msg, target);
 
 	cmd_params_free(free_arg);
 }
@@ -145,8 +145,7 @@ static void cmd_ctcp(const char *data, IRC_SERVER_REC *server,
 	}
 
 	ascii_strup(ctcpcmd);
-	signal_emit("message irc own_ctcp", 4,
-		    server, ctcpcmd, ctcpdata, target);
+	signal_emit__message_irc_own_ctcp(server, ctcpcmd, ctcpdata, target);
 
 	cmd_params_free(free_arg);
 }
@@ -167,7 +166,7 @@ static void cmd_nctcp(const char *data, IRC_SERVER_REC *server,
 	if (*target == '\0' || *text == '\0')
 		cmd_param_error(CMDERR_NOT_ENOUGH_PARAMS);
 
-	signal_emit("message irc own_notice", 3, server, text, target);
+	signal_emit__message_irc_own_notice(server, text, target);
 	cmd_params_free(free_arg);
 }
 
@@ -188,7 +187,7 @@ static void cmd_wall(const char *data, IRC_SERVER_REC *server,
 	chanrec = irc_channel_find(server, channame);
 	if (chanrec == NULL) cmd_param_error(CMDERR_CHAN_NOT_FOUND);
 
-	signal_emit("message irc own_wall", 3, server, msg,
+	signal_emit__message_irc_own_wall(server, msg,
 		    chanrec->visible_name);
 
 	cmd_params_free(free_arg);
@@ -201,10 +200,10 @@ static void bans_ask_channel(const char *channel, IRC_SERVER_REC *server,
 
 	str = g_string_new(NULL);
 	g_string_printf(str, "%s b", channel);
-	signal_emit("command mode", 3, str->str, server, item);
+	signal_emit__command_mode(str->str, server, item);
 	if (server->emode_known) {
 		g_string_printf(str, "%s e", channel);
-		signal_emit("command mode", 3, str->str, server, item);
+		signal_emit__command_mode(str->str, server, item);
 	}
 	g_string_free(str, TRUE);
 }
@@ -290,7 +289,7 @@ static void cmd_ver(gchar *data, IRC_SERVER_REC *server, WI_ITEM_REC *item)
 
 	str = g_strdup_printf("%s VERSION", *data == '\0' ?
 			      window_item_get_target(item) : data);
-	signal_emit("command ctcp", 3, str, server, item);
+	signal_emit__command_ctcp(str, server, item);
 	g_free(str);
 }
 

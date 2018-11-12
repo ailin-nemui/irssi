@@ -242,7 +242,7 @@ static void cmd_channel(const char *data, SERVER_REC *server, WI_ITEM_REC *item)
 	if (*data == '\0')
 		cmd_channel_list_joined();
 	else if (server != NULL && server_ischannel(server, data)) {
-		signal_emit("command join", 3, data, server, item);
+		signal_emit__command_join(data, server, item);
 	} else {
 		command_runsub("channel", data, server, item);
 	}
@@ -298,7 +298,7 @@ static void cmd_channel_add_modify(const char *data, gboolean add)
 	if (botcmdarg != NULL && *botcmdarg != '\0') rec->autosendcmd = g_strdup(botcmdarg);
 	if (*password != '\0' && g_strcmp0(password, "-") != 0) rec->password = g_strdup(password);
 
-	signal_emit("channel add fill", 2, rec, optlist);
+	signal_emit__channel_add_fill(rec, optlist);
 
 	channel_setup_create(rec);
 	printformat(NULL, NULL, MSGLEVEL_CLIENTNOTICE,
@@ -578,7 +578,7 @@ static void cmd_names(const char *data, SERVER_REC *server, WI_ITEM_REC *item)
                 g_string_truncate(unknowns, unknowns->len-1);
 
 	if (unknowns->len > 0 && g_strcmp0(channel, unknowns->str) != 0)
-                signal_emit("command names", 3, unknowns->str, server, item);
+                signal_emit__command_names(unknowns->str, server, item);
         g_string_free(unknowns, TRUE);
 
 	cmd_params_free(free_arg);
@@ -608,7 +608,7 @@ static void cmd_cycle(const char *data, SERVER_REC *server, WI_ITEM_REC *item)
 			chanrec->server->tag, chanrec->name);
 
 	/* FIXME: kludgy kludgy... */
-	signal_emit("command part", 3, data, server, item);
+	signal_emit__command_part(data, server, item);
 
 	if (g_slist_find(channels, chanrec) != NULL) {
 		chanrec->left = TRUE;

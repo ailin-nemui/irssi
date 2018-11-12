@@ -739,7 +739,7 @@ void term_gets(GArray *buffer, int *line_count)
 	} else if (ret == -1 && (errno == EINTR || errno == EAGAIN))
 		ret = 0;
 	if (ret == -1)
-		signal_emit("command quit", 1, "Lost terminal");
+		signal_emit__command_quit("Lost terminal");
 
 	if (ret > 0) {
                 /* convert input to unichars. */

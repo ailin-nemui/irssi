@@ -149,7 +149,7 @@ static void sig_init_finished(void)
 	type = dialog_type_queue;
         text = dialog_text_queue;
 	for (; text != NULL; text = text->next, type = type->next) {
-		signal_emit("gui dialog", 2, type->data, text->data);
+		signal_emit__gui_dialog(type->data, text->data);
 		g_free(type->data);
                 g_free(text->data);
 	}

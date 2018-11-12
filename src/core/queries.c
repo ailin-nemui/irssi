@@ -55,7 +55,7 @@ void query_init(QUERY_REC *query, int automatic)
 		}
 	}
 
-	signal_emit("query created", 2, query, GINT_TO_POINTER(automatic));
+	signal_emit__query_created(query, GINT_TO_POINTER(automatic));
 }
 
 void query_destroy(QUERY_REC *query)
@@ -70,7 +70,7 @@ void query_destroy(QUERY_REC *query)
 		query->server->queries =
 			g_slist_remove(query->server->queries, query);
 	}
-	signal_emit("query destroyed", 1, query);
+	signal_emit__query_destroyed(query);
 
         MODULE_DATA_DEINIT(query);
 	g_free_not_null(query->hilight_color);
@@ -136,8 +136,8 @@ void query_change_nick(QUERY_REC *query, const char *nick)
 	g_free(query->visible_name);
 	query->visible_name = g_strdup(nick);
 
-	signal_emit("query nick changed", 2, query, oldnick);
-	signal_emit("window item name changed", 1, query);
+	signal_emit__query_nick_changed(query, oldnick);
+	signal_emit__window_item_name_changed(query);
         g_free(oldnick);
 }
 
@@ -147,7 +147,7 @@ void query_change_address(QUERY_REC *query, const char *address)
 
         g_free_not_null(query->address);
 	query->address = g_strdup(address);
-	signal_emit("query address changed", 1, query);
+	signal_emit__query_address_changed(query);
 }
 
 void query_change_server(QUERY_REC *query, SERVER_REC *server)
@@ -162,7 +162,7 @@ void query_change_server(QUERY_REC *query, SERVER_REC *server)
                 server->queries = g_slist_append(server->queries, query);
 
 	query->server = server;
-	signal_emit("query server changed", 1, query);
+	signal_emit__query_server_changed(query);
 }
 
 void queries_init(void)

@@ -107,7 +107,7 @@ static void fe_recode_add_cmd (const char *data, SERVER_REC *server, WI_ITEM_REC
 		iconfig_set_str("conversions", target, charset);
 		printformat(NULL, NULL, MSGLEVEL_CLIENTNOTICE, TXT_CONVERSION_ADDED, target, charset);
 	} else
-		signal_emit("error command", 2, GINT_TO_POINTER(CMDERR_INVALID_CHARSET), charset);
+		signal_emit__error_command(GINT_TO_POINTER(CMDERR_INVALID_CHARSET), charset);
  end:
 	cmd_params_free(free_arg);
 }
@@ -158,7 +158,7 @@ static void read_settings(void)
 		g_free(recode_fallback);
 	recode_fallback = g_strdup(settings_get_str("recode_fallback"));
 	if (!is_valid_charset(recode_fallback)) {
-		signal_emit("error command", 2, GINT_TO_POINTER(CMDERR_INVALID_CHARSET), recode_fallback);
+		signal_emit__error_command(GINT_TO_POINTER(CMDERR_INVALID_CHARSET), recode_fallback);
 		g_free(recode_fallback);
 		recode_fallback = is_valid_charset(old_recode_fallback) ? g_strdup(old_recode_fallback) : NULL;
 		settings_set_str("recode_fallback", recode_fallback);
@@ -179,7 +179,7 @@ static void read_settings(void)
 	recode_out_default = g_strdup(settings_get_str("recode_out_default_charset"));
 	if (recode_out_default != NULL && *recode_out_default != '\0' &&
 	    !is_valid_charset(recode_out_default)) {
-		signal_emit("error command", 2, GINT_TO_POINTER(CMDERR_INVALID_CHARSET), recode_out_default);
+		signal_emit__error_command(GINT_TO_POINTER(CMDERR_INVALID_CHARSET), recode_out_default);
 		g_free(recode_out_default);
 		recode_out_default = is_valid_charset(old_recode_out_default) ? g_strdup(old_recode_out_default) : NULL;
 		settings_set_str("recode_out_default_charset", recode_out_default);

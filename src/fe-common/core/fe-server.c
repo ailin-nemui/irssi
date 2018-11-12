@@ -246,7 +246,7 @@ static void cmd_server_add_modify(const char *data, gboolean add)
 		rec->own_ip4 = rec->own_ip6 = NULL;
 	}
 
-	signal_emit("server add fill", 2, rec, optlist);
+	signal_emit__server_add_fill(rec, optlist);
 
 	server_setup_add(rec);
 	printformat(NULL, NULL, MSGLEVEL_CLIENTNOTICE,

@@ -125,9 +125,9 @@ CHAT_PROTOCOL_REC *chat_protocol_register(CHAT_PROTOCOL_REC *rec)
                 chat_protocol_set_default(newrec);
 
         if (created)
-		signal_emit("chat protocol created", 1, newrec);
+		signal_emit__chat_protocol_created(newrec);
         else
-		signal_emit("chat protocol updated", 1, newrec);
+		signal_emit__chat_protocol_updated(newrec);
         return newrec;
 }
 
@@ -142,7 +142,7 @@ static void chat_protocol_destroy(CHAT_PROTOCOL_REC *rec)
 					  chat_protocols->data);
 	}
 
-	signal_emit("chat protocol destroyed", 1, rec);
+	signal_emit__chat_protocol_destroyed(rec);
 
 	g_free(rec->name);
 	g_free(rec);

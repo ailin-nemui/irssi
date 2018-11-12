@@ -64,7 +64,7 @@ KEYBOARD_REC *keyboard_create(void *data)
 	rec->gui_data = data;
 	rec->timer_tag = 0;
 
-	signal_emit("keyboard created", 1, rec);
+	signal_emit__keyboard_created(rec);
         return rec;
 }
 
@@ -76,7 +76,7 @@ void keyboard_destroy(KEYBOARD_REC *keyboard)
 		keyboard->timer_tag = 0;
 	}
 
-	signal_emit("keyboard destroyed", 1, keyboard);
+	signal_emit__keyboard_destroyed(keyboard);
 
         g_free_not_null(keyboard->key_state);
         g_free(keyboard);
@@ -443,7 +443,7 @@ static void key_configure_destroy(KEY_REC *rec)
 	rec->info->keys = g_slist_remove(rec->info->keys, rec);
 	g_hash_table_remove(keys, rec->key);
 
-	signal_emit("key destroyed", 1, rec);
+	signal_emit__key_destroyed(rec);
 
 	if (!key_config_frozen)
                 key_states_rescan();
@@ -478,7 +478,7 @@ static void key_configure_create(const char *id, const char *key,
 	info->keys = g_slist_append(info->keys, rec);
 	g_hash_table_insert(keys, rec->key, rec);
 
-	signal_emit("key created", 1, rec);
+	signal_emit__key_created(rec);
 
 	if (!key_config_frozen)
                 key_states_rescan();
@@ -510,7 +510,7 @@ void key_bind(const char *id, const char *description,
 		signal_add(key, func);
 		g_free(key);
 
-		signal_emit("keyinfo created", 1, info);
+		signal_emit__keyinfo_created(info);
 	}
 
 	if (key_default != NULL && *key_default != '\0') {
@@ -524,7 +524,7 @@ static void keyinfo_remove(KEYINFO_REC *info)
 	g_return_if_fail(info != NULL);
 
 	keyinfos = g_slist_remove(keyinfos, info);
-	signal_emit("keyinfo destroyed", 1, info);
+	signal_emit__keyinfo_destroyed(info);
 
 	/* destroy all keys */
         g_slist_foreach(info->keys, (GFunc) key_destroy, keys);
@@ -709,7 +709,7 @@ int key_pressed(KEYBOARD_REC *keyboard, const char *key)
 void keyboard_entry_redirect(SIGNAL_FUNC func, const char *entry,
 			     int flags, void *data)
 {
-	signal_emit("gui entry redirect", 4, func, entry,
+	signal_emit__gui_entry_redirect(func, entry,
 		    GINT_TO_POINTER(flags), data);
 }
 
@@ -722,7 +722,7 @@ static void sig_command(const char *data)
 	str = strchr(cmdchars, *data) != NULL ? g_strdup(data) :
 		g_strdup_printf("%c%s", *cmdchars, data);
 
-	signal_emit("send command", 3, str, active_win->active_server, active_win->active);
+	signal_emit__send_command(str, active_win->active_server, active_win->active);
 
 	g_free(str);
 }

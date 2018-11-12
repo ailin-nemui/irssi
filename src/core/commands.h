@@ -52,7 +52,7 @@ enum {
 /* Returning from command function with error */
 #define cmd_return_error(a) \
 	G_STMT_START { \
-	  signal_emit("error command", 1, GINT_TO_POINTER(a)); \
+	  signal_emit__error_command(GINT_TO_POINTER(a)); \
 	  signal_stop(); \
 	  return; \
 	} G_STMT_END

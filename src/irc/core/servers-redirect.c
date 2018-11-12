@@ -456,7 +456,6 @@ static void redirect_abort(IRC_SERVER_REC *server, REDIRECT_REC *rec)
 #define REDIRECT_IS_TIMEOUTED(rec) \
 	((now-(rec)->created) > (rec)->cmd->timeout)
 
-
 static REDIRECT_REC *redirect_find(IRC_SERVER_REC *server, const char *event,
 				   const char *args, const char **signal,
 				   int *match)

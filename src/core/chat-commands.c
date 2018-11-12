@@ -52,8 +52,7 @@ static SERVER_CONNECT_REC *get_server_connect(const char *data, int *plus_addr,
 	if (plus_addr != NULL) *plus_addr = *addr == '+';
 	if (*addr == '+') addr++;
 	if (*addr == '\0') {
-		signal_emit("error command", 1,
-			    GINT_TO_POINTER(CMDERR_NOT_ENOUGH_PARAMS));
+		signal_emit__error_command(GINT_TO_POINTER(CMDERR_NOT_ENOUGH_PARAMS));
 		cmd_params_free(free_arg);
 		return NULL;
 	}
@@ -74,8 +73,7 @@ static SERVER_CONNECT_REC *get_server_connect(const char *data, int *plus_addr,
 	conn = server_create_conn(proto != NULL ? proto->id : -1, addr,
 				  atoi(portstr), chatnet, password, nick);
 	if (conn == NULL) {
-		signal_emit("error command", 1,
-			    GINT_TO_POINTER(CMDERR_NO_SERVER_DEFINED));
+		signal_emit__error_command(GINT_TO_POINTER(CMDERR_NO_SERVER_DEFINED));
 		cmd_params_free(free_arg);
 		return NULL;
 	}
@@ -85,7 +83,7 @@ static SERVER_CONNECT_REC *get_server_connect(const char *data, int *plus_addr,
 
 	if (proto->not_initialized) {
 		/* trying to use protocol that isn't yet initialized */
-		signal_emit("chat protocol unknown", 1, proto->name);
+		signal_emit__chat_protocol_unknown(proto->name);
 		server_connect_unref(conn);
                 cmd_params_free(free_arg);
 		return NULL;
@@ -133,7 +131,6 @@ static SERVER_CONNECT_REC *get_server_connect(const char *data, int *plus_addr,
 
 	if (g_hash_table_lookup(optlist, "noproxy") != NULL)
                 g_free_and_null(conn->proxy);
-
 
 	*rawlog_file = g_strdup(g_hash_table_lookup(optlist, "rawlog"));
 
@@ -240,8 +237,7 @@ static void update_reconnection(SERVER_CONNECT_REC *conn, SERVER_REC *server)
 
 	server_connect_unref(oldconn);
 	if (server != NULL) {
-		signal_emit("command disconnect", 2,
-			    "* Changing server", server);
+		signal_emit__command_disconnect("* Changing server", server);
 	}
 }
 
@@ -301,7 +297,7 @@ static void cmd_disconnect(const char *data, SERVER_REC *server)
 	if (server == NULL) cmd_param_error(CMDERR_NOT_CONNECTED);
 
 	if (*msg == '\0') msg = (char *) settings_get_str("quit_message");
-	signal_emit("server quit", 2, server, msg);
+	signal_emit__server_quit(server, msg);
 
 	cmd_params_free(free_arg);
 	server_disconnect(server);
@@ -405,7 +401,7 @@ static void cmd_msg(const char *data, SERVER_REC *server, WI_ITEM_REC *item)
 			splitmsgs = singlemsg;
 
 		while ((m = splitmsgs[n++])) {
-			signal_emit("server sendmsg", 4, server, target, m,
+			signal_emit__server_sendmsg(server, target, m,
 				    GINT_TO_POINTER(target_type));
 			signal_emit(target_type == SEND_TARGET_CHANNEL ?
 				    "message own_public" :
@@ -414,7 +410,7 @@ static void cmd_msg(const char *data, SERVER_REC *server, WI_ITEM_REC *item)
 		}
 		g_strfreev(tmp);
 	} else {
-		signal_emit("message own_private", 4, server, msg, target,
+		signal_emit__message_own_private(server, msg, target,
 			    origtarget);
 	}
 
@@ -448,7 +444,7 @@ static void cmd_foreach_server(const char *data, SERVER_REC *server)
 
 	list = g_slist_copy(servers);
 	while (list != NULL) {
-		signal_emit("send command", 3, str, list->data, NULL);
+		signal_emit__send_command(str, list->data, NULL);
 		list = g_slist_remove(list, list->data);
 	}
 
@@ -470,7 +466,7 @@ static void cmd_foreach_channel(const char *data)
 	while (list != NULL) {
 		CHANNEL_REC *rec = list->data;
 
-		signal_emit("send command", 3, str, rec->server, rec);
+		signal_emit__send_command(str, rec->server, rec);
 		list = g_slist_remove(list, list->data);
 	}
 
@@ -488,12 +484,11 @@ static void cmd_foreach_query(const char *data)
 	str = strchr(cmdchars, *data) != NULL ? g_strdup(data) :
 		g_strdup_printf("%c%s", *cmdchars, data);
 
-
 	list = g_slist_copy(queries);
 	while (list != NULL) {
 		QUERY_REC *rec = list->data;
 
-		signal_emit("send command", 3, str, rec->server, rec);
+		signal_emit__send_command(str, rec->server, rec);
 		list = g_slist_remove(list, list->data);
 	}
 

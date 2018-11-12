@@ -108,7 +108,7 @@ void server_setup_fill_reconn(SERVER_CONNECT_REC *conn,
 	if (sserver->password != NULL && conn->password == NULL)
 		conn->password = g_strdup(sserver->password);
 
-	signal_emit("server setup fill reconn", 2, conn, sserver);
+	signal_emit__server_setup_fill_reconn(conn, sserver);
 }
 
 static void server_setup_fill(SERVER_CONNECT_REC *conn,
@@ -148,7 +148,7 @@ static void server_setup_fill(SERVER_CONNECT_REC *conn,
 		memcpy(conn->own_ip6, source_host_ip6, sizeof(IPADDR));
 	}
 
-	signal_emit("server setup fill connect", 1, conn);
+	signal_emit__server_setup_fill_connect(conn);
 }
 
 static void server_setup_fill_server(SERVER_CONNECT_REC *conn,
@@ -188,7 +188,7 @@ static void server_setup_fill_server(SERVER_CONNECT_REC *conn,
 
 	server_setup_fill_reconn(conn, sserver);
 
-	signal_emit("server setup fill server", 2, conn, sserver);
+	signal_emit__server_setup_fill_server(conn, sserver);
 }
 
 static void server_setup_fill_chatnet(SERVER_CONNECT_REC *conn,
@@ -214,7 +214,7 @@ static void server_setup_fill_chatnet(SERVER_CONNECT_REC *conn,
 			    &chatnet->own_ip4, &chatnet->own_ip6);
 	}
 
-	signal_emit("server setup fill chatnet", 2, conn, chatnet);
+	signal_emit__server_setup_fill_chatnet(conn, chatnet);
 }
 
 static SERVER_CONNECT_REC *
@@ -459,7 +459,7 @@ static SERVER_SETUP_REC *server_setup_read(CONFIG_NODE *node)
 	rec->no_proxy = config_node_get_bool(node, "no_proxy", FALSE);
 	rec->own_host = g_strdup(config_node_get_str(node, "own_host", NULL));
 
-	signal_emit("server setup read", 2, rec, node);
+	signal_emit__server_setup_read(rec, node);
 
 	setupservers = g_slist_append(setupservers, rec);
 	return rec;
@@ -533,7 +533,7 @@ static void server_setup_save(SERVER_SETUP_REC *rec)
 	if (rec->no_proxy)
 		iconfig_node_set_bool(node, "no_proxy", TRUE);
 
-	signal_emit("server setup saved", 2, rec, node);
+	signal_emit__server_setup_saved(rec, node);
 }
 
 static void server_setup_remove_config(SERVER_SETUP_REC *rec)
@@ -558,7 +558,7 @@ static void server_setup_remove_config(SERVER_SETUP_REC *rec)
 static void server_setup_destroy(SERVER_SETUP_REC *rec)
 {
 	setupservers = g_slist_remove(setupservers, rec);
-	signal_emit("server setup destroyed", 1, rec);
+	signal_emit__server_setup_destroyed(rec);
 
 	g_free_not_null(rec->own_host);
 	g_free_not_null(rec->own_ip4);
@@ -584,7 +584,7 @@ void server_setup_add(SERVER_SETUP_REC *rec)
 		setupservers = g_slist_append(setupservers, rec);
 	server_setup_save(rec);
 
-	signal_emit("server setup updated", 1, rec);
+	signal_emit__server_setup_updated(rec);
 }
 
 void server_setup_remove_chatnet(const char *chatnet)

@@ -139,7 +139,7 @@ static void test_event_topic_get(topic_test_case const *const test)
 {
 	setup();
 
-	signal_emit("event 332", 2, server, test->input);
+	signal_emit__event_332(server, test->input);
 
 	g_assert_cmpstr(channel->topic,      ==, test->topic);
 	g_assert_cmpstr(channel->topic_by,   ==, test->topic_by);
@@ -155,7 +155,7 @@ static void test_event_topic(topic_test_case const *const test)
 	setup();
 
 	now = time(NULL);
-	signal_emit("event topic", 4, server, test->input, "newnick",
+	signal_emit__event_topic(server, test->input, "newnick",
 			"user@example.com");
 
 	g_assert_cmpstr(channel->topic,      ==, test->topic);
@@ -169,7 +169,7 @@ static void test_event_topic_info(topic_test_case const *const test)
 {
 	setup();
 
-	signal_emit("event 333", 2, server, test->input);
+	signal_emit__event_333(server, test->input);
 
 	g_assert_cmpstr(channel->topic,      ==, test->topic);
 	g_assert_cmpstr(channel->topic_by,   ==, test->topic_by);

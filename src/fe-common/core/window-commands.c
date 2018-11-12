@@ -151,7 +151,7 @@ static void cmd_window_info(WINDOW_REC *win)
 	if (win->items != NULL)
                 window_print_items(win);
 
-        signal_emit("window print info", 1, win);
+        signal_emit__window_print_info(win);
 
 	printformat_window(win, MSGLEVEL_CLIENTCRAP,
 			   TXT_WINDOW_INFO_FOOTER);
@@ -164,7 +164,7 @@ static void cmd_window(const char *data, void *server, WI_ITEM_REC *item)
 	if (*data == '\0')
                 cmd_window_info(active_win);
 	else if (is_numeric(data, 0))
-                signal_emit("command window refnum", 3, data, server, item);
+                signal_emit__command_window_refnum(data, server, item);
         else
 		command_runsub("window", data, server, item);
 }
@@ -180,7 +180,7 @@ static void cmd_window_new(const char *data, void *server, WI_ITEM_REC *item)
 	type = (g_ascii_strncasecmp(data, "hid", 3) == 0 || g_ascii_strcasecmp(data, "tab") == 0) ? MAIN_WINDOW_TYPE_HIDDEN :
 		g_ascii_strcasecmp(data, "split") == 0 ? MAIN_WINDOW_TYPE_SPLIT :
 		g_ascii_strncasecmp(data, "rs", 2) == 0 ? MAIN_WINDOW_TYPE_RSPLIT : MAIN_WINDOW_TYPE_DEFAULT;
-	signal_emit("gui window create override", 1, GINT_TO_POINTER(type));
+	signal_emit__gui_window_create_override(GINT_TO_POINTER(type));
 
 	window = window_create(NULL, FALSE);
 	window_change_server(window, server);
@@ -507,7 +507,7 @@ static void cmd_window_item(const char *data, void *server, WI_ITEM_REC *item)
         while (*data == ' ') data++;
 
 	if (is_numeric(data, '\0'))
-		signal_emit("command window item goto", 3, data, server, item);
+		signal_emit__command_window_item_goto(data, server, item);
 	else
 		command_runsub("window item", data, server, item);
 }
@@ -856,7 +856,7 @@ static void cmd_foreach_window(const char *data)
 		WINDOW_REC *rec = list->data;
 
 		active_win = rec;
-		signal_emit("send command", 3, str, rec->active_server,
+		signal_emit__send_command(str, rec->active_server,
 			    rec->active);
 		list = g_slist_remove(list, list->data);
 	}
@@ -873,7 +873,7 @@ static void cmd_window_default_command(const char *data, SERVER_REC *server, WI_
 	    !settings_get_bool("window_number_commands")) {
 		return;
 	}
-	signal_emit("command window refnum", 3, data, server, item);
+	signal_emit__command_window_refnum(data, server, item);
 	signal_stop();
 }
 

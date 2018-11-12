@@ -133,8 +133,7 @@ static void signal_query_nick_changed(QUERY_REC *query, const char *oldnick)
 				 query->address == NULL ? "" : query->address);
 	}
 
-	signal_emit("window item changed", 2,
-		    window_item_window((WI_ITEM_REC *) query), query);
+	signal_emit__window_item_changed(window_item_window((WI_ITEM_REC *) query), query);
 }
 
 static void signal_window_item_server_changed(WINDOW_REC *window,
@@ -275,7 +274,7 @@ static void cmd_query(const char *data, SERVER_REC *server, WI_ITEM_REC *item)
 
 	if (*msg != '\0') {
                 msg = g_strdup_printf("-nick %s %s", nick, msg);
-		signal_emit("command msg", 3, msg, server, query);
+		signal_emit__command_msg(msg, server, query);
                 g_free(msg);
 	}
 

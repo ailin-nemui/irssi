@@ -177,7 +177,7 @@ static void process_destroy(PROCESS_REC *rec, int status)
 {
 	processes = g_slist_remove(processes, rec);
 
-	signal_emit("exec remove", 2, rec, GINT_TO_POINTER(status));
+	signal_emit__exec_remove(rec, GINT_TO_POINTER(status));
 
 	if (rec->read_tag != -1)
 		g_source_remove(rec->read_tag);
@@ -256,8 +256,7 @@ static int cmd_options_get_signal(const char *cmd,
 
 	if (signum == -1 || list->next != NULL) {
 		/* unknown option (not a signal) */
-		signal_emit("error command", 2,
-			    GINT_TO_POINTER(CMDERR_OPTION_UNKNOWN),
+		signal_emit__error_command(GINT_TO_POINTER(CMDERR_OPTION_UNKNOWN),
 			    signum == -1 ? list->data : list->next->data);
 		signal_stop();
                 return -2;
@@ -530,7 +529,7 @@ static void handle_exec(const char *args, GHashTable *optlist,
 	if (rec->target == NULL && interactive)
 		rec->target_item = exec_wi_create(active_win, rec);
 
-	signal_emit("exec new", 1, rec);
+	signal_emit__exec_new(rec);
 }
 
 /* SYNTAX: EXEC [-] [-nosh] [-out | -msg <target> | -notice <target>]

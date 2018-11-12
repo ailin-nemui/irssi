@@ -340,7 +340,7 @@ static void autoconnect_servers(void)
 		else
 			str = g_strdup_printf("%s %d %s", autocon_server, autocon_port, autocon_password);
 
-		signal_emit("command connect", 1, str);
+		signal_emit__command_connect(str);
 		g_free(str);
 		return;
 	}
@@ -365,7 +365,7 @@ static void autoconnect_servers(void)
 				str = g_strdup_printf("%s %d", rec->address, rec->port);
 			}
 
-			signal_emit("command connect", 1, str);
+			signal_emit__command_connect(str);
 			g_free(str);
 		}
 	}

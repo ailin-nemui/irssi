@@ -127,12 +127,12 @@ WINDOW_REC *window_create(WI_ITEM_REC *item, int automatic)
 
 	windows = g_slist_prepend(windows, rec);
 	windows_seq_insert(rec);
-	signal_emit("window created", 2, rec, GINT_TO_POINTER(automatic));
+	signal_emit__window_created(rec, GINT_TO_POINTER(automatic));
 
 	if (item != NULL) window_item_add(rec, item, automatic);
 	if (windows->next == NULL || !automatic || settings_get_bool("window_auto_change")) {
 		if (automatic && windows->next != NULL)
-			signal_emit("window changed automatic", 1, rec);
+			signal_emit__window_changed_automatic(rec);
 		window_set_active(rec);
 	}
 	return rec;
@@ -148,7 +148,7 @@ static void window_set_refnum0(WINDOW_REC *window, int refnum)
 
 	old_refnum = window->refnum;
 	window->refnum = refnum;
-	signal_emit("window refnum changed", 2, window, GINT_TO_POINTER(old_refnum));
+	signal_emit__window_refnum_changed(window, GINT_TO_POINTER(old_refnum));
 }
 
 /* removed_refnum was removed from the windows list, pack the windows so
@@ -202,7 +202,7 @@ void window_destroy(WINDOW_REC *window)
         if (settings_get_bool("windows_auto_renumber"))
 		windows_pack(window->refnum);
 
-	signal_emit("window destroyed", 1, window);
+	signal_emit__window_destroyed(window);
 
 	while (window->bound_items != NULL)
                 window_bind_destroy(window, window->bound_items->data);
@@ -237,7 +237,7 @@ void window_set_active(WINDOW_REC *window)
 	}
 
         if (active_win != NULL)
-		signal_emit("window changed", 2, active_win, old_window);
+		signal_emit__window_changed(active_win, old_window);
 }
 
 void window_change_server(WINDOW_REC *window, void *server)
@@ -259,12 +259,12 @@ void window_change_server(WINDOW_REC *window, void *server)
 
 	if (window->connect_server != connect) {
 		window->connect_server = connect;
-		signal_emit("window connect changed", 2, window, connect);
+		signal_emit__window_connect_changed(window, connect);
 	}
 
 	if (window->active_server != active) {
 		window->active_server = active;
-		signal_emit("window server changed", 2, window, active);
+		signal_emit__window_server_changed(window, active);
 	}
 }
 
@@ -284,12 +284,12 @@ void window_set_refnum(WINDOW_REC *window, int refnum)
 		WINDOW_REC *rec = g_sequence_get(other_iter);
 
 		rec->refnum = window->refnum;
-		signal_emit("window refnum changed", 2, rec, GINT_TO_POINTER(refnum));
+		signal_emit__window_refnum_changed(rec, GINT_TO_POINTER(refnum));
 	}
 
 	old_refnum = window->refnum;
 	window->refnum = refnum;
-	signal_emit("window refnum changed", 2, window, GINT_TO_POINTER(old_refnum));
+	signal_emit__window_refnum_changed(window, GINT_TO_POINTER(old_refnum));
 
 	if (window_iter != NULL && other_iter != NULL) {
 		g_sequence_swap(other_iter, window_iter);
@@ -303,7 +303,7 @@ void window_set_name(WINDOW_REC *window, const char *name)
 	g_free_not_null(window->name);
 	window->name = name == NULL || *name == '\0' ? NULL : g_strdup(name);
 
-	signal_emit("window name changed", 1, window);
+	signal_emit__window_name_changed(window);
 }
 
 void window_set_history(WINDOW_REC *window, const char *name)
@@ -316,14 +316,14 @@ void window_set_history(WINDOW_REC *window, const char *name)
 	else
 		window->history_name = g_strdup(name);
 
-	signal_emit("window history changed", 2, window, oldname);
+	signal_emit__window_history_changed(window, oldname);
 
 	g_free_not_null(oldname);
 }
 
 void window_clear_history(WINDOW_REC *window, const char *name)
 {
-	signal_emit("window history cleared", 2, window, name);
+	signal_emit__window_history_cleared(window, name);
 }
 
 void window_set_level(WINDOW_REC *window, int level)
@@ -331,7 +331,7 @@ void window_set_level(WINDOW_REC *window, int level)
 	g_return_if_fail(window != NULL);
 
 	window->level = level;
-        signal_emit("window level changed", 1, window);
+        signal_emit__window_level_changed(window);
 }
 
 void window_set_immortal(WINDOW_REC *window, int immortal)
@@ -339,7 +339,7 @@ void window_set_immortal(WINDOW_REC *window, int immortal)
 	g_return_if_fail(window != NULL);
 
 	window->immortal = immortal;
-        signal_emit("window immortal changed", 1, window);
+        signal_emit__window_immortal_changed(window);
 }
 
 /* return active item's name, or if none is active, window's name */

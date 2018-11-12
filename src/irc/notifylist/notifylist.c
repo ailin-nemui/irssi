@@ -50,7 +50,7 @@ NOTIFYLIST_REC *notifylist_add(const char *mask, const char *ircnets,
         notifylist_add_config(rec);
 
         notifies = g_slist_append(notifies, rec);
-	signal_emit("notifylist new", 1, rec);
+	signal_emit__notifylist_new(rec);
 	return rec;
 }
 
@@ -80,7 +80,7 @@ void notifylist_remove(const char *mask)
 
 	notifylist_remove_config(rec);
 	notifies = g_slist_remove(notifies, rec);
-	signal_emit("notifylist remove", 1, rec);
+	signal_emit__notifylist_remove(rec);
 
         notify_destroy(rec);
 }
@@ -227,8 +227,7 @@ void notifylist_left(IRC_SERVER_REC *server, NOTIFY_NICK_REC *rec)
 	mserver->notify_users = g_slist_remove(mserver->notify_users, rec);
 
 	if (rec->host_ok && rec->away_ok) {
-		signal_emit("notifylist left", 6,
-			    server, rec->nick,
+		signal_emit__notifylist_left(server, rec->nick,
 			    rec->user, rec->host,
 			    rec->realname, rec->awaymsg);
 	}
@@ -291,8 +290,7 @@ static void notifylist_check_join(IRC_SERVER_REC *server, const char *nick,
 	rec->join_announced = TRUE;
 	rec->away_ok = !notify->away_check || !rec->away;
 
-	signal_emit("notifylist joined", 6,
-		    server, rec->nick, rec->user, rec->host, realname, NULL);
+	signal_emit__notifylist_joined(server, rec->nick, rec->user, rec->host, realname, NULL);
 	g_free(user);
 }
 

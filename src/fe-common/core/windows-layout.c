@@ -103,8 +103,7 @@ static void window_add_items(WINDOW_REC *window, CONFIG_NODE *node)
 
 		type = config_node_get_str(node, "type", NULL);
 		if (type != NULL) {
-			signal_emit("layout restore item", 3,
-				    window, type, node);
+			signal_emit__layout_restore_item(window, type, node);
 		}
 	}
 }
@@ -145,7 +144,7 @@ static void sig_layout_restore(void)
 			window->theme = theme_load(window->theme_name);
 
 		window_add_items(window, iconfig_node_section(node, "items", -1));
-		signal_emit("layout restore window", 2, window, node);
+		signal_emit__layout_restore_window(window, node);
 	}
 }
 
@@ -188,7 +187,7 @@ static void window_save_items(WINDOW_REC *window, CONFIG_NODE *node)
 
 	node = iconfig_node_section(node, "items", NODE_TYPE_LIST);
 	for (tmp = window->items; tmp != NULL; tmp = tmp->next)
-		signal_emit("layout save item", 3, window, tmp->data, node);
+		signal_emit__layout_save_item(window, tmp->data, node);
 }
 
 static void window_save(WINDOW_REC *window, CONFIG_NODE *node)
@@ -225,7 +224,7 @@ static void window_save(WINDOW_REC *window, CONFIG_NODE *node)
 	if (window->items != NULL)
 		window_save_items(window, node);
 
-	signal_emit("layout save window", 2, window, node);
+	signal_emit__layout_save_window(window, node);
 }
 
 void windows_layout_save(void)

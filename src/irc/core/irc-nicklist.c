@@ -190,7 +190,7 @@ static void event_end_of_names(IRC_SERVER_REC *server, const char *data)
 		nicklist_set_own(CHANNEL(chanrec), ownnick);
                 chanrec->chanop = chanrec->ownnick->op;
 		chanrec->names_got = TRUE;
-		signal_emit("channel joined", 1, chanrec);
+		signal_emit__channel_joined(chanrec);
 	}
 
 	g_free(params);
