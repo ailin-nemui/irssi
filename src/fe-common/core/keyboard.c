@@ -21,6 +21,7 @@
 #include "module.h"
 #include "module-formats.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "commands.h"
 #include "levels.h"
 #include "misc.h"
@@ -613,7 +614,7 @@ static int key_emit_signal(KEYBOARD_REC *keyboard, KEY_REC *key)
         char *str;
 
 	str = g_strconcat("key ", key->info->id, NULL);
-	consumed = signal_emit(str, 3, key->data, keyboard->gui_data, key->info);
+	consumed = signal_emit__key_(str, key->data, keyboard->gui_data, key->info);
 	g_free(str);
 
         return consumed;
@@ -745,7 +746,7 @@ static void sig_multi(const char *data, void *gui_data)
 		info = key_info_find(*tmp);
 		if (info != NULL) {
 			str = g_strconcat("key ", info->id, NULL);
-			signal_emit(str, 3, p, gui_data, info);
+			signal_emit__key_(info->id, p, gui_data, info);
 			g_free(str);
 		}
 	}

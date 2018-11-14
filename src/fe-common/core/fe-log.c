@@ -675,7 +675,7 @@ static void sig_awaylog_show(LOG_REC *log, gpointer pmsgs, gpointer pfilepos)
 		printformat(NULL, NULL, MSGLEVEL_CLIENTNOTICE, TXT_LOG_AWAY_MSGS, log->real_fname, msgs);
 
                 str = g_strdup_printf("\"%s\" %d", log->real_fname, filepos);
-		signal_emit__command_cat(str);
+		signal_emit__command_("cat", str, NULL, NULL);
 		g_free(str);
 	}
 }

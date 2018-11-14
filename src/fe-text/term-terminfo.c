@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "core/signal-registry.h"
 #include "term.h"
 #include "terminfo-core.h"
 #include "fe-windows.h"
@@ -739,7 +740,7 @@ void term_gets(GArray *buffer, int *line_count)
 	} else if (ret == -1 && (errno == EINTR || errno == EAGAIN))
 		ret = 0;
 	if (ret == -1)
-		signal_emit__command_quit("Lost terminal");
+		signal_emit__command_("quit", "Lost terminal", NULL, NULL);
 
 	if (ret > 0) {
                 /* convert input to unichars. */

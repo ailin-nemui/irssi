@@ -10,7 +10,7 @@ typedef struct {
 				    expanding {templates} */
 } MODULE_THEME_REC;
 
-typedef struct {
+typedef struct _THEME_REC {
 	int refcount;
 
 	char *path;

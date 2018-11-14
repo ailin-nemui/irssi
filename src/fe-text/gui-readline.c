@@ -21,6 +21,7 @@
 #include "module.h"
 #include "module-formats.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "misc.h"
 #include "settings.h"
 #include "special-vars.h"
@@ -890,17 +891,17 @@ static void key_scroll_forward(void)
 
 static void key_scroll_start(void)
 {
-	signal_emit__command_scrollback_home(NULL, active_win->active_server, active_win->active);
+	signal_emit__command_("scrollback home", NULL, active_win->active_server, active_win->active);
 }
 
 static void key_scroll_end(void)
 {
-	signal_emit__command_scrollback_end(NULL, active_win->active_server, active_win->active);
+	signal_emit__command_("scrollback end", NULL, active_win->active_server, active_win->active);
 }
 
 static void key_change_window(const char *data)
 {
-	signal_emit__command_window_goto(data, active_win->active_server, active_win->active);
+	signal_emit__command_("window goto", data, active_win->active_server, active_win->active);
 }
 
 static void key_completion(int erase, int backward)
@@ -950,37 +951,37 @@ static void key_check_replaces(void)
 
 static void key_previous_window(void)
 {
-	signal_emit__command_window_previous("", active_win->active_server, active_win->active);
+	signal_emit__command_("window previous", "", active_win->active_server, active_win->active);
 }
 
 static void key_next_window(void)
 {
-	signal_emit__command_window_next("", active_win->active_server, active_win->active);
+	signal_emit__command_("window next", "", active_win->active_server, active_win->active);
 }
 
 static void key_left_window(void)
 {
-	signal_emit__command_window_left("", active_win->active_server, active_win->active);
+	signal_emit__command_("window _left", "", active_win->active_server, active_win->active);
 }
 
 static void key_right_window(void)
 {
-	signal_emit__command_window_right("", active_win->active_server, active_win->active);
+	signal_emit__command_("window right", "", active_win->active_server, active_win->active);
 }
 
 static void key_upper_window(void)
 {
-	signal_emit__command_window_up("", active_win->active_server, active_win->active);
+	signal_emit__command_("window up", "", active_win->active_server, active_win->active);
 }
 
 static void key_lower_window(void)
 {
-	signal_emit__command_window_down("", active_win->active_server, active_win->active);
+	signal_emit__command_("window down", "", active_win->active_server, active_win->active);
 }
 
 static void key_active_window(void)
 {
-	signal_emit__command_window_goto("active", active_win->active_server, active_win->active);
+	signal_emit__command_("window goto", "active", active_win->active_server, active_win->active);
 }
 
 static SERVER_REC *get_prev_server(SERVER_REC *current)
@@ -1049,7 +1050,7 @@ static void key_previous_window_item(void)
 	SERVER_REC *server;
 
 	if (active_win->items != NULL) {
-		signal_emit__command_window_item_prev("",
+		signal_emit__command_("window item prev", "",
 			    active_win->active_server, active_win->active);
 	} else if (servers != NULL || lookup_servers != NULL) {
 		/* change server */
@@ -1057,7 +1058,7 @@ static void key_previous_window_item(void)
 		if (server == NULL)
 			server = active_win->connect_server;
 		server = get_prev_server(server);
-		signal_emit__command_window_server(server->tag,
+		signal_emit__command_("window server", server->tag,
 			    active_win->active_server, active_win->active);
 	}
 }
@@ -1067,7 +1068,7 @@ static void key_next_window_item(void)
 	SERVER_REC *server;
 
 	if (active_win->items != NULL) {
-		signal_emit__command_window_item_next("",
+		signal_emit__command_("window item next", "",
 			    active_win->active_server, active_win->active);
 	} else if (servers != NULL || lookup_servers != NULL) {
 		/* change server */
@@ -1075,7 +1076,7 @@ static void key_next_window_item(void)
 		if (server == NULL)
 			server = active_win->connect_server;
 		server = get_next_server(server);
-		signal_emit__command_window_server(server->tag,
+		signal_emit__command_("window server", server->tag,
 			    active_win->active_server, active_win->active);
 	}
 }

@@ -30,7 +30,7 @@ static int signal_pidwait;
 
 static void sig_child(GPid pid, gint status, gpointer data)
 {
-	signal_emit_id(signal_pidwait, 2, GINT_TO_POINTER(pid),
+	signal_emit__pidwait(GINT_TO_POINTER(pid),
 		       GINT_TO_POINTER(status));
 	g_hash_table_remove(child_pids, GINT_TO_POINTER(pid));
 	pids = g_slist_remove(pids, GINT_TO_POINTER(pid));

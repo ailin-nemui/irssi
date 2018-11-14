@@ -24,6 +24,7 @@
 #include "net-sendbuffer.h"
 #include "rawlog.h"
 #include "misc.h"
+#include "signal-registry.h"
 
 #include "irc-servers.h"
 #include "irc-channels.h"
@@ -314,6 +315,7 @@ static void strip_params_colon(char *const params)
 static void irc_server_event(IRC_SERVER_REC *server, const char *line,
 			     const char *nick, const char *address)
 {
+	int emitted;
         const char *signal;
 	char *event, *args;
 
@@ -328,15 +330,16 @@ static void irc_server_event(IRC_SERVER_REC *server, const char *line,
 
         /* check if event needs to be redirected */
 	signal = server_redirect_get_signal(server, nick, event, args);
-	if (signal == NULL)
-		signal = event;
-        else
+	if (signal != NULL)
 		rawlog_redirect(server->rawlog, signal);
 
         /* emit it */
 	current_server_event = event+6;
-	if (!signal_emit(signal, 4, server, args, nick, address))
-		signal_emit_id(signal_default_event, 4, server, line, nick, address);
+	emitted = signal == NULL ?
+		signal_emit__event_(line, (SERVER_REC *)server, args, nick, address) :
+		signal_emit_raw(signal, 4, server, args, nick, address);
+	if (!emitted)
+		signal_emit__default_event((SERVER_REC *)server, line, nick, address);
 	current_server_event = NULL;
 
 	g_free(event);
@@ -389,7 +392,7 @@ static void irc_parse_incoming_line(IRC_SERVER_REC *server, char *line)
 
 	line = irc_parse_prefix(line, &nick, &address);
 	if (*line != '\0')
-		signal_emit_id(signal_server_event, 4, server, line, nick, address);
+		signal_emit__server_event((SERVER_REC *)server, line, nick, address);
 }
 
 /* input function: handle incoming server messages */
@@ -410,7 +413,7 @@ static void irc_parse_incoming(SERVER_REC *server)
 	while (!server->disconnected &&
 	       (ret = net_sendbuffer_receive_line(server->handle, &str, count < MAX_SOCKET_READS)) > 0) {
 		rawlog_input(server->rawlog, str);
-		signal_emit_id(signal_server_incoming, 2, server, str);
+		signal_emit__server_incoming(server, str);
 
 		if (server->connection_lost)
 			server_disconnect(server);

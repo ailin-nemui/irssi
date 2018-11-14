@@ -21,6 +21,7 @@
 #include "module.h"
 #include "module-formats.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "special-vars.h"
 #include "settings.h"
 
@@ -853,7 +854,7 @@ void format_newline(WINDOW_REC *window)
 {
 	g_return_if_fail(window != NULL);
 
-	signal_emit_id(signal_gui_print_text, 6, window,
+	signal_emit__gui_print_text(window,
 		       GINT_TO_POINTER(-1), GINT_TO_POINTER(-1),
 		       GINT_TO_POINTER(GUI_PRINT_FLAG_NEWLINE),
 		       "", NULL);
@@ -1238,7 +1239,7 @@ void format_send_to_gui(TEXT_DEST_REC *dest, const char *text)
 
 	if (*str == '\0') {
 		/* empty line, write line info only */
-		signal_emit_id(signal_gui_print_text, 6, dest->window, GINT_TO_POINTER(fgcolor),
+		signal_emit__gui_print_text(dest->window, GINT_TO_POINTER(fgcolor),
 		               GINT_TO_POINTER(bgcolor), GINT_TO_POINTER(flags), str, dest);
 	}
 
@@ -1259,7 +1260,7 @@ void format_send_to_gui(TEXT_DEST_REC *dest, const char *text)
 
 		if (*str != '\0' || (flags & GUI_PRINT_FLAG_CLRTOEOL)) {
 			/* send the text to gui handler */
-			signal_emit_id(signal_gui_print_text, 6, dest->window,
+			signal_emit__gui_print_text(dest->window,
 				       GINT_TO_POINTER(fgcolor),
 				       GINT_TO_POINTER(bgcolor),
 				       GINT_TO_POINTER(flags), str,

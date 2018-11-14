@@ -22,6 +22,7 @@
 #include "module-formats.h"
 #include "modules.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "commands.h"
 #include "settings.h"
 
@@ -68,11 +69,11 @@ void printformat_module_dest_charargs(const char *module, TEXT_DEST_REC *dest,
 
 	if (!sending_print_starting) {
 		sending_print_starting = TRUE;
-		signal_emit_id(signal_print_starting, 1, dest);
+		signal_emit__print_starting(dest);
                 sending_print_starting = FALSE;
 	}
 
-	signal_emit_id(signal_print_format, 5, theme, module,
+	signal_emit__print_format(theme, module,
 		       dest, GINT_TO_POINTER(formatnum), arglist);
 
 	str = format_get_text_theme_charargs(theme, module, dest,
@@ -179,7 +180,7 @@ static void print_line(TEXT_DEST_REC *dest, const char *text)
 
 	/* send both the formatted + stripped (for logging etc.) */
 	stripped = strip_codes(str);
-	signal_emit_id(signal_print_text, 3, dest, str, stripped);
+	signal_emit__print_text(dest, str, stripped);
         g_free_and_null(dest->hilight_color);
 
 	g_free(str);
@@ -308,7 +309,7 @@ static void printtext_dest_args(TEXT_DEST_REC *dest, const char *text, va_list v
 
 	if (!sending_print_starting) {
 		sending_print_starting = TRUE;
-		signal_emit_id(signal_print_starting, 1, dest);
+		signal_emit__print_starting(dest);
                 sending_print_starting = FALSE;
 	}
 
@@ -353,7 +354,7 @@ void printtext_string(void *server, const char *target, int level, const char *t
 
 	if (!sending_print_starting) {
 		sending_print_starting = TRUE;
-		signal_emit_id(signal_print_starting, 1, &dest);
+		signal_emit__print_starting(&dest);
                 sending_print_starting = FALSE;
 	}
 
@@ -375,7 +376,7 @@ void printtext_string_window(WINDOW_REC *window, int level, const char *text)
 
 	if (!sending_print_starting) {
 		sending_print_starting = TRUE;
-		signal_emit_id(signal_print_starting, 1, &dest);
+		signal_emit__print_starting(&dest);
                 sending_print_starting = FALSE;
 	}
 
@@ -432,7 +433,7 @@ static void msg_beep_check(TEXT_DEST_REC *dest)
 	    (beep_when_away || (dest->server != NULL &&
 				!dest->server->usermode_away)) &&
 	    (beep_when_window_active || dest->window != active_win)) {
-                signal_emit("beep", 0);
+                signal_emit__beep();
 	}
 }
 
@@ -470,7 +471,7 @@ static void sig_print_text(TEXT_DEST_REC *dest, const char *text)
 	format_send_to_gui(dest, str);
 	g_free(str);
 
-	signal_emit_id(signal_gui_print_text_finished, 1, dest->window);
+	signal_emit__gui_print_text_finished(dest->window);
 }
 
 void printtext_multiline(void *server, const char *target, int level,

@@ -24,6 +24,8 @@
 #include "modules.h"
 #include "core.h"
 #include "signals.h"
+#include "../core/signal-registry.h"
+#include "signal-registry.h"
 #include "misc.h"
 #include "settings.h"
 
@@ -70,7 +72,7 @@ static void perl_script_destroy(PERL_SCRIPT_REC *script)
 	perl_signal_remove_script(script);
 	perl_source_remove_script(script);
 
-	signal_emit__script_destroyed(script);
+	signal_emit_raw("script destroyed", 1, script);
 
 	g_free(script->name);
 	g_free(script->package);
@@ -148,7 +150,7 @@ void perl_scripts_deinit(void)
         while (perl_scripts != NULL)
 		perl_script_unload(perl_scripts->data);
 
-        signal_emit("perl scripts deinit", 0);
+        signal_emit_raw("perl scripts deinit", 0);
 
         perl_signals_stop();
 	perl_sources_stop();
@@ -250,7 +252,7 @@ static int perl_script_eval(PERL_SCRIPT_REC *script)
 
 		if (error != NULL) {
 			error = g_strdup(error);
-			signal_emit__script_error(script, error);
+			signal_emit_raw("script error", 2, script, error);
 			g_free(error);
 		}
 	}
@@ -279,7 +281,7 @@ static PERL_SCRIPT_REC *script_load(char *name, const char *path,
         script->data = g_strdup(data);
 
 	perl_scripts = g_slist_append(perl_scripts, script);
-	signal_emit__script_created(script);
+	signal_emit_raw("script created", 1, script);
 
 	if (!perl_script_eval(script))
                 script = NULL; /* the script is destroyed in "script error" signal */

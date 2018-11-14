@@ -20,6 +20,7 @@
 #include "common.h"
 
 #include "signals.h"
+#include "fe-common/core/signal-registry.h"
 #include "levels.h"
 #include "printtext.h"
 #include "fe-windows.h"

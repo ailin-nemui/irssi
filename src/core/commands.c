@@ -326,9 +326,9 @@ void command_runsub(const char *cmd, const char *data,
 	subcmd = g_strconcat("command ", newcmd, NULL);
 
 	ascii_strdown(subcmd);
-	if (!signal_emit(subcmd, 3, args, server, item)) {
+	if (!signal_emit_raw(subcmd, 3, args, server, item)) {
 		defcmd = g_strdup_printf("default command %s", cmd);
-		if (!signal_emit(defcmd, 3, data, server, item)) {
+		if (!signal_emit_raw(defcmd, 3, data, server, item)) {
 			signal_emit__error_command(GINT_TO_POINTER(CMDERR_UNKNOWN), subcmd+8);
 		}
                 g_free(defcmd);
@@ -902,8 +902,8 @@ static void parse_command(const char *command, int expand_aliases,
 	oldcmd = current_command;
 	current_command = cmd+8;
         if (server != NULL) server_ref(server);
-        if (!signal_emit(cmd, 3, args, server, item)) {
-		signal_emit_id(signal_default_command, 3,
+        if (!signal_emit_raw(cmd, 3, args, server, item)) {
+		signal_emit__default_command(
 			       command, server, item);
 	}
 	if (server != NULL) {

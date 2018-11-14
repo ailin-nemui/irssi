@@ -21,6 +21,7 @@
 #include "module.h"
 #include "modules.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "commands.h"
 #include "pidwait.h"
 #include "line-split.h"
@@ -368,7 +369,7 @@ static void sig_exec_input_reader(PROCESS_REC *rec)
 		}
 
 		if (ret > 0) {
-			signal_emit_id(signal_exec_input, 2, rec, str);
+			signal_emit__exec_input(rec, str);
                         if (recvlen > 0) recvlen = 0;
 		}
 	} while (ret > 0);
@@ -565,7 +566,7 @@ static void sig_pidwait(void *pid, void *statusp)
 	/* process exited - print the last line if
 	   there wasn't a newline at end. */
 	if (line_split("\n", 1, &str, &rec->databuf) > 0 && *str != '\0')
-		signal_emit_id(signal_exec_input, 2, rec, str);
+		signal_emit__exec_input(rec, str);
 
 	if (!rec->silent) {
 		if (WIFSIGNALED(status)) {
@@ -613,8 +614,8 @@ static void sig_exec_input(PROCESS_REC *rec, const char *text)
 		str = g_strconcat(rec->target_nick ? "-nick " :
 				  rec->target_channel ? "-channel " : "",
 				  rec->target, " ", *text == '\0' ? " " : text, NULL);
-		signal_emit(rec->notice ? "command notice" : "command msg",
-			    3, str, server, item);
+		signal_emit__command_(rec->notice ? "notice" : "msg",
+			    str, server, item);
                 g_free(str);
 	} else if (rec->target_item != NULL) {
 		printtext(NULL, rec->target_item->visible_name,

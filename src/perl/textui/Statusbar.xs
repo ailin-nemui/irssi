@@ -1,5 +1,6 @@
 #define PERL_NO_GET_CONTEXT
 #include "module.h"
+#include "perl/signal-registry.h"
 
 static GHashTable *perl_sbar_defs;
 

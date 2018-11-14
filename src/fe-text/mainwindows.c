@@ -21,6 +21,7 @@
 #include "module.h"
 #include "module-formats.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "commands.h"
 #include "levels.h"
 #include "misc.h"
@@ -833,7 +834,7 @@ void mainwindows_resize(int width, int height)
 		window_set_active(active_mainwin->active);
 	}
 
-	signal_emit("terminal resized", 0);
+	signal_emit__terminal_resized();
 
 	irssi_redraw();
 }

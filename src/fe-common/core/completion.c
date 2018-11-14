@@ -21,6 +21,7 @@
 #include "module.h"
 #include "module-formats.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "commands.h"
 #include "levels.h"
 #include "misc.h"
@@ -681,7 +682,7 @@ static void sig_complete_word(GList **list, WINDOW_REC *window,
 
 	/* complete parameters */
 	signal = g_strconcat("complete command ", cmd, NULL);
-	signal_emit(signal, 5, list, window, word, args, want_space);
+	signal_emit__complete_command_(cmd, list, window, word, args, want_space);
 
 	if (command_have_sub(line)) {
 		/* complete subcommand */
@@ -722,7 +723,7 @@ static void sig_complete_erase(WINDOW_REC *window, const char *word,
 	}
 
 	signal = g_strconcat("complete erase command ", cmd, NULL);
-	signal_emit(signal, 3, window, word, args);
+	signal_emit__complete_erase_command_(cmd, window, word, args);
 
         g_free(signal);
 	g_free(cmd);

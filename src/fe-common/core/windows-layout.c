@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "misc.h"
 #include "levels.h"
 #include "lib-config/iconfig.h"
@@ -110,7 +111,7 @@ static void window_add_items(WINDOW_REC *window, CONFIG_NODE *node)
 
 void windows_layout_restore(void)
 {
-	signal_emit("layout restore", 0);
+	signal_emit__layout_restore();
 }
 
 static void sig_layout_restore(void)
@@ -238,7 +239,7 @@ void windows_layout_save(void)
 	sorted = windows_get_sorted();
 	g_slist_foreach(sorted, (GFunc) window_save, node);
 	g_slist_free(sorted);
-	signal_emit("layout save", 0);
+	signal_emit__layout_save();
 
 	printformat(NULL, NULL, MSGLEVEL_CLIENTNOTICE,
 		    TXT_WINDOWS_LAYOUT_SAVED);
@@ -255,7 +256,7 @@ void windows_layout_reset(void)
 	}
 
 	iconfig_set_str(NULL, "windows", NULL);
-	signal_emit("layout reset", 0);
+	signal_emit__layout_reset();
 
 	printformat(NULL, NULL, MSGLEVEL_CLIENTNOTICE,
 		    TXT_WINDOWS_LAYOUT_RESET);

@@ -13,7 +13,7 @@
 #define MAIN_WINDOW_TEXT_WIDTH(window) \
         ((window)->width-(window)->statusbar_columns)
 
-typedef struct {
+typedef struct _MAIN_WINDOW_REC {
 	WINDOW_REC *active;
 
 	TERM_WINDOW *screen_win;

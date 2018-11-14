@@ -27,6 +27,7 @@
 #include "common.h"
 #include "levels.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "printtext.h"
 #include "statusbar-item.h"
 

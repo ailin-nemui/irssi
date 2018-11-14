@@ -67,7 +67,7 @@ static void add_tuple(gpointer key_, gpointer value_, gpointer user_data)
 }
 
 static void wrap_signal_emit(void *signal, void **p) {
-	signal_emit(signal, 6, p[0], p[1], p[2], p[3], p[4], p[5]);
+	signal_emit_raw(signal, 6, p[0], p[1], p[2], p[3], p[4], p[5]);
 }
 
 static void wrap_signal_continue(void *dummy, void **p) {

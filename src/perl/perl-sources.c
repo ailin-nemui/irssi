@@ -22,6 +22,7 @@
 #define PERL_NO_GET_CONTEXT
 #include "module.h"
 #include "signals.h"
+#include "signal-registry.h"
 
 #include "perl-core.h"
 #include "perl-common.h"

@@ -77,15 +77,6 @@ void cap_finish_negotiation (IRC_SERVER_REC *server)
 	signal_emit__server_cap_end(server);
 }
 
-static void cap_emit_signal (IRC_SERVER_REC *server, char *cmd, char *args)
-{
-	char *signal_name;
-
-	signal_name = g_strdup_printf("server cap %s %s", cmd, args? args: "");
-	signal_emit(signal_name, 1, server);
-	g_free(signal_name);
-}
-
 static gboolean parse_cap_name(char *name, char **key, char **val)
 {
 	const char *eq;
@@ -227,7 +218,7 @@ static void event_cap (IRC_SERVER_REC *server, char *args, char *nick, char *add
 			if (!strcmp(caps[i], "sasl"))
 				got_sasl = TRUE;
 
-			cap_emit_signal(server, "ack", caps[i]);
+			signal_emit__server_cap_ack_(caps[i], server);
 		}
 
 		/* Hopefully the server has ack'd all the caps requested and we're ready to terminate the
@@ -242,7 +233,7 @@ static void event_cap (IRC_SERVER_REC *server, char *args, char *nick, char *add
 		/* A NAK'd request means that a required cap can't be enabled or disabled, don't update the
 		 * list of active caps and notify the listeners. */
 		for (i = 0; i < caps_length; i++)
-			cap_emit_signal(server, "nak", caps[i]);
+			signal_emit__server_cap_nak_(caps[i], server);
 	}
 	else if (!g_ascii_strcasecmp(evt, "NEW")) {
 		for (i = 0; i < caps_length; i++) {
@@ -254,7 +245,7 @@ static void event_cap (IRC_SERVER_REC *server, char *args, char *nick, char *add
 			}
 
 			g_hash_table_insert(server->cap_supported, key, val);
-			cap_emit_signal(server, "new", key);
+			signal_emit__server_cap_new_(key, server);
 		}
 	}
 	else if (!g_ascii_strcasecmp(evt, "DEL")) {
@@ -267,7 +258,7 @@ static void event_cap (IRC_SERVER_REC *server, char *args, char *nick, char *add
 			}
 
 			g_hash_table_remove(server->cap_supported, key);
-			cap_emit_signal(server, "delete", key);
+			signal_emit__server_cap_delete_(key, server);
 			/* The server removed this CAP, remove it from the list
 			 * of the active ones if we had requested it */
 			server->cap_active = gslist_delete_string(server->cap_active, key, g_free);

@@ -1,6 +1,7 @@
 #define PERL_NO_GET_CONTEXT
 #include "module.h"
 #include "expandos.h"
+#include "perl/signal-registry.h"
 
 typedef struct {
 	PERL_SCRIPT_REC *script;

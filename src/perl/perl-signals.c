@@ -25,6 +25,7 @@
 #include "signals.h"
 #include "commands.h"
 #include "servers.h"
+#include "signal-registry.h"
 
 #include "perl-core.h"
 #include "perl-common.h"

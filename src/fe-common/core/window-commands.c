@@ -21,6 +21,7 @@
 #include "module.h"
 #include "module-formats.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "commands.h"
 #include "misc.h"
 #include "servers.h"
@@ -164,7 +165,7 @@ static void cmd_window(const char *data, void *server, WI_ITEM_REC *item)
 	if (*data == '\0')
                 cmd_window_info(active_win);
 	else if (is_numeric(data, 0))
-                signal_emit__command_window_refnum(data, server, item);
+                signal_emit__command_("window refnum", data, server, item);
         else
 		command_runsub("window", data, server, item);
 }
@@ -507,7 +508,7 @@ static void cmd_window_item(const char *data, void *server, WI_ITEM_REC *item)
         while (*data == ' ') data++;
 
 	if (is_numeric(data, '\0'))
-		signal_emit__command_window_item_goto(data, server, item);
+		signal_emit__command_("window item goto", data, server, item);
 	else
 		command_runsub("window item", data, server, item);
 }
@@ -873,7 +874,7 @@ static void cmd_window_default_command(const char *data, SERVER_REC *server, WI_
 	    !settings_get_bool("window_number_commands")) {
 		return;
 	}
-	signal_emit__command_window_refnum(data, server, item);
+	signal_emit__command_("window refnum", data, server, item);
 	signal_stop();
 }
 

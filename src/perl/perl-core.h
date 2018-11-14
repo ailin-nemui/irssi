@@ -1,7 +1,7 @@
 #ifndef __PERL_CORE_H
 #define __PERL_CORE_H
 
-typedef struct {
+typedef struct _PERL_SCRIPT_REC {
 	char *name; /* unique name */
         char *package; /* package name */
 

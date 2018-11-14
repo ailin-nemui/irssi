@@ -484,7 +484,7 @@ static void sig_init_finished(void)
 		   config file, reload it */
 		g_warning("Some settings were automatically "
 			  "updated, please /SAVE");
-		signal_emit("setup changed", 0);
+		signal_emit__setup_changed();
 	}
 
 	signal_emit__settings_userinfo_changed(GUINT_TO_POINTER(user_settings_changed));
@@ -814,7 +814,7 @@ int settings_reread(const char *fname)
 	mainconfig = tempconfig;
 	config_last_modifycounter = mainconfig->modifycounter;
 
-	signal_emit("setup changed", 0);
+	signal_emit__setup_changed();
 	signal_emit__setup_reread(mainconfig->fname);
         return TRUE;
 }

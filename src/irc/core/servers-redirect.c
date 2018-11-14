@@ -442,10 +442,10 @@ static void redirect_abort(IRC_SERVER_REC *server, REDIRECT_REC *rec)
 		g_free(str);
 
 		if (rec->failure_signal != NULL)
-			signal_emit(rec->failure_signal, 1, server);
+			signal_emit_raw(rec->failure_signal, 1, server);
 	} else if (rec->last_signal != NULL) {
                 /* emit the last signal */
-		signal_emit(rec->last_signal, 1, server);
+		signal_emit_raw(rec->last_signal, 1, server);
 	}
 
 	server->redirect_active = g_slist_remove(server->redirect_active, rec);
@@ -561,7 +561,7 @@ server_redirect_get(IRC_SERVER_REC *server, const char *prefix,
 	    !(*redirect)->first_signal_sent) {
 		/* emit the first_signal */
                 (*redirect)->first_signal_sent = TRUE;
-		signal_emit((*redirect)->first_signal, 1, server);
+		signal_emit_raw((*redirect)->first_signal, 1, server);
 	}
 
         return signal;

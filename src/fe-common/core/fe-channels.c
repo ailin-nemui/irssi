@@ -22,6 +22,7 @@
 #include "module-formats.h"
 #include "modules.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "commands.h"
 #include "levels.h"
 #include "misc.h"
@@ -242,7 +243,7 @@ static void cmd_channel(const char *data, SERVER_REC *server, WI_ITEM_REC *item)
 	if (*data == '\0')
 		cmd_channel_list_joined();
 	else if (server != NULL && server_ischannel(server, data)) {
-		signal_emit__command_join(data, server, item);
+		signal_emit__command_("join", data, server, item);
 	} else {
 		command_runsub("channel", data, server, item);
 	}
@@ -578,7 +579,7 @@ static void cmd_names(const char *data, SERVER_REC *server, WI_ITEM_REC *item)
                 g_string_truncate(unknowns, unknowns->len-1);
 
 	if (unknowns->len > 0 && g_strcmp0(channel, unknowns->str) != 0)
-                signal_emit__command_names(unknowns->str, server, item);
+                signal_emit__command_("names", unknowns->str, server, item);
         g_string_free(unknowns, TRUE);
 
 	cmd_params_free(free_arg);
@@ -608,7 +609,7 @@ static void cmd_cycle(const char *data, SERVER_REC *server, WI_ITEM_REC *item)
 			chanrec->server->tag, chanrec->name);
 
 	/* FIXME: kludgy kludgy... */
-	signal_emit__command_part(data, server, item);
+	signal_emit__command_("part", data, server, item);
 
 	if (g_slist_find(channels, chanrec) != NULL) {
 		chanrec->left = TRUE;

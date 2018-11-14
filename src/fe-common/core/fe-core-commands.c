@@ -22,6 +22,7 @@
 #include "module.h"
 #include "module-formats.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "commands.h"
 #include "levels.h"
 #include "misc.h"
@@ -168,7 +169,7 @@ static void cmd_cat(const char *data)
 /* SYNTAX: BEEP */
 static void cmd_beep(void)
 {
-        signal_emit("beep", 0);
+        signal_emit__beep();
 }
 
 static void cmd_nick(const char *data, SERVER_REC *server)

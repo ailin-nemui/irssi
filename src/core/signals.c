@@ -271,7 +271,7 @@ static int signal_emit_real(Signal *rec, int params, va_list va,
 	return stopped;
 }
 
-int signal_emit(const char *signal, int params, ...)
+int signal_emit_raw(const char *signal, int params, ...)
 {
 	Signal *rec;
 	va_list va;
@@ -291,7 +291,7 @@ int signal_emit(const char *signal, int params, ...)
 	return rec != NULL;
 }
 
-int signal_emit_id(int signal_id, int params, ...)
+int signal_emit_id_raw(int signal_id, int params, ...)
 {
 	Signal *rec;
 	va_list va;

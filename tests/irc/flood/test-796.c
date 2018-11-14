@@ -31,6 +31,10 @@
 #include "irc-servers.h"
 #include "irc-channels.h"
 
+#include <core/signal-registry.h>
+#include <fe-common/core/signal-registry.h>
+#include <irc/core/signal-registry.h>
+
 /* irc.c */
 void irc_init(void);
 void irc_deinit(void);
@@ -75,7 +79,7 @@ static void server_destroy_flood_set_up(ServerDestroyFloodData *fixture, const v
 	irc_init();
 	fe_common_core_init();
 	fe_common_irc_init();
-	signal_emit("irssi init finished", 0);
+	signal_emit__irssi_init_finished();
 	command_bind("echo", NULL, (SIGNAL_FUNC) cmd_echo);
 	signal_add("message public", (SIGNAL_FUNC) sig_public);
 	signal_add("server destroyed", (SIGNAL_FUNC) print_destroyed);
@@ -149,7 +153,7 @@ static void test_server_destroy_flood(ServerDestroyFloodData *fixture, const voi
 	*/
 
 	server_ref(server);
-	signal_emit__event_privmsg(server, "#someroom :test message", "nick", "user@host");
+	signal_emit__event_("privmsg", (SERVER_REC *)server, "#someroom :test message", "nick", "user@host");
 	server_unref(server);
 
 	g_log_set_always_fatal(loglev);

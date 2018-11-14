@@ -46,7 +46,7 @@ typedef struct {
 	GSList *items;
 } STATUSBAR_CONFIG_REC;
 
-typedef struct {
+typedef struct _STATUSBAR_REC {
 	STATUSBAR_GROUP_REC *group;
 	STATUSBAR_CONFIG_REC *config;
 

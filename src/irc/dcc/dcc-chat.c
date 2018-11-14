@@ -705,7 +705,7 @@ static void ctcp_msg_dcc_chat(IRC_SERVER_REC *server, const char *data,
 static void dcc_chat_msg(CHAT_DCC_REC *dcc, const char *msg)
 {
 	char *event, *cmd, *ptr;
-	int reply;
+	int reply, emitted;
 
 	g_return_if_fail(IS_DCC_CHAT(dcc));
 	g_return_if_fail(msg != NULL);
@@ -740,9 +740,14 @@ static void dcc_chat_msg(CHAT_DCC_REC *dcc, const char *msg)
 	cmd = g_ascii_strup(cmd, -1);
 
 	ascii_strdown(event+9);
-	if (!signal_emit(event, 2, dcc, ptr)) {
-		signal_emit(reply ? "default dcc reply" :
-			    "default dcc ctcp", 3, dcc, cmd, ptr);
+	emitted = reply ?
+		signal_emit__dcc_reply_(msg+1, dcc, ptr) :
+		signal_emit__dcc_ctcp_(msg+1, dcc, ptr);
+	if (!emitted) {
+		if (reply)
+			signal_emit__default_dcc_reply(dcc, cmd, ptr);
+		else
+			signal_emit__default_dcc_ctcp(dcc, cmd, ptr);
 	}
 
         g_free(cmd);
@@ -756,9 +761,8 @@ static void dcc_ctcp_redirect(CHAT_DCC_REC *dcc, const char *msg)
 	g_return_if_fail(msg != NULL);
 	g_return_if_fail(IS_DCC_CHAT(dcc));
 
-	/* XXX: signal_emit carries additional user_data */
-	signal_emit("ctcp msg dcc", 6, dcc->server, msg,
-		    dcc->nick, "dcc", dcc->mynick, dcc);
+	signal_emit__ctcp_msg_dcc(dcc->server, msg,
+				  dcc->nick, "dcc", dcc->mynick, (DCC_REC *)dcc);
 }
 
 static void dcc_ctcp_reply_redirect(CHAT_DCC_REC *dcc, const char *msg)
@@ -766,9 +770,8 @@ static void dcc_ctcp_reply_redirect(CHAT_DCC_REC *dcc, const char *msg)
 	g_return_if_fail(msg != NULL);
 	g_return_if_fail(IS_DCC_CHAT(dcc));
 
-	/* XXX: signal_emit carries additional user_data */
-	signal_emit("ctcp reply dcc", 6, dcc->server, msg,
-		    dcc->nick, "dcc", dcc->mynick, dcc);
+	signal_emit__ctcp_reply_dcc(dcc->server, msg,
+				    dcc->nick, "dcc", dcc->mynick, (DCC_REC *)dcc);
 }
 
 /* CTCP REPLY: REJECT */

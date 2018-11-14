@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "../signal-registry.h"
 #include "commands.h"
 #include "levels.h"
 #include "settings.h"
@@ -269,7 +270,7 @@ static void cmd_me(const char *data, SERVER_REC *server, WI_ITEM_REC *item)
 
 	dcc = item_get_dcc(item);
 	if (dcc != NULL)
-		signal_emit__message_dcc_own_action(dcc, data);
+		signal_emit__message_dcc_own__action(dcc, data);
 }
 
 static void cmd_action(const char *data, SERVER_REC *server, WI_ITEM_REC *item)
@@ -299,7 +300,7 @@ static void cmd_action(const char *data, SERVER_REC *server, WI_ITEM_REC *item)
 		if (query_find(NULL, target) == NULL)
 			completion_last_message_add(target);
 
-		signal_emit__message_dcc_own_action(dcc, text);
+		signal_emit__message_dcc_own__action(dcc, text);
 	}
 	cmd_params_free(free_arg);
 }
@@ -332,7 +333,7 @@ static void cmd_ctcp(const char *data, SERVER_REC *server)
 			    IRCTXT_DCC_CHAT_NOT_FOUND, target+1);
 	} else {
 		ascii_strup(ctcpcmd);
-		signal_emit__message_dcc_own_ctcp(dcc, ctcpcmd, ctcpdata);
+		signal_emit__message_dcc_own__ctcp(dcc, ctcpcmd, ctcpdata);
 	}
 
 	cmd_params_free(free_arg);

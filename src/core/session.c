@@ -87,7 +87,7 @@ static void cmd_upgrade(const char *data)
         session_args = g_strsplit(str, " ", -1);
         g_free(str);
 
-	signal_emit("gui exit", 0);
+	signal_emit__gui_exit();
 }
 
 static void session_save_nick(CHANNEL_REC *channel, NICK_REC *nick,

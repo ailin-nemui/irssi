@@ -325,7 +325,7 @@ static void cmd_quit(const char *data)
 		g_free(str);
 	}
 
-	signal_emit("gui exit", 0);
+	signal_emit__gui_exit();
 }
 
 /* SYNTAX: MSG [-<server tag>] [-channel | -nick] *|<targets> <message> */

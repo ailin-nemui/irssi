@@ -115,7 +115,7 @@ static void event_whois_end(IRC_SERVER_REC *server, const char *data)
 			event = "notifylist away changed";
 
 		if (event != NULL) {
-			signal_emit(event, 6, server, rec->nick,
+			signal_emit_raw(event, 6, server, rec->nick,
 				    rec->user != NULL ? rec->user : "??",
 				    rec->host != NULL ? rec->host : "??",
 				    rec->realname != NULL ? rec->realname : "??",

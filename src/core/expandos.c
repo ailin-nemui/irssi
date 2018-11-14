@@ -551,7 +551,7 @@ static int sig_timer(void)
 	struct tm *tm;
         int last_min;
 
-        signal_emit("expando timer", 0);
+        signal_emit__expando_timer();
 
         /* check if $Z has changed */
 	now = time(NULL);
@@ -566,7 +566,7 @@ static int sig_timer(void)
                                 return 1;
 		}
 
-                signal_emit("time changed", 0);
+                signal_emit__time_changed();
 		last_timestamp = now;
 	}
 

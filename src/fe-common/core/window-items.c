@@ -22,6 +22,7 @@
 #include "module-formats.h"
 #include "modules.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "servers.h"
 #include "channels.h"
 #include "settings.h"

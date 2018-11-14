@@ -22,6 +22,8 @@
 #include "module-formats.h"
 #include "args.h"
 #include "misc.h"
+#include "signals.h"
+#include "signal-registry.h"
 #include "levels.h"
 #include "settings.h"
 
@@ -340,7 +342,7 @@ static void autoconnect_servers(void)
 		else
 			str = g_strdup_printf("%s %d %s", autocon_server, autocon_port, autocon_password);
 
-		signal_emit__command_connect(str);
+		signal_emit__command_("connect", str, NULL, NULL);
 		g_free(str);
 		return;
 	}
@@ -365,7 +367,7 @@ static void autoconnect_servers(void)
 				str = g_strdup_printf("%s %d", rec->address, rec->port);
 			}
 
-			signal_emit__command_connect(str);
+			signal_emit__command_("connect", str, NULL, NULL);
 			g_free(str);
 		}
 	}
@@ -436,7 +438,7 @@ void fe_common_core_finish_init(void)
 {
 	int setup_changed;
 
-	signal_emit("irssi init read settings", 0);
+	signal_emit__irssi_init_read_settings();
 
 #ifdef SIGPIPE
 	signal(SIGPIPE, SIG_IGN);
@@ -462,7 +464,7 @@ void fe_common_core_finish_init(void)
 	g_log_set_default_handler((GLogFunc) glog_func, NULL);
 
 	if (setup_changed)
-                signal_emit("setup changed", 0);
+                signal_emit__setup_changed();
 
 	autorun_startup();
 	autoconnect_servers();

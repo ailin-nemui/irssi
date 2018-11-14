@@ -23,6 +23,9 @@
 #include "modules-load.h"
 #include "args.h"
 #include "signals.h"
+#include "core/signal-registry.h"
+#include "fe-common/core/signal-registry.h"
+#include "signal-registry.h"
 #include "levels.h"
 #include "core.h"
 #include "settings.h"
@@ -194,7 +197,7 @@ static void textui_finish_init(void)
 	dirty_check();
 
 	fe_common_core_finish_init();
-	signal_emit("irssi init finished", 0);
+	signal_emit__irssi_init_finished();
 	statusbar_redraw(NULL, TRUE);
 
 	if (servers == NULL && lookup_servers == NULL) {
@@ -336,7 +339,7 @@ int main(int argc, char **argv)
 		if (reload_config) {
 			/* SIGHUP received, do /RELOAD */
 			reload_config = FALSE;
-			signal_emit__command_reload("");
+			signal_emit__command_("reload", "", NULL, NULL);
 		}
 
 		dirty_check();

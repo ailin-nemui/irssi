@@ -40,8 +40,8 @@ void signal_remove_full(const char *signal, SIGNAL_FUNC func, void *user_data);
 void signal_remove_id(int signal_id, SIGNAL_FUNC func, void *user_data);
 
 /* emit signal */
-int signal_emit(const char *signal, int params, ...);
-int signal_emit_id(int signal_id, int params, ...);
+int signal_emit_raw(const char *signal, int params, ...);
+int signal_emit_id_raw(int signal_id, int params, ...);
 
 /* continue currently emitted signal with different parameters */
 void signal_continue(int params, ...);

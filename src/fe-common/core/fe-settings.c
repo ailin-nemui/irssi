@@ -21,6 +21,7 @@
 #include "module.h"
 #include "module-formats.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "commands.h"
 #include "servers.h"
 #include "misc.h"
@@ -196,7 +197,7 @@ static void cmd_set(char *data)
 				/* Unpossible! */
 				break;
 			}
-			signal_emit("setup changed", 0);
+			signal_emit__setup_changed();
 			printformat(NULL, NULL, MSGLEVEL_CLIENTCRAP, TXT_SET_TITLE, rec->section);
 			set_print(rec);
 		} else
@@ -227,7 +228,7 @@ static void cmd_toggle(const char *data)
 	else {
 		set_boolean(key, *value != '\0' ? value : "TOGGLE");
 		set_print(settings_get_record(key));
-		signal_emit("setup changed", 0);
+		signal_emit__setup_changed();
 	}
 
 	cmd_params_free(free_arg);

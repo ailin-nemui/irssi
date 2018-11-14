@@ -370,7 +370,7 @@ static void ctcp_msg_dcc(IRC_SERVER_REC *server, const char *data,
 	if (args != NULL) *args++ = '\0'; else args = "";
 
 	ascii_strdown(str+13);
-	if (!signal_emit(str, 6, server, args, nick, addr, target, chat)) {
+	if (!signal_emit__ctcp_msg_dcc_(data, server, args, nick, addr, target, chat)) {
 		signal_emit__default_ctcp_msg_dcc(server, data, nick, addr, target, chat);
 	}
 	g_free(str);
@@ -391,7 +391,7 @@ static void ctcp_reply_dcc(IRC_SERVER_REC *server, const char *data,
 	if (args != NULL) *args++ = '\0'; else args = "";
 
 	ascii_strdown(str+15);
-	if (!signal_emit(str, 5, server, args, nick, addr, target)) {
+	if (!signal_emit__ctcp_reply_dcc_(data, server, args, nick, addr, target)) {
 		signal_emit__default_ctcp_reply_dcc(server, data, nick, addr, target);
 	}
 	g_free(str);

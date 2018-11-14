@@ -23,6 +23,7 @@
 #include "module.h"
 #include "textbuffer-view.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "utf8.h"
 
 typedef struct {
