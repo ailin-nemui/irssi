@@ -1,0 +1,229 @@
+// core
+SIGNAL_REGISTER(gui_exit, 0, (void))
+SIGNAL_REGISTER(gui_dialog, 2, (char *type, const char *text),
+	 type, text)
+
+// chat-protocols.c:
+SIGNAL_REGISTER(chat_protocol_created, 1, (CHAT_PROTOCOL_REC *chat_protocol),
+	 chat_protocol)
+SIGNAL_REGISTER(chat_protocol_updated, 1, (CHAT_PROTOCOL_REC *chat_protocol),
+	 chat_protocol)
+SIGNAL_REGISTER(chat_protocol_destroyed, 1, (CHAT_PROTOCOL_REC *chat_protocol),
+	 chat_protocol)
+SIGNAL_REGISTER(chat_protocol_deinit, 1, (CHAT_PROTOCOL_REC *chat_protocol),
+	 chat_protocol)
+
+// channels.c:
+SIGNAL_REGISTER(channel_created, 2, (CHANNEL_REC *channel, int_in_ptr automatic),
+	 channel, automatic)
+SIGNAL_REGISTER(channel_destroyed, 1, (CHANNEL_REC *channel),
+	 channel)
+SIGNAL_REGISTER(channel_name_changed, 1, (CHANNEL_REC *channel),
+	 channel)
+
+// channels-setup.c
+SIGNAL_REGISTER(channel_setup_created, 2, (CHANNEL_SETUP_REC *channel_setup, CONFIG_NODE *node),
+	 channel_setup, node)
+SIGNAL_REGISTER(channel_setup_destroyed, 1, (CHANNEL_SETUP_REC *channel_setup),
+	 channel_setup)
+
+// chatnets.c:
+SIGNAL_REGISTER(chatnet_created, 1, (CHATNET_REC *chatnet),
+	 chatnet)
+SIGNAL_REGISTER(chatnet_destroyed, 1, (CHATNET_REC *chatnet),
+	 chatnet)
+SIGNAL_REGISTER(chatnet_saved, 2, (CHATNET_REC *chatnet, CONFIG_NODE *node),
+	 chatnet, node)
+SIGNAL_REGISTER(chatnet_removed, 1, (CHATNET_REC *chatnet),
+	 chatnet)
+SIGNAL_REGISTER(chatnet_read, 2, (CHATNET_REC *chatnet, CONFIG_NODE *node),
+	 chatnet, node)
+
+// commands.c:
+SIGNAL_REGISTER(commandlist_new, 1, (COMMAND_REC *command),
+	 command)
+SIGNAL_REGISTER(commandlist_remove, 1, (COMMAND_REC *command),
+	 command)
+SIGNAL_REGISTER(list_subcommands, 1, (const char *command),
+	 command)
+SIGNAL_REGISTER(error_command, 2, (int_in_ptr err, char *cmd),
+	 err, cmd)
+
+SIGNAL_REGISTER(send_command, 3, (char *args, SERVER_REC *server, WI_ITEM_REC *wi_item),
+	 args, server, wi_item)
+SIGNAL_REGISTER(send_text, 3, (const char *line, SERVER_REC *server, WI_ITEM_REC *wi_item),
+	 line, server, wi_item)
+SIGNAL_REGISTER_F(command, 3, (const char *cmd, char *args, SERVER_REC *server, WI_ITEM_REC *wi_item),
+	 cmd, args, server, wi_item)
+SIGNAL_REGISTER(default_command, 3, (char *args, SERVER_REC *server, WI_ITEM_REC *wi_item),
+	 args, server, wi_item)
+
+// chat-commands.c:
+SIGNAL_REGISTER(chat_protocol_unknown, 1, (const char *protocol),
+	 protocol)
+SIGNAL_REGISTER(message_own__public, 3, (SERVER_REC *server, char *msg, char *target),
+	 server, msg, target)
+SIGNAL_REGISTER(message_own__private, 4, (SERVER_REC *server, char *msg, char *target, char *orig_target),
+	 server, msg, target, orig_target)
+
+// ignore.c:
+SIGNAL_REGISTER(ignore_created, 1, (IGNORE_REC *ignore),
+	 ignore)
+SIGNAL_REGISTER(ignore_destroyed, 1, (IGNORE_REC *ignore),
+	 ignore)
+SIGNAL_REGISTER(ignore_changed, 1, (IGNORE_REC *ignore),
+	 ignore)
+
+// log.c:
+SIGNAL_REGISTER(log_new, 1, (LOG_REC *log),
+	 log)
+SIGNAL_REGISTER(log_remove, 1, (LOG_REC *log),
+	 log)
+SIGNAL_REGISTER(log_create_failed, 1, (LOG_REC *log),
+	 log)
+SIGNAL_REGISTER(log_locked, 1, (LOG_REC *log),
+	 log)
+SIGNAL_REGISTER(log_started, 1, (LOG_REC *log),
+	 log)
+SIGNAL_REGISTER(log_stopped, 1, (LOG_REC *log),
+	 log)
+SIGNAL_REGISTER(log_rotated, 1, (LOG_REC *log),
+	 log)
+SIGNAL_REGISTER(log_written, 2, (LOG_REC *log, const char *line),
+	 log, line)
+SIGNAL_REGISTER(log_config_save, 2, (LOG_REC *log, CONFIG_NODE *node),
+	 log, node)
+SIGNAL_REGISTER(log_config_read, 2, (LOG_REC *log, CONFIG_NODE *node),
+	 log, node)
+
+// log-away.c:
+SIGNAL_REGISTER(awaylog_show, 3, (LOG_REC *log, int_in_ptr away_msgs, int_in_ptr filepos),
+	 log, away_msgs, filepos)
+
+// modules.c:
+SIGNAL_REGISTER(module_loaded, 2, (MODULE_REC *module, MODULE_FILE_REC *module_file),
+	 module, module_file)
+SIGNAL_REGISTER(module_unloaded, 2, (MODULE_REC *module, MODULE_FILE_REC *module_file),
+	 module, module_file)
+SIGNAL_REGISTER(module_error, 4, (int_in_ptr error, const char *text, const char *rootmodule, const char *submodule),
+	 error, text, rootmodule, submodule)
+
+// network-openssl.c:
+SIGNAL_REGISTER(tls_handshake_finished, 2, (SERVER_REC *server, TLS_REC *tls),
+	 server, tls)
+
+// nicklist.c:
+SIGNAL_REGISTER(nicklist_new, 2, (CHANNEL_REC *channel, NICK_REC *nick),
+	 channel, nick)
+SIGNAL_REGISTER(nicklist_remove, 2, (CHANNEL_REC *channel, NICK_REC *nick),
+	 channel, nick)
+SIGNAL_REGISTER(nicklist_changed, 3, (CHANNEL_REC *channel, NICK_REC *nick, const char *old_nick),
+	 channel, nick, old_nick)
+SIGNAL_REGISTER(nicklist_host_changed, 2, (CHANNEL_REC *channel, NICK_REC *nick),
+	 channel, nick)
+SIGNAL_REGISTER(nicklist_gone_changed, 2, (CHANNEL_REC *channel, NICK_REC *nick),
+	 channel, nick)
+SIGNAL_REGISTER(nicklist_serverop_changed, 2, (CHANNEL_REC *channel, NICK_REC *nick),
+	 channel, nick)
+
+// pidwait.c:
+SIGNAL_REGISTER(pidwait, 2, (int_in_ptr pid, int_in_ptr status),
+	 pid, status)
+
+// queries.c:
+SIGNAL_REGISTER(query_created, 2, (QUERY_REC *query, int_in_ptr automatic),
+	 query, automatic)
+SIGNAL_REGISTER(query_destroyed, 1, (QUERY_REC *query),
+	 query)
+SIGNAL_REGISTER(query_nick_changed, 2, (QUERY_REC *query, const char *orignick),
+	 query, orignick)
+SIGNAL_REGISTER(window_item_name_changed, 1, (WI_ITEM_REC *wi_item),
+	 wi_item)
+SIGNAL_REGISTER(query_address_changed, 1, (QUERY_REC *query),
+	 query)
+SIGNAL_REGISTER(query_server_changed, 1, (QUERY_REC *query),
+	 query)
+
+// rawlog.c:
+SIGNAL_REGISTER(rawlog, 2, (RAWLOG_REC *rawlog, char *data),
+	 rawlog, data)
+
+// server.c:
+SIGNAL_REGISTER(server_looking, 1, (SERVER_REC *server),
+	 server)
+SIGNAL_REGISTER(server_nick_changed, 1, (SERVER_REC *server),
+	 server)
+SIGNAL_REGISTER(server_connected, 1, (SERVER_REC *server),
+	 server)
+SIGNAL_REGISTER(server_connecting, 2, (SERVER_REC *server, mem_ptr ip),
+	 server, ip)
+SIGNAL_REGISTER(server_connect_failed, 2, (SERVER_REC *server, const char *msg),
+	 server, msg)
+SIGNAL_REGISTER(server_disconnected, 1, (SERVER_REC *server),
+	 server)
+SIGNAL_REGISTER(server_quit, 2, (SERVER_REC *server, char *msg),
+	 server, msg)
+SIGNAL_REGISTER(server_sendmsg, 4, (SERVER_REC *server, char *target, char *msg, int_in_ptr target_type),
+	 server, target, msg, target_type)
+SIGNAL_REGISTER(server_destroyed, 1, (SERVER_REC *server),
+	 server)
+
+// servers-setup.c
+SIGNAL_REGISTER(server_setup_fill_connect, 1, (SERVER_CONNECT_REC *server_connect),
+	 server_connect)
+SIGNAL_REGISTER(server_setup_fill_reconn, 2, (SERVER_CONNECT_REC *server_connect, SERVER_SETUP_REC *server_setup),
+	 server_connect, server_setup)
+SIGNAL_REGISTER(server_setup_fill_server, 2, (SERVER_CONNECT_REC *server_connect, SERVER_SETUP_REC *server_setup),
+	 server_connect, server_setup)
+SIGNAL_REGISTER(server_setup_fill_chatnet, 2, (SERVER_CONNECT_REC *server_connect, CHATNET_REC *chatnet),
+	 server_connect, chatnet)
+SIGNAL_REGISTER(server_setup_read, 2, (SERVER_SETUP_REC *server_setup, CONFIG_NODE *node),
+	 server_setup, node)
+SIGNAL_REGISTER(server_setup_saved, 2, (SERVER_SETUP_REC *server_setup, CONFIG_NODE *node),
+	 server_setup, node)
+SIGNAL_REGISTER(server_setup_destroyed, 1, (SERVER_SETUP_REC *server_setup),
+	 server_setup)
+SIGNAL_REGISTER(server_setup_updated, 1, (SERVER_SETUP_REC *server_setup),
+	 server_setup)
+
+// servers-reconnect.c:
+SIGNAL_REGISTER(server_reconnect_save_status, 2, (SERVER_CONNECT_REC *server_connect, SERVER_REC *server),
+	 server_connect, server)
+SIGNAL_REGISTER(server_reconnect_remove, 1, (RECONNECT_REC *reconnect),
+	 reconnect)
+SIGNAL_REGISTER(server_reconnect_not_found, 1, (const char *tag),
+	 tag)
+SIGNAL_REGISTER(server_connect_copy, 2, (SERVER_CONNECT_REC **dest, SERVER_CONNECT_REC *server_connect),
+	 dest, server_connect)
+
+// session.c
+SIGNAL_REGISTER(session_save, 1, (CONFIG_REC *config),
+	 config)
+SIGNAL_REGISTER(session_save_nick, 4, (CHANNEL_REC *channel, NICK_REC *nick, CONFIG_REC *config, CONFIG_NODE *node),
+	 channel, nick, config, node)
+SIGNAL_REGISTER(session_save_channel, 3, (CHANNEL_REC *channel, CONFIG_REC *config, CONFIG_NODE *node),
+	 channel, config, node)
+SIGNAL_REGISTER(session_save_server, 3, (SERVER_REC *server, CONFIG_REC *config, CONFIG_NODE *node),
+	 server, config, node)
+SIGNAL_REGISTER(session_restore_nick, 2, (CHANNEL_REC *channel, NICK_REC *nick),
+	 channel, nick)
+SIGNAL_REGISTER(session_restore_channel, 2, (CHANNEL_REC *channel, CONFIG_NODE *node),
+	 channel, node)
+SIGNAL_REGISTER(session_restore_server, 2, (SERVER_REC *server, CONFIG_NODE *node),
+	 server, node)
+SIGNAL_REGISTER(session_restore, 1, (CONFIG_REC *config),
+	 config)
+
+// settings.c:
+SIGNAL_REGISTER(setup_changed, 0, (void))
+SIGNAL_REGISTER(setup_reread, 1, (char *fname),
+	 fname)
+SIGNAL_REGISTER(setup_saved, 2, (const char *fname, int_in_ptr autosaved),
+	 fname, autosaved)
+SIGNAL_REGISTER(settings_errors, 1, (const char *msg),
+	 msg)
+SIGNAL_REGISTER(settings_userinfo_changed, 1, (uint_in_ptr flags),
+	 flags)
+SIGNAL_REGISTER(irssi_init_userinfo_changed, 1, (uint_in_ptr flags),
+	 flags)
+ 

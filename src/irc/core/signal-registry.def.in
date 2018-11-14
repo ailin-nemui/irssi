@@ -1,0 +1,137 @@
+
+// bans.c:
+ "ban type changed", char *bantype
+
+// channels, nicklist:
+ "channel joined", CHANNEL_REC
+ "channel wholist", CHANNEL_REC
+ "channel sync", CHANNEL_REC
+
+ "channel topic changed", CHANNEL_REC
+
+// channel-rejoin.c
+ "channel rejoin remove", SERVER_REC, REJOIN_REC
+ "channel rejoin new", SERVER_REC, REJOIN_REC
+
+// ctcp.c:
+
+ "ctcp msg", IRC_SERVER_REC, const char *args, const char *nick, const char *addr, const char *target
+ "ctcp msg "<cmd>, IRC_SERVER_REC, const char *args, const char *nick, const char *addr, const char *target
+ "default ctcp msg", IRC_SERVER_REC, const char *args, const char *nick, const char *addr, const char *target
+ "ctcp reply", IRC_SERVER_REC, const char *args, const char *nick, const char *addr, const char *target
+ "ctcp reply "<cmd>, IRC_SERVER_REC, const char *args, const char *nick, const char *addr, const char *target
+ "default ctcp reply", IRC_SERVER_REC, const char *args, const char *nick, const char *addr, const char *target
+ "ctcp action", IRC_SERVER_REC, const char *args, const char *nick, const char *addr, const char *target
+
+// irc-servers.c:
+ "event connected", SERVER_REC
+
+// irc-cap.c
+ "server cap ack "<cmd>, IRC_SERVER_REC
+ "server cap nak "<cmd>, IRC_SERVER_REC
+ "server cap new "<cmd>, IRC_SERVER_REC
+ "server cap delete "<cmd>, IRC_SERVER_REC
+ "server cap end", IRC_SERVER_REC
+ "server cap req", IRC_SERVER_REC, char *caps
+
+// sasl.c
+ "server sasl failure", SERVER_REC, char *reason
+ "server sasl success", SERVER_REC
+
+// irc.c:
+
+ "server event", SERVER_REC, char *data, char *sender_nick, char *sender_address
+ "event "<cmd>, SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
+ "default event", SERVER_REC, char *data, char *sender_nick, char *sender_address
+ "whois default event", SERVER_REC, char *args, char *sender_nick, char *sender_address
+
+ "server incoming", SERVER_REC, char *data
+
+// (for perl parser..)
+ "redir "<cmd>, SERVER_REC, char *args, char *sender_nick, char *sender_address
+
+// lag.c:
+ "server lag", SERVER_REC
+ "server lag disconnect", SERVER_REC
+
+// massjoin.c:
+ "massjoin", CHANNEL_REC, GSList *nicks/*<NICK_REC*>*/
+
+// mode-lists.c:
+ "ban new", CHANNEL_REC, BAN_REC
+ "ban remove", CHANNEL_REC, BAN_REC, const char *setby
+
+// modes.c:
+ "channel mode changed", CHANNEL_REC, const char *setby
+ "nick mode changed", CHANNEL_REC, NICK_REC, const char *setby, const char *mode, const char *type
+ "user mode changed", SERVER_REC, char *old
+ "away mode changed", SERVER_REC
+
+// netsplit.c:
+ "netsplit server new", IRC_SERVER_REC, NETSPLIT_SERVER_REC
+ "netsplit server remove", IRC_SERVER_REC, NETSPLIT_SERVER_REC
+ "netsplit new", NETSPLIT_REC
+ "netsplit remove", NETSPLIT_REC
+
+// dcc*.c:
+
+ "dcc ctcp "<cmd>, char *args, DCC_REC
+ "default dcc ctcp", char *args, DCC_REC
+ "dcc unknown ctcp", char *args, char *sender, char *sendaddr
+
+ "dcc reply "<cmd>, char *args, DCC_REC
+ "default dcc reply", char *args, DCC_REC
+ "dcc unknown reply", char *args, char *sender, char *sendaddr
+
+ "dcc created", DCC_REC
+ "dcc destroyed", DCC_REC
+ "dcc connected", DCC_REC
+ "dcc rejected", DCC_REC
+ "dcc closed", DCC_REC
+ "dcc request", DCC_REC, const char *sendaddr
+ "dcc request send", DCC_REC
+ "dcc chat message", CHAT_DCC_REC, char *msg
+ "dcc transfer update", DCC_REC
+ "dcc get receive", GET_DCC_REC
+ "dcc send pasv", SEND_DCC_REC
+ "dcc server message", SERVER_DCC_REC, char *msg
+ "dcc server started", SERVER_DCC_REC
+ "dcc error connect", DCC_REC
+ "dcc error file create", DCC_REC, const char *filename, const char *errmsg
+ "dcc error file open", const char *nick, const char *filename, int errno
+ "dcc error get not found", const char *nick
+ "dcc error send no route", const char *nick, char *file
+ "dcc error send exists", const char *nick, const char *filename
+ "dcc error unknown type", const char *type
+ "dcc error close not found", const char *type, const char *nick, char *filename
+ "dcc error write", DCC_REC, const char *errmsg
+ "dcc error ctcp", const char *type, const char *data, const char *nick, const char *addr, const char *target
+
+ "default ctcp msg dcc", IRC_SERVER_REC, const char *args, const char *nick, const char *addr, const char *target, DCC_REC
+ "default ctcp reply dcc", IRC_SERVER_REC, const char *args, const char *nick, const char *addr, const char *target
+
+// autoignore.c:
+
+ "autoignore new", SERVER_REC, AUTOIGNORE_REC
+ "autoignore remove", SERVER_REC, AUTOIGNORE_REC
+
+// flood.c:
+
+ "flood", SERVER_REC, const char *nick, const char *host, int level, const char *target
+
+// notifylist.c:
+
+ "notifylist new", NOTIFYLIST_REC
+ "notifylist remove", NOTIFYLIST_REC
+ "notifylist joined", SERVER_REC, char *nick, char *user, char *host, const char *realname, char *awaymsg
+ "notifylist away changed", SERVER_REC, char *nick, char *user, char *host, const char *realname, char *awaymsg
+ "notifylist left", SERVER_REC, char *nick, char *user, char *host, const char *realname, char *awaymsg
+
+// proxy/listen.c:
+
+ "proxy client connecting", CLIENT_REC
+ "proxy client connected", CLIENT_REC
+ "proxy client disconnected", CLIENT_REC
+ "proxy client command", CLIENT_REC, char *args, char *data
+ "proxy client dump", CLIENT_REC, char *data
+

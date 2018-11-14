@@ -1,0 +1,154 @@
+// FE common
+
+SIGNAL_REGISTER(gui_print_text, 6,
+	(WINDOW_REC *window, int_in_ptr fg, int_in_ptr bg, int_in_ptr flags, char *text, TEXT_DEST_REC *text_dest),
+	 window, fg, bg, flags, text, text_dest)
+
+// (Can be used to determine when all "gui print text"s are sent (not required)))
+SIGNAL_REGISTER(gui_print_text_finished, 1,
+	(WINDOW_REC *window),
+	 window)
+
+// completion.c:
+SIGNAL_REGISTER(complete_word, 5,
+	(GList * of char*, WINDOW_REC *window, char *word, char *linestart, int_in_ptr *want_space),
+	GList * of char*, window, word, linestart, want_space)
+
+// fe-common-core.c:
+SIGNAL_REGISTER(irssi_init_read_settings, 0,
+	(void))
+
+// fe-exec.c:
+SIGNAL_REGISTER(exec_new, 1,
+	(PROCESS_REC *process),
+	 process)
+SIGNAL_REGISTER(exec_remove, 2,
+	(PROCESS_REC *process, int_in_ptr status),
+	 process, status)
+SIGNAL_REGISTER(exec_input, 2,
+	(PROCESS_REC *process, char *text),
+	 process, text)
+
+// fe-messages.c:
+SIGNAL_REGISTER(message_public, 5,
+	(SERVER_REC *server, char *msg, char *nick, char *address, char *target),
+	 server, msg, nick, address, target)
+SIGNAL_REGISTER(message_private, 5,
+	(SERVER_REC *server, char *msg, char *nick, char *address, char *target),
+	 server, msg, nick, address, target)
+SIGNAL_REGISTER(message_join, 4,
+	(SERVER_REC *server, char *channel, char *nick, char *address),
+	 server, channel, nick, address)
+SIGNAL_REGISTER(message_part, 5,
+	(SERVER_REC *server, char *channel, char *nick, char *address, char *reason),
+	 server, channel, nick, address, reason)
+SIGNAL_REGISTER(message_quit, 4,
+	(SERVER_REC *server, char *nick, char *address, char *reason),
+	 server, nick, address, reason)
+SIGNAL_REGISTER(message_kick, 6,
+	(SERVER_REC *server, char *channel, char *nick, char *kicker, char *address, char *reason),
+	 server, channel, nick, kicker, address, reason)
+SIGNAL_REGISTER(message_nick, 4,
+	(SERVER_REC *server, char *newnick, char *oldnick, char *address),
+	 server, newnick, oldnick, address)
+SIGNAL_REGISTER(message_own__nick, 4,
+	(SERVER_REC *server, char *newnick, char *oldnick, char *address),
+	 server, newnick, oldnick, address)
+SIGNAL_REGISTER(message_invite, 4,
+	(SERVER_REC *server, char *channel, char *nick, char *address),
+	 server, channel, nick, address)
+SIGNAL_REGISTER(message_topic, 5,
+	(SERVER_REC *server, char *channel, char *topic, char *nick, char *address),
+	 server, channel, topic, nick, address)
+
+// fe-log.c:
+SIGNAL_REGISTER(awaylog_show, 3,
+	(LOG_REC *log, int_in_ptr away_msgs, int_in_ptr filepos),
+	 log, away_msgs, filepos)
+
+// keyboard.c:
+SIGNAL_REGISTER(keyinfo_created, 1,
+	(KEYINFO_REC *keyinfo),
+	 keyinfo)
+SIGNAL_REGISTER(keyinfo_destroyed, 1,
+	(KEYINFO_REC *keyinfo),
+	 keyinfo)
+
+// printtext.c:
+SIGNAL_REGISTER(print_text, 3,
+	(TEXT_DEST_REC *dest, char *text, char *stripped),
+	 dest, text, stripped)
+
+// themes.c:
+SIGNAL_REGISTER(theme_created, 1,
+	(THEME_REC *theme),
+	 theme)
+SIGNAL_REGISTER(theme_destroyed, 1,
+	(THEME_REC *theme),
+	 theme)
+
+// window-activity.c:
+SIGNAL_REGISTER(window_hilight, 1,
+	(WINDOW_REC *window),
+	 window)
+SIGNAL_REGISTER(window_hilight_check, 4,
+	(TEXT_DEST_REC *text_dest, char *msg, int_in_ptr *data_level, int_in_ptr *should_ignore),
+	 text_dest, msg, data_level, should_ignore)
+SIGNAL_REGISTER(window_dehilight, 1,
+	(WINDOW_REC *window),
+	 window)
+SIGNAL_REGISTER(window_activity, 2,
+	(WINDOW_REC *window, int_in_ptr old_level),
+	 window, old_level)
+SIGNAL_REGISTER(window_item_hilight, 1,
+	(WI_ITEM_REC *wi_item),
+	 wi_item)
+SIGNAL_REGISTER(window_item_activity, 2,
+	(WI_ITEM_REC *wi_item, int_in_ptr old_level),
+	 wi_item, old_level)
+
+// window-items.c:
+SIGNAL_REGISTER(window_item_new, 2,
+	(WINDOW_REC *window, WI_ITEM_REC *wi_item),
+	 window, wi_item)
+SIGNAL_REGISTER(window_item_remove, 2,
+	(WINDOW_REC *window, WI_ITEM_REC *wi_item),
+	 window, wi_item)
+SIGNAL_REGISTER(window_item_moved, 3,
+	(WINDOW_REC *window, WI_ITEM_REC *wi_item, WINDOW_REC *window),
+	 window, wi_item, window)
+SIGNAL_REGISTER(window_item_changed, 2,
+	(WINDOW_REC *window, WI_ITEM_REC *wi_item),
+	 window, wi_item)
+SIGNAL_REGISTER(window_item_server_changed, 2,
+	(WINDOW_REC *window, WI_ITEM_REC *wi_item),
+	 window, wi_item)
+
+// windows.c:
+SIGNAL_REGISTER(window_created, 1,
+	(WINDOW_REC *window),
+	 window)
+SIGNAL_REGISTER(window_destroyed, 1,
+	(WINDOW_REC *window),
+	 window)
+SIGNAL_REGISTER(window_changed, 2,
+	(WINDOW_REC *window, WINDOW_REC old),
+	 window, old)
+SIGNAL_REGISTER(window_changed_automatic, 1,
+	(WINDOW_REC *window),
+	 window)
+SIGNAL_REGISTER(window_server_changed, 2,
+	(WINDOW_REC *window, SERVER_REC *server),
+	 window, server)
+SIGNAL_REGISTER(window_refnum_changed, 2,
+	(WINDOW_REC *window, int_in_ptr old),
+	 window, old)
+SIGNAL_REGISTER(window_name_changed, 1,
+	(WINDOW_REC *window),
+	 window)
+SIGNAL_REGISTER(window_history_changed, 2,
+	(WINDOW_REC *window, char *oldname),
+	 window, oldname)
+SIGNAL_REGISTER(window_level_changed, 1,
+	(WINDOW_REC *window),
+	 window)

@@ -1,0 +1,223 @@
+
+// bans.c:
+SIGNAL_REGISTER(ban_type_changed, 1, (char *bantype),
+	 bantype)
+
+// channels, nicklist:
+SIGNAL_REGISTER(channel_joined, 1, (CHANNEL_REC *channel),
+	 channel)
+SIGNAL_REGISTER(channel_wholist, 1, (CHANNEL_REC *channel),
+	 channel)
+SIGNAL_REGISTER(channel_sync, 1, (CHANNEL_REC *channel),
+	 channel)
+
+SIGNAL_REGISTER(channel_topic_changed, 1, (CHANNEL_REC *channel),
+	 channel)
+
+// channel-rejoin.c
+SIGNAL_REGISTER(channel_rejoin_remove, 2, (SERVER_REC *server, REJOIN_REC *rejoin),
+	 server, rejoin)
+SIGNAL_REGISTER(channel_rejoin_new, 2, (SERVER_REC *server, REJOIN_REC *rejoin),
+	 server, rejoin)
+
+// ctcp.c:
+
+SIGNAL_REGISTER(ctcp_msg, 5, (IRC_SERVER_REC *irc_server, const char *args, const char *nick, const char *addr, const char *target),
+	 irc_server, args, nick, addr, target)
+SIGNAL_REGISTER_F(ctcp_msg, 5, (const char *cmd, IRC_SERVER_REC *irc_server, const char *args, const char *nick, const char *addr, const char *target),
+	 cmd, irc_server, args, nick, addr, target)
+SIGNAL_REGISTER(default_ctcp_msg, 5, (IRC_SERVER_REC *irc_server, const char *args, const char *nick, const char *addr, const char *target),
+	 irc_server, args, nick, addr, target)
+SIGNAL_REGISTER(ctcp_reply, 5, (IRC_SERVER_REC *irc_server, const char *args, const char *nick, const char *addr, const char *target),
+	 irc_server, args, nick, addr, target)
+SIGNAL_REGISTER_F(ctcp_reply, 5, (const char *cmd, IRC_SERVER_REC *irc_server, const char *args, const char *nick, const char *addr, const char *target),
+	 cmd, irc_server, args, nick, addr, target)
+SIGNAL_REGISTER(default_ctcp_reply, 5, (IRC_SERVER_REC *irc_server, const char *args, const char *nick, const char *addr, const char *target),
+	 irc_server, args, nick, addr, target)
+SIGNAL_REGISTER(ctcp_action, 5, (IRC_SERVER_REC *irc_server, const char *args, const char *nick, const char *addr, const char *target),
+	 irc_server, args, nick, addr, target)
+
+// irc-servers.c:
+SIGNAL_REGISTER(event_connected, 1, (SERVER_REC *server),
+	 server)
+
+// irc-cap.c
+SIGNAL_REGISTER_F(server_cap_ack, 1, (const char *cmd, IRC_SERVER_REC *irc_server),
+	 cmd, irc_server)
+SIGNAL_REGISTER_F(server_cap_nak, 1, (const char *cmd, IRC_SERVER_REC *irc_server),
+	 cmd, irc_server)
+SIGNAL_REGISTER_F(server_cap_new, 1, (const char *cmd, IRC_SERVER_REC *irc_server),
+	 cmd, irc_server)
+SIGNAL_REGISTER_F(server_cap_delete, 1, (const char *cmd, IRC_SERVER_REC *irc_server),
+	 cmd, irc_server)
+SIGNAL_REGISTER(server_cap_end, 1, (IRC_SERVER_REC *irc_server),
+	 irc_server)
+SIGNAL_REGISTER(server_cap_req, 2, (IRC_SERVER_REC *irc_server, char *caps),
+	 irc_server, caps)
+
+// sasl.c
+SIGNAL_REGISTER(server_sasl_failure, 2, (SERVER_REC *server, char *reason),
+	 server, reason)
+SIGNAL_REGISTER(server_sasl_success, 1, (SERVER_REC *server),
+	 server)
+
+// irc.c:
+
+SIGNAL_REGISTER(server_event, 4, (SERVER_REC *server, char *data, char *sender_nick, char *sender_address),
+	 server, data, sender_nick, sender_address)
+SIGNAL_REGISTER_F(event, 4, (const char *cmd, SERVER_REC *server, const char *args, const char *sender_nick, const char *sender_address),
+	 cmd, server, args, sender_nick, sender_address)
+SIGNAL_REGISTER(default_event, 4, (SERVER_REC *server, char *data, char *sender_nick, char *sender_address),
+	 server, data, sender_nick, sender_address)
+SIGNAL_REGISTER(whois_default_event, 4, (SERVER_REC *server, char *args, char *sender_nick, char *sender_address),
+	 server, args, sender_nick, sender_address)
+
+SIGNAL_REGISTER(server_incoming, 2, (SERVER_REC *server, char *data),
+	 server, data)
+
+// (for perl parser..))
+SIGNAL_REGISTER_F(redir, 4, (const char *cmd, SERVER_REC *server, char *args, char *sender_nick, char *sender_address),
+	 cmd, server, args, sender_nick, sender_address)
+
+// lag.c:
+SIGNAL_REGISTER(server_lag, 1, (SERVER_REC *server),
+	 server)
+SIGNAL_REGISTER(server_lag_disconnect, 1, (SERVER_REC *server),
+	 server)
+
+// massjoin.c:
+SIGNAL_REGISTER(massjoin, 2, (CHANNEL_REC *channel, GSList *nicks/*<NICK_REC*>*/),
+	 channel, nicks)
+
+// mode-lists.c:
+SIGNAL_REGISTER(ban_new, 2, (CHANNEL_REC *channel, BAN_REC *ban),
+	 channel, ban)
+SIGNAL_REGISTER(ban_remove, 3, (CHANNEL_REC *channel, BAN_REC *ban, const char *setby),
+	 channel, ban, setby)
+
+// modes.c:
+SIGNAL_REGISTER(channel_mode_changed, 2, (CHANNEL_REC *channel, const char *setby),
+	 channel, setby)
+SIGNAL_REGISTER(nick_mode_changed, 5, (CHANNEL_REC *channel, NICK_REC *nick, const char *setby, const char *mode, const char *type),
+	 channel, nick, setby, mode, type)
+SIGNAL_REGISTER(user_mode_changed, 2, (SERVER_REC *server, char *old),
+	 server, old)
+SIGNAL_REGISTER(away_mode_changed, 1, (SERVER_REC *server),
+	 server)
+
+// netsplit.c:
+SIGNAL_REGISTER(netsplit_server_new, 2, (IRC_SERVER_REC *irc_server, NETSPLIT_SERVER_REC *netsplit_server),
+	 irc_server, netsplit_server)
+SIGNAL_REGISTER(netsplit_server_remove, 2, (IRC_SERVER_REC *irc_server, NETSPLIT_SERVER_REC *netsplit_server),
+	 irc_server, netsplit_server)
+SIGNAL_REGISTER(netsplit_new, 1, (NETSPLIT_REC *netsplit),
+	 netsplit)
+SIGNAL_REGISTER(netsplit_remove, 1, (NETSPLIT_REC *netsplit),
+	 netsplit)
+
+// dcc*.c:
+
+SIGNAL_REGISTER_F(dcc_ctcp, 2, (const char *cmd, char *args, DCC_REC *dcc),
+	 cmd, args, dcc)
+SIGNAL_REGISTER(default_dcc_ctcp, 2, (char *args, DCC_REC *dcc),
+	 args, dcc)
+SIGNAL_REGISTER(dcc_unknown_ctcp, 3, (char *args, char *sender, char *sendaddr),
+	 args, sender, sendaddr)
+
+SIGNAL_REGISTER_F(dcc_reply, 2, (const char *cmd, char *args, DCC_REC *dcc),
+	 cmd, args, dcc)
+SIGNAL_REGISTER(default_dcc_reply, 2, (char *args, DCC_REC *dcc),
+	 args, dcc)
+SIGNAL_REGISTER(dcc_unknown_reply, 3, (char *args, char *sender, char *sendaddr),
+	 args, sender, sendaddr)
+
+SIGNAL_REGISTER(dcc_created, 1, (DCC_REC *dcc),
+	 dcc)
+SIGNAL_REGISTER(dcc_destroyed, 1, (DCC_REC *dcc),
+	 dcc)
+SIGNAL_REGISTER(dcc_connected, 1, (DCC_REC *dcc),
+	 dcc)
+SIGNAL_REGISTER(dcc_rejected, 1, (DCC_REC *dcc),
+	 dcc)
+SIGNAL_REGISTER(dcc_closed, 1, (DCC_REC *dcc),
+	 dcc)
+SIGNAL_REGISTER(dcc_request, 2, (DCC_REC *dcc, const char *sendaddr),
+	 dcc, sendaddr)
+SIGNAL_REGISTER(dcc_request_send, 1, (DCC_REC *dcc),
+	 dcc)
+SIGNAL_REGISTER(dcc_chat_message, 2, (CHAT_DCC_REC *chat_dcc, char *msg),
+	 chat_dcc, msg)
+SIGNAL_REGISTER(dcc_transfer_update, 1, (DCC_REC *dcc),
+	 dcc)
+SIGNAL_REGISTER(dcc_get_receive, 1, (GET_DCC_REC *get_dcc),
+	 get_dcc)
+SIGNAL_REGISTER(dcc_send_pasv, 1, (SEND_DCC_REC *send_dcc),
+	 send_dcc)
+SIGNAL_REGISTER(dcc_server_message, 2, (SERVER_DCC_REC *server_dcc, char *msg),
+	 server_dcc, msg)
+SIGNAL_REGISTER(dcc_server_started, 1, (SERVER_DCC_REC *server_dcc),
+	 server_dcc)
+SIGNAL_REGISTER(dcc_error_connect, 1, (DCC_REC *dcc),
+	 dcc)
+SIGNAL_REGISTER(dcc_error_file_create, 3, (DCC_REC *dcc, const char *filename, const char *errmsg),
+	 dcc, filename, errmsg)
+SIGNAL_REGISTER(dcc_error_file_open, 3, (const char *nick, const char *filename, int_in_ptr errno),
+	 nick, filename, errno)
+SIGNAL_REGISTER(dcc_error_get_not_found, 1, (const char *nick),
+	 nick)
+SIGNAL_REGISTER(dcc_error_send_no_route, 2, (const char *nick, char *file),
+	 nick, file)
+SIGNAL_REGISTER(dcc_error_send_exists, 2, (const char *nick, const char *filename),
+	 nick, filename)
+SIGNAL_REGISTER(dcc_error_unknown_type, 1, (const char *type),
+	 type)
+SIGNAL_REGISTER(dcc_error_close_not_found, 3, (const char *type, const char *nick, char *filename),
+	 type, nick, filename)
+SIGNAL_REGISTER(dcc_error_write, 2, (DCC_REC *dcc, const char *errmsg),
+	 dcc, errmsg)
+SIGNAL_REGISTER(dcc_error_ctcp, 5, (const char *type, const char *data, const char *nick, const char *addr, const char *target),
+	 type, data, nick, addr, target)
+
+SIGNAL_REGISTER(default_ctcp_msg_dcc, 6, (IRC_SERVER_REC *irc_server, const char *args, const char *nick, const char *addr, const char *target, DCC_REC *dcc),
+	 irc_server, args, nick, addr, target, dcc)
+SIGNAL_REGISTER(default_ctcp_reply_dcc, 5, (IRC_SERVER_REC *irc_server, const char *args, const char *nick, const char *addr, const char *target),
+	 irc_server, args, nick, addr, target)
+
+// autoignore.c:
+
+SIGNAL_REGISTER(autoignore_new, 2, (SERVER_REC *server, AUTOIGNORE_REC *autoignore),
+	 server, autoignore)
+SIGNAL_REGISTER(autoignore_remove, 2, (SERVER_REC *server, AUTOIGNORE_REC *autoignore),
+	 server, autoignore)
+
+// flood.c:
+
+SIGNAL_REGISTER(flood, 5, (SERVER_REC *server, const char *nick, const char *host, int_in_ptr level, const char *target),
+	 server, nick, host, level, target)
+
+// notifylist.c:
+
+SIGNAL_REGISTER(notifylist_new, 1, (NOTIFYLIST_REC *notifylist),
+	 notifylist)
+SIGNAL_REGISTER(notifylist_remove, 1, (NOTIFYLIST_REC *notifylist),
+	 notifylist)
+SIGNAL_REGISTER(notifylist_joined, 6, (SERVER_REC *server, char *nick, char *user, char *host, const char *realname, char *awaymsg),
+	 server, nick, user, host, realname, awaymsg)
+SIGNAL_REGISTER(notifylist_away_changed, 6, (SERVER_REC *server, char *nick, char *user, char *host, const char *realname, char *awaymsg),
+	 server, nick, user, host, realname, awaymsg)
+SIGNAL_REGISTER(notifylist_left, 6, (SERVER_REC *server, char *nick, char *user, char *host, const char *realname, char *awaymsg),
+	 server, nick, user, host, realname, awaymsg)
+
+// proxy/listen.c:
+
+SIGNAL_REGISTER(proxy_client_connecting, 1, (CLIENT_REC *client),
+	 client)
+SIGNAL_REGISTER(proxy_client_connected, 1, (CLIENT_REC *client),
+	 client)
+SIGNAL_REGISTER(proxy_client_disconnected, 1, (CLIENT_REC *client),
+	 client)
+SIGNAL_REGISTER(proxy_client_command, 3, (CLIENT_REC *client, char *args, char *data),
+	 client, args, data)
+SIGNAL_REGISTER(proxy_client_dump, 2, (CLIENT_REC *client, char *data),
+	 client, data)
+

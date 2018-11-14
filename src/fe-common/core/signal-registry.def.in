@@ -1,0 +1,69 @@
+// FE common
+
+ "gui print text", WINDOW_REC, int fg, int bg, int flags, char *text, TEXT_DEST_REC
+
+// (Can be used to determine when all "gui print text"s are sent (not required))
+ "gui print text finished", WINDOW_REC
+
+// completion.c:
+ "complete word", GList * of char*, WINDOW_REC, char *word, char *linestart, int *want_space
+
+// fe-common-core.c:
+ "irssi init read settings"
+
+// fe-exec.c:
+ "exec new", PROCESS_REC
+ "exec remove", PROCESS_REC, int status
+ "exec input", PROCESS_REC, char *text
+
+// fe-messages.c:
+ "message public", SERVER_REC, char *msg, char *nick, char *address, char *target
+ "message private", SERVER_REC, char *msg, char *nick, char *address, char *target
+ "message join", SERVER_REC, char *channel, char *nick, char *address
+ "message part", SERVER_REC, char *channel, char *nick, char *address, char *reason
+ "message quit", SERVER_REC, char *nick, char *address, char *reason
+ "message kick", SERVER_REC, char *channel, char *nick, char *kicker, char *address, char *reason
+ "message nick", SERVER_REC, char *newnick, char *oldnick, char *address
+ "message own_nick", SERVER_REC, char *newnick, char *oldnick, char *address
+ "message invite", SERVER_REC, char *channel, char *nick, char *address
+ "message topic", SERVER_REC, char *channel, char *topic, char *nick, char *address
+
+// fe-log.c:
+ "awaylog show", LOG_REC, int away_msgs, int filepos
+
+// keyboard.c:
+ "keyinfo created", KEYINFO_REC
+ "keyinfo destroyed", KEYINFO_REC
+
+// printtext.c:
+ "print text", TEXT_DEST_REC *dest, char *text, char *stripped
+
+// themes.c:
+ "theme created", THEME_REC
+ "theme destroyed", THEME_REC
+
+// window-activity.c:
+ "window hilight", WINDOW_REC
+ "window hilight check", TEXT_DEST_REC, char *msg, int *data_level, int *should_ignore
+ "window dehilight", WINDOW_REC
+ "window activity", WINDOW_REC, int old_level
+ "window item hilight", WI_ITEM_REC
+ "window item activity", WI_ITEM_REC, int old_level
+
+// window-items.c:
+ "window item new", WINDOW_REC, WI_ITEM_REC
+ "window item remove", WINDOW_REC, WI_ITEM_REC
+ "window item moved", WINDOW_REC, WI_ITEM_REC, WINDOW_REC
+ "window item changed", WINDOW_REC, WI_ITEM_REC
+ "window item server changed", WINDOW_REC, WI_ITEM_REC
+
+// windows.c:
+ "window created", WINDOW_REC
+ "window destroyed", WINDOW_REC
+ "window changed", WINDOW_REC, WINDOW_REC old
+ "window changed automatic", WINDOW_REC
+ "window server changed", WINDOW_REC, SERVER_REC
+ "window refnum changed", WINDOW_REC, int old
+ "window name changed", WINDOW_REC
+ "window history changed", WINDOW_REC, char *oldname
+ "window level changed", WINDOW_REC

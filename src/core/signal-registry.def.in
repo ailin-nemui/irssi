@@ -1,0 +1,137 @@
+// core
+ "gui exit"
+ "gui dialog", char *type, const char *text
+
+// chat-protocols.c:
+ "chat protocol created", CHAT_PROTOCOL_REC
+ "chat protocol updated", CHAT_PROTOCOL_REC
+ "chat protocol destroyed", CHAT_PROTOCOL_REC
+ "chat protocol deinit", CHAT_PROTOCOL_REC
+
+// channels.c:
+ "channel created", CHANNEL_REC, int automatic
+ "channel destroyed", CHANNEL_REC
+ "channel name changed", CHANNEL_REC
+
+// channels-setup.c
+ "channel setup created", CHANNEL_SETUP_REC, CONFIG_NODE
+ "channel setup destroyed", CHANNEL_SETUP_REC
+
+// chatnets.c:
+ "chatnet created", CHATNET_REC
+ "chatnet destroyed", CHATNET_REC
+ "chatnet saved", CHATNET_REC, CONFIG_NODE
+ "chatnet removed", CHATNET_REC
+ "chatnet read", CHATNET_REC, CONFIG_NODE
+
+// commands.c:
+ "commandlist new", COMMAND_REC
+ "commandlist remove", COMMAND_REC
+ "list subcommands", const char *command
+ "error command", int err, char *cmd
+
+ "send command", char *args, SERVER_REC, WI_ITEM_REC
+ "send text", const char *line, SERVER_REC, WI_ITEM_REC
+ "command "<cmd>, char *args, SERVER_REC, WI_ITEM_REC
+ "default command", char *args, SERVER_REC, WI_ITEM_REC
+
+// chat-commands.c:
+ "chat protocol unknown", const char *protocol
+ "message own_public", SERVER_REC, char *msg, char *target
+ "message own_private", SERVER_REC, char *msg, char *target, char *orig_target
+
+// ignore.c:
+ "ignore created", IGNORE_REC
+ "ignore destroyed", IGNORE_REC
+ "ignore changed", IGNORE_REC
+
+// log.c:
+ "log new", LOG_REC
+ "log remove", LOG_REC
+ "log create failed", LOG_REC
+ "log locked", LOG_REC
+ "log started", LOG_REC
+ "log stopped", LOG_REC
+ "log rotated", LOG_REC
+ "log written", LOG_REC, const char *line
+ "log config save", LOG_REC, CONFIG_NODE
+ "log config read", LOG_REC, CONFIG_NODE
+
+// log-away.c:
+ "awaylog show", LOG_REC, int away_msgs, int filepos
+
+// modules.c:
+ "module loaded", MODULE_REC, MODULE_FILE_REC
+ "module unloaded", MODULE_REC, MODULE_FILE_REC
+ "module error", int error, const char *text, const char *rootmodule, const char *submodule
+
+// network-openssl.c:
+ "tls handshake finished", SERVER_REC, TLS_REC
+
+// nicklist.c:
+ "nicklist new", CHANNEL_REC, NICK_REC
+ "nicklist remove", CHANNEL_REC, NICK_REC
+ "nicklist changed", CHANNEL_REC, NICK_REC, const char *old_nick
+ "nicklist host changed", CHANNEL_REC, NICK_REC
+ "nicklist gone changed", CHANNEL_REC, NICK_REC
+ "nicklist serverop changed", CHANNEL_REC, NICK_REC
+
+// pidwait.c:
+ "pidwait", int pid, int status
+
+// queries.c:
+ "query created", QUERY_REC, int automatic
+ "query destroyed", QUERY_REC
+ "query nick changed", QUERY_REC, const char *orignick
+ "window item name changed", WI_ITEM_REC
+ "query address changed", QUERY_REC
+ "query server changed", QUERY_REC
+
+// rawlog.c:
+ "rawlog", RAWLOG_REC, char *data
+
+// server.c:
+ "server looking", SERVER_REC
+ "server nick changed", SERVER_REC
+ "server connected", SERVER_REC
+ "server connecting", SERVER_REC, mem_ptr ip
+ "server connect failed", SERVER_REC, const char *msg
+ "server disconnected", SERVER_REC
+ "server quit", SERVER_REC, char *msg
+ "server sendmsg", SERVER_REC, char *target, char *msg, int target_type
+ "server destroyed", SERVER_REC
+
+// servers-setup.c
+ "server setup fill connect", SERVER_CONNECT_REC
+ "server setup fill reconn", SERVER_CONNECT_REC, SERVER_SETUP_REC
+ "server setup fill server", SERVER_CONNECT_REC, SERVER_SETUP_REC
+ "server setup fill chatnet", SERVER_CONNECT_REC, CHATNET_REC
+ "server setup read", SERVER_SETUP_REC, CONFIG_NODE
+ "server setup saved", SERVER_SETUP_REC, CONFIG_NODE
+ "server setup destroyed", SERVER_SETUP_REC
+ "server setup updated", SERVER_SETUP_REC
+
+// servers-reconnect.c:
+ "server reconnect save status", SERVER_CONNECT_REC, SERVER_REC
+ "server reconnect remove", RECONNECT_REC
+ "server reconnect not found", const char *tag
+ "server connect copy", SERVER_CONNECT_REC **dest, SERVER_CONNECT_REC
+
+// session.c
+ "session save", CONFIG_REC
+ "session save nick", CHANNEL_REC, NICK_REC, CONFIG_REC, CONFIG_NODE
+ "session save channel", CHANNEL_REC, CONFIG_REC, CONFIG_NODE
+ "session save server", SERVER_REC, CONFIG_REC, CONFIG_NODE
+ "session restore nick", CHANNEL_REC, NICK_REC
+ "session restore channel", CHANNEL_REC, CONFIG_NODE
+ "session restore server", SERVER_REC, CONFIG_NODE
+ "session restore", CONFIG_REC
+
+// settings.c:
+ "setup changed"
+ "setup reread", char *fname
+ "setup saved", const char *fname, int autosaved
+ "settings errors", const char *msg
+ "settings userinfo changed", uint flags
+ "irssi init userinfo changed", uint flags
+ 
