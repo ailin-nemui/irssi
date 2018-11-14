@@ -25,6 +25,7 @@
 #include "misc.h"
 #include "servers.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "tls.h"
 
 #include <openssl/crypto.h>

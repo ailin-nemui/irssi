@@ -22,6 +22,7 @@
 #include "commands.h"
 #include "network.h"
 #include "signals.h"
+#include "signal-registry.h"
 
 #include "chat-protocols.h"
 #include "servers.h"
@@ -414,7 +415,7 @@ static void cmd_reconnect(const char *data, SERVER_REC *server)
 
 		msg = g_strconcat("* ", *msg == '\0' ?
 				  "Reconnecting" : msg, NULL);
-		signal_emit__command_disconnect(msg, server);
+		signal_emit__command_("disconnect", msg, server, NULL);
 		g_free(msg);
 
 		conn->reconnection = TRUE;

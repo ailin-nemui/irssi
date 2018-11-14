@@ -17,7 +17,7 @@ enum {
 	DCC_GET_RESUME
 };
 
-typedef struct {
+typedef struct _GET_DCC_REC {
 #include "dcc-file-rec.h"
 
 	int get_type; /* what to do if file exists? */

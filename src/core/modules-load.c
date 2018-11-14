@@ -22,6 +22,7 @@
 #include "modules.h"
 #include "modules-load.h"
 #include "signals.h"
+#include "signal-registry.h"
 
 #include "settings.h"
 #include "commands.h"
@@ -433,7 +434,7 @@ void module_unload(MODULE_REC *module)
 
 	modules = g_slist_remove(modules, module);
 
-	signal_emit__module_unloaded(module);
+	signal_emit__module_unloaded(module, NULL);
 
 	while (module->files != NULL)
                 module_file_unload(module->files->data);

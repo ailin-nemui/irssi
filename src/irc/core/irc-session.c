@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "net-sendbuffer.h"
 #include "lib-config/iconfig.h"
 #include "misc.h"
@@ -166,11 +167,11 @@ static void session_restore_channel(IRC_CHANNEL_REC *channel)
 {
 	char *data;
 
-	signal_emit__event_join(channel->server, channel->name,
+	signal_emit__event_("join", (SERVER_REC *)channel->server, channel->name,
 		    channel->server->nick, channel->server->userhost);
 
 	data = g_strconcat(channel->server->nick, " ", channel->name, NULL);
-	signal_emit__event_366(channel->server, data);
+	signal_emit__event_("366", (SERVER_REC *)channel->server, data, NULL, NULL);
 	g_free(data);
 }
 
@@ -188,7 +189,7 @@ static void sig_connected(IRC_SERVER_REC *server)
 	   free()'s the server->real_address and then tries to strdup() the
 	   given origin again */
 	addr = g_strdup(server->real_address);
-	signal_emit__event_001(server, str, addr);
+	signal_emit__event_("001", (SERVER_REC *)server, str, addr, NULL);
         g_free(addr);
         g_free(str);
 

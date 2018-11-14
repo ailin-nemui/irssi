@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "../core/signal-registry.h"
 #include "commands.h"
 #include "network.h"
 #include "misc.h"
@@ -172,7 +173,7 @@ static void sig_dccget_receive(GET_DCC_REC *dcc)
 
 		if (write(dcc->fhandle, dcc_get_recv_buffer, ret) != ret) {
 			/* most probably out of disk space */
-			signal_emit__dcc_error_write(dcc, g_strerror(errno));
+			signal_emit__dcc_error_write((DCC_REC *)dcc, g_strerror(errno));
 			dcc_close(DCC(dcc));
                         return;
 		}
@@ -183,7 +184,7 @@ static void sig_dccget_receive(GET_DCC_REC *dcc)
 	if (dcc->count_pos <= 0)
 		dcc_get_send_received(dcc);
 
-	signal_emit__dcc_transfer_update(dcc);
+	signal_emit__dcc_transfer_update((DCC_REC *)dcc);
 }
 
 /* callback: net_connect() finished for DCC GET */
@@ -196,7 +197,7 @@ void sig_dccget_connected(GET_DCC_REC *dcc)
 	if (!dcc->from_dccserver) {
 		if (net_geterror(dcc->handle) != 0) {
 			/* error connecting */
-			signal_emit__dcc_error_connect(dcc);
+			signal_emit__dcc_error_connect((DCC_REC *)dcc);
 			dcc_destroy(DCC(dcc));
 			return;
 		}
@@ -272,7 +273,7 @@ void sig_dccget_connected(GET_DCC_REC *dcc)
 		g_free(tempfname);
 
 		if (dcc->fhandle == -1) {
-			signal_emit__dcc_error_file_create(dcc, dcc->file, g_strerror(ret_errno));
+			signal_emit__dcc_error_file_create((DCC_REC *)dcc, dcc->file, g_strerror(ret_errno));
 			dcc_destroy(DCC(dcc));
 			return;
 		}
@@ -285,7 +286,7 @@ void sig_dccget_connected(GET_DCC_REC *dcc)
 	}
 	dcc->tagread = g_input_add(dcc->handle, G_INPUT_READ,
 				   (GInputFunction) sig_dccget_receive, dcc);
-	signal_emit__dcc_connected(dcc);
+	signal_emit__dcc_connected((DCC_REC *)dcc);
 
 	if (dcc->from_dccserver) {
 		str = g_strdup_printf("121 %s %d\n",
@@ -316,7 +317,7 @@ void dcc_get_connect(GET_DCC_REC *dcc)
 				    dcc);
 	} else {
 		/* error connecting */
-		signal_emit__dcc_error_connect(dcc);
+		signal_emit__dcc_error_connect((DCC_REC *)dcc);
 		dcc_destroy(DCC(dcc));
 	}
 }
@@ -502,7 +503,7 @@ static void ctcp_msg_dcc_send(IRC_SERVER_REC *server, const char *data,
 
 			/* This new signal is added to let us invoke
 			   dcc_send_connect() which is found in dcc-send.c */
-			signal_emit__dcc_reply_send_pasv(temp_dcc);
+			signal_emit__dcc_send_pasv(temp_dcc);
 			g_free(address);
 			g_free(fname);
 			return;
@@ -543,7 +544,7 @@ static void ctcp_msg_dcc_send(IRC_SERVER_REC *server, const char *data,
 	dcc->size = size;
 	dcc->file_quoted = quoted;
 
-	signal_emit__dcc_request(dcc, addr);
+	signal_emit__dcc_request((DCC_REC *)dcc, addr);
 
 	g_free(address);
 	g_free(fname);

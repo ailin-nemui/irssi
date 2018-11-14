@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "commands.h"
 #include "net-disconnect.h"
 #include "net-nonblock.h"

@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "lib-config/iconfig.h"
 #include "settings.h"
 
@@ -84,7 +85,7 @@ void channel_setup_create(CHANNEL_SETUP_REC *channel)
 		setupchannels = g_slist_append(setupchannels, channel);
 	channel_setup_save(channel);
 
-	signal_emit__channel_setup_created(channel);
+	signal_emit__channel_setup_created(channel, NULL);
 }
 
 static void channel_config_remove(CHANNEL_SETUP_REC *channel)

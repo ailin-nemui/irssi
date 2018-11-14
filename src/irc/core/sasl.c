@@ -20,6 +20,8 @@
 
 #include "module.h"
 #include "misc.h"
+#include "signals.h"
+#include "signal-registry.h"
 #include "settings.h"
 
 #include "irc-cap.h"
@@ -50,7 +52,7 @@ static gboolean sasl_timeout(IRC_SERVER_REC *server)
 	server->sasl_timeout = 0;
 	server->sasl_success = FALSE;
 
-	signal_emit__server_sasl_failure(server, "The authentication timed out");
+	signal_emit__server_sasl_failure((SERVER_REC *)server, "The authentication timed out");
 
 	return FALSE;
 }
@@ -92,7 +94,7 @@ static void sasl_fail(IRC_SERVER_REC *server, const char *data, const char *from
 
 	server->sasl_success = FALSE;
 
-	signal_emit__server_sasl_failure(server, error);
+	signal_emit__server_sasl_failure((SERVER_REC *)server, error);
 
 	/* Terminate the negotiation */
 	cap_finish_negotiation(server);
@@ -106,7 +108,7 @@ static void sasl_already(IRC_SERVER_REC *server, const char *data, const char *f
 
 	server->sasl_success = TRUE;
 
-	signal_emit__server_sasl_success(server);
+	signal_emit__server_sasl_success((SERVER_REC *)server);
 
 	/* We're already authenticated, do nothing */
 	cap_finish_negotiation(server);
@@ -118,7 +120,7 @@ static void sasl_success(IRC_SERVER_REC *server, const char *data, const char *f
 
 	server->sasl_success = TRUE;
 
-	signal_emit__server_sasl_success(server);
+	signal_emit__server_sasl_success((SERVER_REC *)server);
 
 	/* The authentication succeeded, time to finish the CAP negotiation */
 	cap_finish_negotiation(server);
@@ -266,7 +268,7 @@ static void sasl_step_fail(IRC_SERVER_REC *server)
 
 	sasl_timeout_stop(server);
 
-	signal_emit__server_sasl_failure(server, "The server sent an invalid payload");
+	signal_emit__server_sasl_failure((SERVER_REC *)server, "The server sent an invalid payload");
 }
 
 static void sasl_step(IRC_SERVER_REC *server, const char *data, const char *from)
@@ -311,7 +313,7 @@ static void sig_sasl_over(IRC_SERVER_REC *server)
 	    server->connrec->sasl_mechanism != SASL_MECHANISM_NONE) {
 		if (server->cap_supported == NULL ||
 		    !g_hash_table_lookup_extended(server->cap_supported, "sasl", NULL, NULL)) {
-			signal_emit__server_sasl_failure(server, "The server did not offer SASL");
+			signal_emit__server_sasl_failure((SERVER_REC *)server, "The server did not offer SASL");
 		}
 
 		if (settings_get_bool("sasl_disconnect_on_failure")) {

@@ -23,6 +23,7 @@
 #include "log.h"
 #include "modules.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "commands.h"
 #include "misc.h"
 #include "write-buffer.h"

@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "settings.h"
 
 #include "irc-servers.h"
@@ -211,7 +212,7 @@ static void massjoin_send(IRC_CHANNEL_REC *channel)
 	g_hash_table_foreach(channel->nicks, (GHFunc) massjoin_send_hash, &list);
 
 	channel->massjoins = 0;
-	signal_emit__massjoin(channel, list);
+	signal_emit__massjoin((CHANNEL_REC *)channel, list);
 	g_slist_free(list);
 }
 

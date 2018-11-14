@@ -21,6 +21,7 @@
 #include "module.h"
 #include "modules.h"
 #include "signals.h"
+#include "../core/signal-registry.h"
 #include "levels.h"
 #include "misc.h"
 #include "settings.h"
@@ -213,7 +214,7 @@ static void flood_newmsg(IRC_SERVER_REC *server, int level, const char *nick,
 		rec->msgtimes = g_slist_append(rec->msgtimes, ttime);
 		if (g_slist_length(rec->msgtimes) > flood_max_msgs) {
 			/* flooding! */
-			signal_emit__flood(server, nick, host,
+			signal_emit__flood((SERVER_REC *)server, nick, host,
 				    GINT_TO_POINTER(rec->level), target);
 		}
 		return;

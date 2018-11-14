@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "../core/signal-registry.h"
 #include "commands.h"
 #include "network.h"
 #include "misc.h"
@@ -337,7 +338,7 @@ static void ctcp_msg(IRC_SERVER_REC *server, const char *data,
                 return;
 	data += 4;
 
-	signal_emit__ctcp_msg_dcc(server, data, nick, addr, target);
+	signal_emit__ctcp_msg_("dcc", server, data, nick, addr, target);
         signal_stop();
 }
 
@@ -350,7 +351,7 @@ static void ctcp_reply(IRC_SERVER_REC *server, const char *data,
                 return;
 	data += 4;
 
-	signal_emit__ctcp_reply_dcc(server, data, nick, addr, target);
+	signal_emit__ctcp_reply_("dcc", server, data, nick, addr, target);
         signal_stop();
 }
 

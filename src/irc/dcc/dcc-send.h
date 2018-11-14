@@ -9,7 +9,7 @@
 #define IS_DCC_SEND(dcc) \
 	(DCC_SEND(dcc) ? TRUE : FALSE)
 
-typedef struct {
+typedef struct _SEND_DCC_REC {
 #include "dcc-file-rec.h"
 
 	unsigned int file_quoted:1; /* file name was received quoted ("file name") */

@@ -19,6 +19,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "misc.h"
 
 #include "irc-cap.h"

@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "../core/signal-registry.h"
 #include "commands.h"
 #include "network.h"
 #include "net-sendbuffer.h"
@@ -128,7 +129,7 @@ static void dcc_init_server_rec(SERVER_DCC_REC *dcc, IRC_SERVER_REC *server,
 	dcc->servertag = g_strdup(servertag);
 
 	dcc_conns = g_slist_append(dcc_conns, dcc);
-	signal_emit__dcc_created(dcc);
+	signal_emit__dcc_created((DCC_REC *)dcc);
 }
 
 static SERVER_DCC_REC *dcc_server_create(IRC_SERVER_REC *server, const char *flags)
@@ -186,7 +187,7 @@ static void dcc_server_listen(SERVER_DCC_REC *dcc)
 	newdcc->tagread = g_input_add(handle, G_INPUT_READ,
 				      (GInputFunction) dcc_server_input, newdcc);
 
-	signal_emit__dcc_connected(newdcc);
+	signal_emit__dcc_connected((DCC_REC *)newdcc);
 }
 
 /* DCC SERVER: text received */
@@ -214,7 +215,7 @@ static void dcc_server_msg(SERVER_DCC_REC *dcc, const char *msg)
 						       (GInputFunction) dcc_chat_input, dccchat);
 
 			dcc->connection_established = 1;
-			signal_emit__dcc_connected(dccchat);
+			signal_emit__dcc_connected((DCC_REC *)dccchat);
 
 			str = g_strdup_printf("101 %s\n",
 					      (dccchat->server) ? dccchat->server->nick : "??");
@@ -281,7 +282,7 @@ static void dcc_server_msg(SERVER_DCC_REC *dcc, const char *msg)
 			dccget->from_dccserver = 1;
 
 			dcc->connection_established = 1;
-			signal_emit__dcc_request(dccget, dccget->addrstr);
+			signal_emit__dcc_request((DCC_REC *)dccget, dccget->addrstr);
 
 			g_strfreev(params);
 			g_free(fname);

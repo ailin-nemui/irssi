@@ -21,6 +21,7 @@
 #include "module.h"
 #include "modules.h"
 #include "signals.h"
+#include "../core/signal-registry.h"
 #include "settings.h"
 
 #include "irc.h"
@@ -227,7 +228,7 @@ void notifylist_left(IRC_SERVER_REC *server, NOTIFY_NICK_REC *rec)
 	mserver->notify_users = g_slist_remove(mserver->notify_users, rec);
 
 	if (rec->host_ok && rec->away_ok) {
-		signal_emit__notifylist_left(server, rec->nick,
+		signal_emit__notifylist_left((SERVER_REC *)server, rec->nick,
 			    rec->user, rec->host,
 			    rec->realname, rec->awaymsg);
 	}
@@ -290,7 +291,7 @@ static void notifylist_check_join(IRC_SERVER_REC *server, const char *nick,
 	rec->join_announced = TRUE;
 	rec->away_ok = !notify->away_check || !rec->away;
 
-	signal_emit__notifylist_joined(server, rec->nick, rec->user, rec->host, realname, NULL);
+	signal_emit__notifylist_joined((SERVER_REC *)server, rec->nick, rec->user, rec->host, realname, NULL);
 	g_free(user);
 }
 

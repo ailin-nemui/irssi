@@ -1,7 +1,7 @@
 #ifndef __CHANNEL_REJOIN_H
 #define __CHANNEL_REJOIN_H
 
-typedef struct {
+typedef struct _REJOIN_REC {
 	char *channel;
 	char *key;
 	unsigned int joining:1;

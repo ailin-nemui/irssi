@@ -8,7 +8,7 @@
 
 typedef struct CHAT_DCC_REC CHAT_DCC_REC;
 
-typedef struct {
+typedef struct _DCC_REC {
 #include "dcc-rec.h"
 } DCC_REC;
 

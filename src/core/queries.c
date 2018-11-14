@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "misc.h"
 
 #include "servers.h"
@@ -137,7 +138,7 @@ void query_change_nick(QUERY_REC *query, const char *nick)
 	query->visible_name = g_strdup(nick);
 
 	signal_emit__query_nick_changed(query, oldnick);
-	signal_emit__window_item_name_changed(query);
+	signal_emit__window_item_name_changed((WI_ITEM_REC *)query);
         g_free(oldnick);
 }
 

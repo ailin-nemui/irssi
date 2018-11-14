@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "commands.h"
 #include "misc.h"
 #include "special-vars.h"
@@ -891,7 +892,7 @@ static void parse_command(const char *command, int expand_aliases,
 
 		signal_emit__error_command(GINT_TO_POINTER(server == NULL ?
 					    CMDERR_NOT_CONNECTED :
-					    CMDERR_ILLEGAL_PROTO));
+					    CMDERR_ILLEGAL_PROTO), NULL);
 		return;
 	}
 

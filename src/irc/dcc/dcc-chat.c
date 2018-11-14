@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "../core/signal-registry.h"
 #include "commands.h"
 #include "recode.h"
 #include "network.h"
@@ -358,7 +359,7 @@ static void dcc_chat_listen(CHAT_DCC_REC *dcc)
 	dcc->tagread = g_input_add(handle, G_INPUT_READ,
 				   (GInputFunction) dcc_chat_input, dcc);
 
-	signal_emit__dcc_connected(dcc);
+	signal_emit__dcc_connected((DCC_REC *)dcc);
 }
 
 /* callback: DCC CHAT - net_connect_nonblock() finished */
@@ -368,7 +369,7 @@ static void sig_chat_connected(CHAT_DCC_REC *dcc)
 
 	if (net_geterror(dcc->handle) != 0) {
 		/* error connecting */
-		signal_emit__dcc_error_connect(dcc);
+		signal_emit__dcc_error_connect((DCC_REC *)dcc);
 		dcc_destroy(DCC(dcc));
 		return;
 	}
@@ -382,7 +383,7 @@ static void sig_chat_connected(CHAT_DCC_REC *dcc)
 	dcc->tagread = g_input_add(dcc->handle, G_INPUT_READ,
 				   (GInputFunction) dcc_chat_input, dcc);
 
-	signal_emit__dcc_connected(dcc);
+	signal_emit__dcc_connected((DCC_REC *)dcc);
 }
 
 static void dcc_chat_connect(CHAT_DCC_REC *dcc)
@@ -402,7 +403,7 @@ static void dcc_chat_connect(CHAT_DCC_REC *dcc)
 					   (GInputFunction) sig_chat_connected, dcc);
 	} else {
 		/* error connecting */
-		signal_emit__dcc_error_connect(dcc);
+		signal_emit__dcc_error_connect((DCC_REC *)dcc);
 		dcc_destroy(DCC(dcc));
 	}
 }
@@ -512,7 +513,7 @@ static void cmd_dcc_chat(const char *data, IRC_SERVER_REC *server)
 				    (GInputFunction) dcc_chat_listen, dcc);
 
 		/* send the chat request */
-		signal_emit__dcc_request_send(dcc);
+		signal_emit__dcc_request_send((DCC_REC *)dcc);
 
 		dcc_ip2str(&own_ip, host);
 		irc_send_cmdv(server, "PRIVMSG %s :\001DCC CHAT CHAT %s %d\001",
@@ -521,7 +522,7 @@ static void cmd_dcc_chat(const char *data, IRC_SERVER_REC *server)
 		/* Passive protocol... we want the other side to listen */
 		/* send the chat request */
 		dcc->port = 0;
-		signal_emit__dcc_request_send(dcc);
+		signal_emit__dcc_request_send((DCC_REC *)dcc);
 
 		/* generate a random id */
 		p_id = rand() % 64;
@@ -603,7 +604,7 @@ static void cmd_whois(const char *data, SERVER_REC *server,
 	if (*data == '\0') {
 		dcc = item_get_dcc(item);
 		if (dcc != NULL) {
-			signal_emit__command_whois(dcc->nick, server, item);
+			signal_emit__command_("whois", dcc->nick, server, item);
                         signal_stop();
 		}
 	}
@@ -686,7 +687,7 @@ static void ctcp_msg_dcc_chat(IRC_SERVER_REC *server, const char *data,
 	dcc_str2ip(params[1], &dcc->addr);
 	net_ip2host(&dcc->addr, dcc->addrstr);
 
-	signal_emit__dcc_request(dcc, addr);
+	signal_emit__dcc_request((DCC_REC *)dcc, addr);
 
 	if (autoallow || DCC_CHAT_AUTOACCEPT(dcc, server, nick, addr)) {
 		if (passive) {
@@ -755,7 +756,8 @@ static void dcc_ctcp_redirect(CHAT_DCC_REC *dcc, const char *msg)
 	g_return_if_fail(msg != NULL);
 	g_return_if_fail(IS_DCC_CHAT(dcc));
 
-	signal_emit__ctcp_msg_dcc(dcc->server, msg,
+	/* XXX: signal_emit carries additional user_data */
+	signal_emit("ctcp msg dcc", 6, dcc->server, msg,
 		    dcc->nick, "dcc", dcc->mynick, dcc);
 }
 
@@ -764,7 +766,8 @@ static void dcc_ctcp_reply_redirect(CHAT_DCC_REC *dcc, const char *msg)
 	g_return_if_fail(msg != NULL);
 	g_return_if_fail(IS_DCC_CHAT(dcc));
 
-	signal_emit__ctcp_reply_dcc(dcc->server, msg,
+	/* XXX: signal_emit carries additional user_data */
+	signal_emit("ctcp reply dcc", 6, dcc->server, msg,
 		    dcc->nick, "dcc", dcc->mynick, dcc);
 }
 

@@ -22,6 +22,7 @@
 #include "module.h"
 #include "modules.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "expandos.h"
 #include "settings.h"
 #include "commands.h"

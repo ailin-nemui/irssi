@@ -5,7 +5,7 @@
    connection failed */
 #define FAILED_RECONNECT_WAIT (60*30)
 
-typedef struct {
+typedef struct _RECONNECT_REC {
         int tag;
 	time_t next_connect;
 

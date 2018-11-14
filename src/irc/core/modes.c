@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "settings.h"
 
 #include "irc-commands.h"
@@ -55,7 +56,7 @@ static void nick_mode_change(IRC_CHANNEL_REC *channel, const char *nick,
 
 	modestr[0] = mode; modestr[1] = '\0';
 	typestr[0] = type; typestr[1] = '\0';
-	signal_emit__nick_mode_changed(channel, nickrec, setby, modestr, typestr);
+	signal_emit__nick_mode_changed((CHANNEL_REC *)channel, nickrec, setby, modestr, typestr);
 }
 
 void prefix_add(char prefixes[MAX_USER_PREFIXES+1], char newprefix, SERVER_REC *server)
@@ -401,7 +402,7 @@ void parse_channel_modes(IRC_CHANNEL_REC *channel, const char *setby,
 		g_free(channel->mode);
 		channel->mode = g_strdup(newmode->str);
 
-		signal_emit__channel_mode_changed(channel, setby);
+		signal_emit__channel_mode_changed((CHANNEL_REC *)channel, setby);
 	}
 
 	g_string_free(newmode, TRUE);
@@ -460,7 +461,7 @@ static void parse_user_mode(IRC_SERVER_REC *server, const char *modestr)
 	server->usermode = newmode;
 	server->server_operator = ((strchr(newmode, 'o') != NULL) || (strchr(newmode, 'O') != NULL));
 
-	signal_emit__user_mode_changed(server, oldmode);
+	signal_emit__user_mode_changed((SERVER_REC *)server, oldmode);
 	g_free_not_null(oldmode);
 }
 
@@ -514,7 +515,7 @@ static void event_away(IRC_SERVER_REC *server, const char *data)
 	g_return_if_fail(server != NULL);
 
 	server->usermode_away = TRUE;
-	signal_emit__away_mode_changed(server);
+	signal_emit__away_mode_changed((SERVER_REC *)server);
 }
 
 static void event_unaway(IRC_SERVER_REC *server, const char *data)
@@ -523,7 +524,7 @@ static void event_unaway(IRC_SERVER_REC *server, const char *data)
 
 	server->usermode_away = FALSE;
 	g_free_and_null(server->away_reason);
-	signal_emit__away_mode_changed(server);
+	signal_emit__away_mode_changed((SERVER_REC *)server);
 }
 
 static void sig_req_usermode_change(IRC_SERVER_REC *server, const char *data,
@@ -544,7 +545,7 @@ static void sig_req_usermode_change(IRC_SERVER_REC *server, const char *data,
 
 	g_free(params);
 
-	signal_emit__event_mode(server, data, nick, addr);
+	signal_emit__event_("mode", (SERVER_REC *)server, data, nick, addr);
 }
 
 void channel_set_singlemode(IRC_CHANNEL_REC *channel, const char *nicks,
@@ -745,7 +746,7 @@ static char *get_nicks(IRC_SERVER_REC *server, WI_ITEM_REC *item,
 				g_strfreev(matches);
 				cmd_params_free(free_arg);
 
-				signal_emit__error_command(GINT_TO_POINTER(CMDERR_NOT_GOOD_IDEA));
+				signal_emit__error_command(GINT_TO_POINTER(CMDERR_NOT_GOOD_IDEA), NULL);
 				signal_stop();
                                 return NULL;
 			}

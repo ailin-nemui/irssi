@@ -1,7 +1,7 @@
 #ifndef __MODE_LISTS_H
 #define __MODE_LISTS_H
 
-typedef struct {
+typedef struct _BAN_REC {
 	char *ban;
 	char *setby;
 	time_t time;

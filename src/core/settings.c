@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "commands.h"
 #include "levels.h"
 #include "misc.h"
@@ -655,7 +656,7 @@ void sig_term(int n)
 	signal(SIGTERM, SIG_DFL);
 
 	/* quit from all servers too.. */
-	signal_emit__command_quit("");
+	signal_emit__command_("quit", "", NULL, NULL);
 
 	/* and die */
 	raise(SIGTERM);

@@ -21,6 +21,7 @@
 #include "module.h"
 #include "network.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "special-vars.h"
 #include "lib-config/iconfig.h"
 #include "settings.h"

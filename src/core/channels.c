@@ -20,6 +20,8 @@
 
 #include "module.h"
 #include "signals.h"
+#include "signal-registry.h"
+#include "signal-registry.h"
 #include "misc.h"
 #include "special-vars.h"
 
@@ -148,7 +150,7 @@ void channel_change_visible_name(CHANNEL_REC *channel, const char *name)
 	g_free(channel->visible_name);
 	channel->visible_name = g_strdup(name);
 
-	signal_emit__window_item_name_changed(channel);
+	signal_emit__window_item_name_changed((WI_ITEM_REC *)channel);
 }
 
 static CHANNEL_REC *channel_find_servers(GSList *servers, const char *name)

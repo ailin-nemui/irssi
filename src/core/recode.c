@@ -22,6 +22,7 @@
 #include "settings.h"
 #include "servers.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "lib-config/iconfig.h"
 #include "misc.h"
 

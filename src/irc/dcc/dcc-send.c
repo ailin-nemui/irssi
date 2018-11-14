@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "../core/signal-registry.h"
 #include "commands.h"
 #include "network.h"
 #include "net-sendbuffer.h"
@@ -128,7 +129,7 @@ static void dcc_send_add(const char *servertag, CHAT_DCC_REC *chat,
 		}
 
 		if (ret < 0) {
-			signal_emit__dcc_error_file_open(nick, fname, errno);
+			signal_emit__dcc_error_file_open(nick, fname, GINT_TO_POINTER(errno));
 			g_free(fname);
 			continue;
 		}
@@ -276,7 +277,7 @@ static void dcc_send_data(SEND_DCC_REC *dcc)
 
 	lseek(dcc->fhandle, dcc->transfd, SEEK_SET);
 
-	signal_emit__dcc_transfer_update(dcc);
+	signal_emit__dcc_transfer_update((DCC_REC *)dcc);
 }
 
 /* input function: DCC SEND - received some data */
@@ -339,7 +340,7 @@ static void dcc_send_connected(SEND_DCC_REC *dcc)
 	dcc->tagwrite = g_input_add(handle, G_INPUT_WRITE,
 				    (GInputFunction) dcc_send_data, dcc);
 
-	signal_emit__dcc_connected(dcc);
+	signal_emit__dcc_connected((DCC_REC *)dcc);
 }
 
 /* input function: DCC SEND - connect to the receiver (passive protocol) */
@@ -356,10 +357,10 @@ static void dcc_send_connect(SEND_DCC_REC *dcc)
 		dcc->tagwrite = g_input_add(dcc->handle, G_INPUT_WRITE,
 					    (GInputFunction) dcc_send_data,
 					    dcc);
-		signal_emit__dcc_connected(dcc);
+		signal_emit__dcc_connected((DCC_REC *)dcc);
 	} else {
 		/* error connecting */
-		signal_emit__dcc_error_connect(dcc);
+		signal_emit__dcc_error_connect((DCC_REC *)dcc);
 		dcc_destroy(DCC(dcc));
 	}
 }
@@ -444,7 +445,7 @@ static int dcc_send_one_file(int queue, const char *target, const char *fname,
 	}
 
 	/* send DCC request */
-	signal_emit__dcc_request_send(dcc);
+	signal_emit__dcc_request_send((DCC_REC *)dcc);
 
 	dcc_ip2str(&own_ip, host);
 	if (passive == FALSE) {
@@ -470,7 +471,7 @@ void dcc_send_init(void)
 	settings_add_str("dcc", "dcc_upload_path", "~");
 	settings_add_bool("dcc", "dcc_send_replace_space_with_underscore", FALSE);
 	signal_add("dcc destroyed", (SIGNAL_FUNC) sig_dcc_destroyed);
-	signal_add("dcc reply send pasv", (SIGNAL_FUNC) dcc_send_connect);
+	signal_add("dcc send pasv", (SIGNAL_FUNC) dcc_send_connect);
 	command_bind("dcc send", NULL, (SIGNAL_FUNC) cmd_dcc_send);
 	command_set_options("dcc send", "append flush prepend rmhead rmtail passive");
 
@@ -483,6 +484,6 @@ void dcc_send_deinit(void)
 
         dcc_unregister_type("SEND");
 	signal_remove("dcc destroyed", (SIGNAL_FUNC) sig_dcc_destroyed);
-	signal_remove("dcc reply send pasv", (SIGNAL_FUNC) dcc_send_connect);
+	signal_remove("dcc send pasv", (SIGNAL_FUNC) dcc_send_connect);
 	command_unbind("dcc send", (SIGNAL_FUNC) cmd_dcc_send);
 }

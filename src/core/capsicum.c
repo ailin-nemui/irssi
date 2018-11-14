@@ -31,6 +31,7 @@
 #include "network-openssl.h"
 #include "settings.h"
 #include "signals.h"
+#include "signal-registry.h"
 
 #include <sys/param.h>
 #include <sys/capsicum.h>

@@ -1,7 +1,7 @@
 #ifndef __NOTIFYLIST_H
 #define __NOTIFYLIST_H
 
-typedef struct {
+typedef struct _NOTIFYLIST_REC {
 	char *mask; /* nick part must not contain wildcards */
 	char **ircnets; /* if non-NULL, check only from these irc networks */
 

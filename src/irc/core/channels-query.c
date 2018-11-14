@@ -41,6 +41,7 @@ loop:
 #include "module.h"
 #include "misc.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "settings.h"
 
 #include "modes.h"
@@ -309,7 +310,7 @@ static void channel_checksync(IRC_CHANNEL_REC *channel)
 	}
 
 	channel->synced = TRUE;
-	signal_emit__channel_sync(channel);
+	signal_emit__channel_sync((CHANNEL_REC *)channel);
 }
 
 /* Error occurred when trying to execute query - abort and try again. */
@@ -449,7 +450,7 @@ static void event_end_of_who(IRC_SERVER_REC *server, const char *data)
 			failed = TRUE;
 		} else {
 			chanrec->wholist = TRUE;
-			signal_emit__channel_wholist(chanrec);
+			signal_emit__channel_wholist((CHANNEL_REC *)chanrec);
 			channel_got_query(chanrec, CHANNEL_QUERY_WHO);
 		}
 	}

@@ -22,6 +22,7 @@
 
 #include "net-sendbuffer.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "rawlog.h"
 #include "misc.h"
 
@@ -722,7 +723,7 @@ static void event_connected(IRC_SERVER_REC *server, const char *data, const char
 		server->wanted_usermode = g_strdup(server->connrec->usermode);
 	}
 
-	signal_emit__event_connected(server);
+	signal_emit__event_connected((SERVER_REC *)server);
 	g_free(params);
 }
 

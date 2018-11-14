@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "special-vars.h"
 #include "expandos.h"
 #include "settings.h"

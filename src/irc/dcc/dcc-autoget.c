@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "../core/signal-registry.h"
 #include "masks.h"
 #include "settings.h"
 #include "servers.h"
@@ -74,7 +75,7 @@ static void sig_dcc_request(GET_DCC_REC *dcc, const char *nickaddr)
 			      stat(file, &statbuf) == 0 ?
 			      "RESUME %s \"%s\"" : "GET %s \"%s\"",
 			      dcc->nick, esc_arg);
-	signal_emit__command_dcc(str, dcc->server);
+	signal_emit__command_("dcc", str, (SERVER_REC *)dcc->server, NULL);
 	g_free(esc_arg);
         g_free(file);
 	g_free(str);

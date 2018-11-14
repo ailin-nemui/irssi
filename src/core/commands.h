@@ -2,6 +2,7 @@
 #define __COMMANDS_H
 
 #include "signals.h"
+#include "signal-registry.h"
 
 typedef struct {
 	SIGNAL_FUNC func;
@@ -15,7 +16,7 @@ typedef struct {
         GSList *callbacks;
 } COMMAND_MODULE_REC;
 
-typedef struct {
+typedef struct _COMMAND_REC {
         GSList *modules;
 	char *category;
 	char *cmd;
@@ -52,7 +53,7 @@ enum {
 /* Returning from command function with error */
 #define cmd_return_error(a) \
 	G_STMT_START { \
-	  signal_emit__error_command(GINT_TO_POINTER(a)); \
+	  signal_emit__error_command(GINT_TO_POINTER(a), NULL); \
 	  signal_stop(); \
 	  return; \
 	} G_STMT_END

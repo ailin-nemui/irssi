@@ -21,6 +21,7 @@
 #include "module.h"
 #include "modules.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "chat-protocols.h"
 
 #include "chatnets.h"

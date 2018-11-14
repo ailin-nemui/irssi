@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "levels.h"
 #include "log.h"
 #include "servers.h"

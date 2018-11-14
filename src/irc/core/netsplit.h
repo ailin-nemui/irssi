@@ -3,7 +3,7 @@
 
 #include "nicklist.h"
 
-typedef struct {
+typedef struct _NETSPLIT_SERVER_REC {
 	char *server;
 	char *destserver;
 	int count;
@@ -12,7 +12,7 @@ typedef struct {
 	time_t last; /* last time we received a QUIT msg here */
 } NETSPLIT_SERVER_REC;
 
-typedef struct {
+typedef struct _NETSPLIT_REC {
 	NETSPLIT_SERVER_REC *server;
 
 	char *nick;

@@ -23,6 +23,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "settings.h"
 #include "utf8.h"
 
