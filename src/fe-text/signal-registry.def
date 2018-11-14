@@ -1,11 +1,43 @@
 // Text FE
 
 // gui-readline.c:
- "gui key pressed", int key
+SIGNAL_REGISTER(gui_key_pressed, 1, (int_in_ptr key),
+	 key)
 
 // gui-printtext.c:
- "beep"
- "gui print text after finished", WINDOW_REC, LINE_REC *line, LINE_REC *prev_line
+SIGNAL_REGISTER(gui_print_text_after_finished, 3, (WINDOW_REC *window, LINE_REC *line, LINE_REC *prev_line),
+	 window, line, prev_line)
 
 // textbuffer-view.c
- "gui textbuffer line removed", TEXTBUFFER_VIEW_REC *view, LINE_REC *line, LINE_REC *prev_line
+SIGNAL_REGISTER(gui_textbuffer_line_removed, 3, (TEXT_BUFFER_VIEW_REC *view, LINE_REC *line, LINE_REC *prev_line),
+	 view, line, prev_line)
+
+// gui-windows.c:
+SIGNAL_REGISTER(gui_window_created, 1, (WINDOW_REC *window),
+	 window)
+SIGNAL_REGISTER(gui_window_destroyed, 1, (WINDOW_REC *window),
+	 window)
+SIGNAL_REGISTER(gui_page_scrolled, 1, (WINDOW_REC *window),
+	 window)
+
+// mainwindows.c:
+SIGNAL_REGISTER(mainwindow_created, 1, (MAIN_WINDOW_REC *main_window),
+	 main_window)
+SIGNAL_REGISTER(mainwindow_resized, 1, (MAIN_WINDOW_REC *main_window),
+	 main_window)
+SIGNAL_REGISTER(mainwindow_moved, 1, (MAIN_WINDOW_REC *main_window),
+	 main_window)
+SIGNAL_REGISTER(mainwindow_destroyed, 1, (MAIN_WINDOW_REC *main_window),
+	 main_window)
+SIGNAL_REGISTER(terminal_resized, 0, (void))
+
+// statusbar.c:
+SIGNAL_REGISTER(statusbar_created, 1, (STATUSBAR_REC *statusbar),
+	 statusbar)
+SIGNAL_REGISTER(statusbar_destroyed, 1, (STATUSBAR_REC *statusbar),
+	 statusbar)
+SIGNAL_REGISTER(statusbar_item_created, 1, (SBAR_ITEM_REC *sbar_item),
+	 sbar_item)
+SIGNAL_REGISTER(statusbar_item_destroyed, 1, (SBAR_ITEM_REC *sbar_item),
+	 sbar_item)
+ 

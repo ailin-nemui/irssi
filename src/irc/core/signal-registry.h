@@ -4,6 +4,7 @@
 #include "modules.h"
 #include "signal-registry-macros.h"
 
+STYPE(IRC_SERVER_REC);
 STYPE(BAN_REC);
 STYPE(NETSPLIT_SERVER_REC);
 STYPE(NETSPLIT_REC);

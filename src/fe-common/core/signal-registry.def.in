@@ -6,45 +6,77 @@
  "gui print text finished", WINDOW_REC
 
 // completion.c:
- "complete word", GList * of char*, WINDOW_REC, char *word, char *linestart, int *want_space
+ "complete command "<cmd>, GList **completions/*<char*>*/, WINDOW_REC, const char *word, char *linestart, int *want_space
+ "complete word", GList **completions/*<char*>*/, WINDOW_REC, const char *word, char *linestart, int *want_space
+ "complete erase", WINDOW_REC, const char *word, const char *linestart
+ "complete erase command "<cmd>, WINDOW_REC, const char *word, const char *linestart
+ "completion removed", const char *word
+ "completion added", const char *word
+ 
 
 // fe-common-core.c:
  "irssi init read settings"
+ "irssi init finished"
 
+// fe-core-commands.c:
+ "beep"
+ 
 // fe-exec.c:
  "exec new", PROCESS_REC
  "exec remove", PROCESS_REC, int status
  "exec input", PROCESS_REC, char *text
 
 // fe-messages.c:
- "message public", SERVER_REC, char *msg, char *nick, char *address, char *target
- "message private", SERVER_REC, char *msg, char *nick, char *address, char *target
- "message join", SERVER_REC, char *channel, char *nick, char *address
- "message part", SERVER_REC, char *channel, char *nick, char *address, char *reason
- "message quit", SERVER_REC, char *nick, char *address, char *reason
- "message kick", SERVER_REC, char *channel, char *nick, char *kicker, char *address, char *reason
- "message nick", SERVER_REC, char *newnick, char *oldnick, char *address
- "message own_nick", SERVER_REC, char *newnick, char *oldnick, char *address
- "message invite", SERVER_REC, char *channel, char *nick, char *address
- "message topic", SERVER_REC, char *channel, char *topic, char *nick, char *address
+ "message public", SERVER_REC, const char *msg, const char *nick, const char *address, const char *target
+ "message private", SERVER_REC, const char *msg, const char *nick, const char *address, const char *target
+ "message join", SERVER_REC, const char *channel, const char *nick, const char *address
+ "message part", SERVER_REC, const char *channel, const char *nick, const char *address, char *reason
+ "message quit", SERVER_REC, const char *nick, const char *address, char *reason
+ "message kick", SERVER_REC, const char *channel, const char *nick, const char *kicker, const char *address, char *reason
+ "message nick", SERVER_REC, const char *newnick, const char *oldnick, const char *address
+ "message own_nick", SERVER_REC, const char *newnick, const char *oldnick, const char *address
+ "message invite", SERVER_REC, const char *channel, const char *nick, const char *address
+ "message topic", SERVER_REC, const char *channel, char *topic, const char *nick, const char *address
 
 // fe-log.c:
- "awaylog show", LOG_REC, int away_msgs, int filepos
+
+// fe-channels.c:
+ "channel add fill", CHANNEL_SETUP_REC, GHashTable *optlist
+
+// fe-server.c:
+ "server add fill", SERVER_SETUP_REC, GHashTable *optlist
+
+// fe-settings.c:
+ "alias added", const char *alias, const char *value
+ "alias removed", const char *alias
 
 // keyboard.c:
  "keyinfo created", KEYINFO_REC
  "keyinfo destroyed", KEYINFO_REC
+ "keyboard created", KEYBOARD_REC
+ "keyboard destroyed", KEYBOARD_REC
+ "key created", KEY_REC
+ "key destroyed", KEY_REC
+ "key "<key>, const char *data, void *gui_data, KEYINFO_REC
+ "gui entry redirect", SIGNAL_FUNC func, const char *entry, int flags, void *data
 
 // printtext.c:
- "print text", TEXT_DEST_REC *dest, char *text, char *stripped
+ "print text", TEXT_DEST_REC *dest, const char *text, const char *stripped
+ "print starting", TEXT_DEST_REC
+ "print format", THEME_REC, const char *module, TEXT_DEST_REC, int formatnum, char **arglist
 
 // themes.c:
  "theme created", THEME_REC
  "theme destroyed", THEME_REC
+ "theme changed", THEME_REC
+
+// hilight-text.c:
+ "hilight created", HILIGHT_REC
+ "hilight destroyed", HILIGHT_REC
 
 // window-activity.c:
  "window hilight", WINDOW_REC
- "window hilight check", TEXT_DEST_REC, char *msg, int *data_level, int *should_ignore
+ "window hilight check", TEXT_DEST_REC, const char *msg, int *data_level, int *should_ignore
  "window dehilight", WINDOW_REC
  "window activity", WINDOW_REC, int old_level
  "window item hilight", WI_ITEM_REC
@@ -58,12 +90,34 @@
  "window item server changed", WINDOW_REC, WI_ITEM_REC
 
 // windows.c:
- "window created", WINDOW_REC
+ "window created", WINDOW_REC, int automatic
  "window destroyed", WINDOW_REC
- "window changed", WINDOW_REC, WINDOW_REC old
+ "window changed", WINDOW_REC, WINDOW_REC *old
  "window changed automatic", WINDOW_REC
  "window server changed", WINDOW_REC, SERVER_REC
  "window refnum changed", WINDOW_REC, int old
  "window name changed", WINDOW_REC
  "window history changed", WINDOW_REC, char *oldname
  "window level changed", WINDOW_REC
+
+// window-commands.c:
+ "window print info", WINDOW_REC
+ "gui window create override", int type
+
+// windows-layout.c:
+ "layout save"
+ "layout save item", WINDOW_REC, const char *type, CONFIG_NODE
+ "layout save window", WINDOW_REC, CONFIG_NODE
+ "layout restore item", WINDOW_REC, const char *type, CONFIG_NODE
+ "layout restore window", WINDOW_REC, CONFIG_NODE
+ "layout restore"
+ "layout reset"
+
+// fe-windows.c:
+ "window connect changed", WINDOW_REC, SERVER_REC
+ "window history cleared", WINDOW_REC, const char *name
+ "window immortal changed", WINDOW_REC
+ 
+// fe-dcc.c:
+ "dcc list print", DCC_REC
+ 

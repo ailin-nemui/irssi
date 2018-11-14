@@ -1,3 +1,4 @@
 // Perl
 
-"script error", PERL_SCRIPT_REC, char *errormsg
+SIGNAL_REGISTER(script_error, 2, (PERL_SCRIPT_REC *perl_script, char *errormsg),
+	 perl_script, errormsg)

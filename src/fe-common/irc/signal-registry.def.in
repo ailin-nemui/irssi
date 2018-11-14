@@ -1,0 +1,25 @@
+// FE IRC
+
+// fe-events.c:
+ "default event numeric", SERVER_REC, const char *data, const char *nick, const char *address
+
+// fe-irc-messages.c:
+ "message irc op_public", IRC_SERVER_REC, char *msg, const char *nick, const char *address, const char *target
+ "message irc own_wall", IRC_SERVER_REC, const char *msg, const char *target
+ "message irc own_action", IRC_SERVER_REC, const char *msg, const char *target
+ "message irc action", IRC_SERVER_REC, char *msg, const char *nick, const char *address, const char *target
+ "message irc own_notice", IRC_SERVER_REC, const char *msg, const char *target
+ "message irc notice", IRC_SERVER_REC, char *msg, const char *nick, const char *address, const char *target
+ "message irc own_ctcp", IRC_SERVER_REC, char *cmd, char *data, const char *target
+ "message irc ctcp", IRC_SERVER_REC, char *cmd, const char *data, const char *nick, const char *address, const char *target
+
+// fe-modes.c:
+ "message irc mode", IRC_SERVER_REC, const char *channel, const char *nick, const char *addr, char *mode
+
+// dcc/fe-dcc-chat-messages.c:
+ "message dcc own", CHAT_DCC_REC *dcc, const char *msg
+ "message dcc own_action", CHAT_DCC_REC *dcc, const char *msg
+ "message dcc own_ctcp", CHAT_DCC_REC *dcc, const char *cmd, const char *data
+ "message dcc", CHAT_DCC_REC *dcc, const char *msg
+ "message dcc action", CHAT_DCC_REC *dcc, const char *msg
+ "message dcc ctcp", CHAT_DCC_REC *dcc, const char *cmd, const char *data

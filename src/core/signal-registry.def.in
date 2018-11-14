@@ -28,12 +28,12 @@
  "commandlist new", COMMAND_REC
  "commandlist remove", COMMAND_REC
  "list subcommands", const char *command
- "error command", int err, char *cmd
+ "error command", int err, const char *cmd
 
  "send command", char *args, SERVER_REC, WI_ITEM_REC
  "send text", const char *line, SERVER_REC, WI_ITEM_REC
- "command "<cmd>, char *args, SERVER_REC, WI_ITEM_REC
- "default command", char *args, SERVER_REC, WI_ITEM_REC
+ "command "<cmd>, const char *args, SERVER_REC, WI_ITEM_REC
+ "default command", const char *args, SERVER_REC, WI_ITEM_REC
 
 // chat-commands.c:
  "chat protocol unknown", const char *protocol
@@ -135,3 +135,6 @@
  "settings userinfo changed", uint flags
  "irssi init userinfo changed", uint flags
  
+// expandos.c:
+ "expando timer"
+ "time changed"

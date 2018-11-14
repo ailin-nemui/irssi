@@ -1,0 +1,4 @@
+// OTR Core
+
+// otr.c:
+ "otr event", SERVER_REC, const char *nick, const char *status

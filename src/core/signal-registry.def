@@ -46,16 +46,16 @@ SIGNAL_REGISTER(commandlist_remove, 1, (COMMAND_REC *command),
 	 command)
 SIGNAL_REGISTER(list_subcommands, 1, (const char *command),
 	 command)
-SIGNAL_REGISTER(error_command, 2, (int_in_ptr err, char *cmd),
+SIGNAL_REGISTER(error_command, 2, (int_in_ptr err, const char *cmd),
 	 err, cmd)
 
 SIGNAL_REGISTER(send_command, 3, (char *args, SERVER_REC *server, WI_ITEM_REC *wi_item),
 	 args, server, wi_item)
 SIGNAL_REGISTER(send_text, 3, (const char *line, SERVER_REC *server, WI_ITEM_REC *wi_item),
 	 line, server, wi_item)
-SIGNAL_REGISTER_F(command, 3, (const char *cmd, char *args, SERVER_REC *server, WI_ITEM_REC *wi_item),
+SIGNAL_REGISTER_F(command, 3, (const char *cmd, const char *args, SERVER_REC *server, WI_ITEM_REC *wi_item),
 	 cmd, args, server, wi_item)
-SIGNAL_REGISTER(default_command, 3, (char *args, SERVER_REC *server, WI_ITEM_REC *wi_item),
+SIGNAL_REGISTER(default_command, 3, (const char *args, SERVER_REC *server, WI_ITEM_REC *wi_item),
 	 args, server, wi_item)
 
 // chat-commands.c:
@@ -227,3 +227,6 @@ SIGNAL_REGISTER(settings_userinfo_changed, 1, (uint_in_ptr flags),
 SIGNAL_REGISTER(irssi_init_userinfo_changed, 1, (uint_in_ptr flags),
 	 flags)
  
+// expandos.c:
+SIGNAL_REGISTER(expando_timer, 0, (void))
+SIGNAL_REGISTER(time_changed, 0, (void))

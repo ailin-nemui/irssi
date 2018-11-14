@@ -42,7 +42,7 @@
 
  "server event", SERVER_REC, char *data, char *sender_nick, char *sender_address
  "event "<cmd>, SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
- "default event", SERVER_REC, char *data, char *sender_nick, char *sender_address
+ "default event", SERVER_REC, const char *data, const char *sender_nick, const char *sender_address
  "whois default event", SERVER_REC, char *args, char *sender_nick, char *sender_address
 
  "server incoming", SERVER_REC, char *data
@@ -75,12 +75,12 @@
 
 // dcc*.c:
 
- "dcc ctcp "<cmd>, char *args, DCC_REC
- "default dcc ctcp", char *args, DCC_REC
+ "dcc ctcp "<cmd>, CHAT_DCC_REC, char *args
+ "default dcc ctcp", CHAT_DCC_REC, char *cmd, char *args
  "dcc unknown ctcp", char *args, char *sender, char *sendaddr
 
- "dcc reply "<cmd>, char *args, DCC_REC
- "default dcc reply", char *args, DCC_REC
+ "dcc reply "<cmd>, CHAT_DCC_REC, char *args
+ "default dcc reply", CHAT_DCC_REC, char *cmd, char *args
  "dcc unknown reply", char *args, char *sender, char *sendaddr
 
  "dcc created", DCC_REC
@@ -109,6 +109,10 @@
 
  "default ctcp msg dcc", IRC_SERVER_REC, const char *args, const char *nick, const char *addr, const char *target, DCC_REC
  "default ctcp reply dcc", IRC_SERVER_REC, const char *args, const char *nick, const char *addr, const char *target
+ "ctcp msg dcc", IRC_SERVER_REC, const char *args, const char *nick, const char *addr, const char *target, DCC_REC
+ "ctcp msg dcc "<cmd>, IRC_SERVER_REC, const char *args, const char *nick, const char *addr, const char *target, DCC_REC
+ "ctcp reply dcc", IRC_SERVER_REC, const char *args, const char *nick, const char *addr, const char *target, DCC_REC
+ "ctcp reply dcc "<cmd>, IRC_SERVER_REC, const char *args, const char *nick, const char *addr, const char *target
 
 // autoignore.c:
 

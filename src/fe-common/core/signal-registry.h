@@ -4,6 +4,15 @@
 #include "modules.h"
 #include "signal-registry-macros.h"
 
+typedef struct PROCESS_REC PROCESS_REC;
+STYPE(KEYINFO_REC);
+STYPE(TEXT_DEST_REC);
+STYPE(THEME_REC);
+STYPE(HILIGHT_REC);
+STYPE(KEYBOARD_REC);
+STYPE(KEY_REC);
+STYPE(DCC_REC);
+STYPE(CONFIG_NODE);
 
 #include "signal-registry.def"
 

@@ -67,7 +67,7 @@ SIGNAL_REGISTER(server_event, 4, (SERVER_REC *server, char *data, char *sender_n
 	 server, data, sender_nick, sender_address)
 SIGNAL_REGISTER_F(event, 4, (const char *cmd, SERVER_REC *server, const char *args, const char *sender_nick, const char *sender_address),
 	 cmd, server, args, sender_nick, sender_address)
-SIGNAL_REGISTER(default_event, 4, (SERVER_REC *server, char *data, char *sender_nick, char *sender_address),
+SIGNAL_REGISTER(default_event, 4, (SERVER_REC *server, const char *data, const char *sender_nick, const char *sender_address),
 	 server, data, sender_nick, sender_address)
 SIGNAL_REGISTER(whois_default_event, 4, (SERVER_REC *server, char *args, char *sender_nick, char *sender_address),
 	 server, args, sender_nick, sender_address)
@@ -117,17 +117,17 @@ SIGNAL_REGISTER(netsplit_remove, 1, (NETSPLIT_REC *netsplit),
 
 // dcc*.c:
 
-SIGNAL_REGISTER_F(dcc_ctcp, 2, (const char *cmd, char *args, DCC_REC *dcc),
-	 cmd, args, dcc)
-SIGNAL_REGISTER(default_dcc_ctcp, 2, (char *args, DCC_REC *dcc),
-	 args, dcc)
+SIGNAL_REGISTER_F(dcc_ctcp, 2, (const char *cmd, CHAT_DCC_REC *chat_dcc, char *args),
+	 cmd, chat_dcc, args)
+SIGNAL_REGISTER(default_dcc_ctcp, 3, (CHAT_DCC_REC *chat_dcc, char *cmd, char *args),
+	 chat_dcc, cmd, args)
 SIGNAL_REGISTER(dcc_unknown_ctcp, 3, (char *args, char *sender, char *sendaddr),
 	 args, sender, sendaddr)
 
-SIGNAL_REGISTER_F(dcc_reply, 2, (const char *cmd, char *args, DCC_REC *dcc),
-	 cmd, args, dcc)
-SIGNAL_REGISTER(default_dcc_reply, 2, (char *args, DCC_REC *dcc),
-	 args, dcc)
+SIGNAL_REGISTER_F(dcc_reply, 2, (const char *cmd, CHAT_DCC_REC *chat_dcc, char *args),
+	 cmd, chat_dcc, args)
+SIGNAL_REGISTER(default_dcc_reply, 3, (CHAT_DCC_REC *chat_dcc, char *cmd, char *args),
+	 chat_dcc, cmd, args)
 SIGNAL_REGISTER(dcc_unknown_reply, 3, (char *args, char *sender, char *sendaddr),
 	 args, sender, sendaddr)
 
@@ -182,6 +182,14 @@ SIGNAL_REGISTER(default_ctcp_msg_dcc, 6, (IRC_SERVER_REC *irc_server, const char
 	 irc_server, args, nick, addr, target, dcc)
 SIGNAL_REGISTER(default_ctcp_reply_dcc, 5, (IRC_SERVER_REC *irc_server, const char *args, const char *nick, const char *addr, const char *target),
 	 irc_server, args, nick, addr, target)
+SIGNAL_REGISTER(ctcp_msg_dcc, 6, (IRC_SERVER_REC *irc_server, const char *args, const char *nick, const char *addr, const char *target, DCC_REC *dcc),
+	 irc_server, args, nick, addr, target, dcc)
+SIGNAL_REGISTER_F(ctcp_msg_dcc, 6, (const char *cmd, IRC_SERVER_REC *irc_server, const char *args, const char *nick, const char *addr, const char *target, DCC_REC *dcc),
+	 cmd, irc_server, args, nick, addr, target, dcc)
+SIGNAL_REGISTER(ctcp_reply_dcc, 6, (IRC_SERVER_REC *irc_server, const char *args, const char *nick, const char *addr, const char *target, DCC_REC *dcc),
+	 irc_server, args, nick, addr, target, dcc)
+SIGNAL_REGISTER_F(ctcp_reply_dcc, 5, (const char *cmd, IRC_SERVER_REC *irc_server, const char *args, const char *nick, const char *addr, const char *target),
+	 cmd, irc_server, args, nick, addr, target)
 
 // autoignore.c:
 

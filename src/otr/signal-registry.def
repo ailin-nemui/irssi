@@ -1,4 +1,5 @@
 // OTR Core
 
 // otr.c:
- "otr event", SERVER_REC, char *nick, char *status
+SIGNAL_REGISTER(otr_event, 3, (SERVER_REC *server, const char *nick, const char *status),
+	 server, nick, status)
