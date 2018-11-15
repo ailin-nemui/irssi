@@ -28,6 +28,7 @@
 #include "printtext.h"
 #include "formats.h"
 #include "recode.h"
+#include "core/signal-registry.h"
 
 static char *recode_fallback = NULL;
 static char *recode_out_default = NULL;

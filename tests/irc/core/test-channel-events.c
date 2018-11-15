@@ -30,12 +30,13 @@
 #include <recode.h>
 #include <settings.h>
 #include <signals.h>
-#include <core/signal-registry.h>
-#include <irc/core/signal-registry.h>
 #include <time.h>
 #include <args.h>
 
 #define MODULE_NAME "test-channel-events"
+
+#include <core/signal-registry.h>
+#include <irc/core/signal-registry.h>
 
 typedef struct {
 	char const *const description;

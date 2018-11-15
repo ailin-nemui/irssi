@@ -26,8 +26,6 @@
 
 #include "common.h"
 #include "signals.h"
-#include "fe-common/core/signal-registry.h"
-#include "fe-common/irc/signal-registry.h"
 #include "queries.h"
 #include "commands.h"
 
@@ -41,6 +39,10 @@
 #include "otr-formats.h"
 #include "otr-fe.h"
 #include "misc.h"
+
+#include "core/signal-registry.h"
+#include "fe-common/core/signal-registry.h"
+#include "fe-common/irc/signal-registry.h"
 
 /*
  * Global state for the user. Init when the module loads.

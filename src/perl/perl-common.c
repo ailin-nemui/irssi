@@ -23,6 +23,7 @@
 #include "module.h"
 #include "modules.h"
 #include "signals.h"
+#include "core/signal-registry.h"
 #include "core.h"
 #include "misc.h"
 #include "settings.h"

@@ -33,6 +33,8 @@
 #include "otr-formats.h"
 #include "key.h"
 
+#include "core/signal-registry.h"
+
 static void cmd_otr(const char *data, SERVER_REC *server, void *item)
 {
 	if (*data == '\0')

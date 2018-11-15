@@ -20,7 +20,6 @@
 #include "common.h"
 
 #include "signals.h"
-#include "fe-common/core/signal-registry.h"
 #include "levels.h"
 #include "printtext.h"
 #include "fe-windows.h"
@@ -29,6 +28,10 @@
 #include "module.h"
 #include "otr-formats.h"
 #include "irssi-otr.h"
+
+#include "core/signal-registry.h"
+#include "fe-common/core/signal-registry.h"
+#include "fe-common/irc/signal-registry.h"
 
 static OtrlPolicy OTR_DEFAULT_POLICY = OTRL_POLICY_MANUAL | OTRL_POLICY_WHITESPACE_START_AKE;
 

@@ -21,6 +21,7 @@
 #include "module.h"
 #include "chat-protocols.h"
 #include "settings.h"
+#include "core/signal-registry.h"
 
 #include "irc-servers.h"
 #include "irc-chatnets.h"

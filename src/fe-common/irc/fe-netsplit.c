@@ -21,6 +21,7 @@
 #include "module.h"
 #include "module-formats.h"
 #include "signals.h"
+#include "core/signal-registry.h"
 #include "levels.h"
 #include "settings.h"
 

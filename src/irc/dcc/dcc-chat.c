@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "core/signal-registry.h"
 #include "../core/signal-registry.h"
 #include "commands.h"
 #include "recode.h"

@@ -2,7 +2,6 @@
 #define __COMMANDS_H
 
 #include "signals.h"
-#include "signal-registry.h"
 
 typedef struct {
 	SIGNAL_FUNC func;

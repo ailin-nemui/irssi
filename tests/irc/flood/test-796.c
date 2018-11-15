@@ -31,10 +31,6 @@
 #include "irc-servers.h"
 #include "irc-channels.h"
 
-#include <core/signal-registry.h>
-#include <fe-common/core/signal-registry.h>
-#include <irc/core/signal-registry.h>
-
 /* irc.c */
 void irc_init(void);
 void irc_deinit(void);
@@ -51,6 +47,10 @@ typedef struct {
 } ServerDestroyFloodData;
 
 #define MODULE_NAME "tests"
+
+#include <core/signal-registry.h>
+#include <fe-common/core/signal-registry.h>
+#include <irc/core/signal-registry.h>
 
 static void cmd_echo(const char *data, void *server, WI_ITEM_REC *item)
 {

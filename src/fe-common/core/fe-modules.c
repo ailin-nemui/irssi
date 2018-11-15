@@ -23,6 +23,7 @@
 #include "modules-load.h"
 #include "module-formats.h"
 #include "signals.h"
+#include "core/signal-registry.h"
 #include "commands.h"
 #include "levels.h"
 #include "chat-protocols.h"
