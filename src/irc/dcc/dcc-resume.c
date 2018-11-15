@@ -233,14 +233,14 @@ static void cmd_dcc_resume(const char *data)
 
 void dcc_resume_init(void)
 {
-	signal_add("ctcp msg dcc resume", (SIGNAL_FUNC) ctcp_msg_dcc_resume);
-	signal_add("ctcp msg dcc accept", (SIGNAL_FUNC) ctcp_msg_dcc_accept);
+	signal_add__ctcp_msg_dcc_resume(ctcp_msg_dcc_resume);
+	signal_add__ctcp_msg_dcc_accept(ctcp_msg_dcc_accept);
 	command_bind("dcc resume", NULL, (SIGNAL_FUNC) cmd_dcc_resume);
 }
 
 void dcc_resume_deinit(void)
 {
-	signal_remove("ctcp msg dcc resume", (SIGNAL_FUNC) ctcp_msg_dcc_resume);
-	signal_remove("ctcp msg dcc accept", (SIGNAL_FUNC) ctcp_msg_dcc_accept);
+	signal_remove__ctcp_msg_dcc_resume(ctcp_msg_dcc_resume);
+	signal_remove__ctcp_msg_dcc_accept(ctcp_msg_dcc_accept);
 	command_unbind("dcc resume", (SIGNAL_FUNC) cmd_dcc_resume);
 }

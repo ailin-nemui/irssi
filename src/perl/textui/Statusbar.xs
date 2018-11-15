@@ -28,7 +28,7 @@ void perl_statusbar_init(void)
 {
 	perl_sbar_defs = g_hash_table_new((GHashFunc) g_str_hash,
 					  (GCompareFunc) g_str_equal);
-	signal_add("script destroyed", (SIGNAL_FUNC) script_unregister_statusbars);
+	signal_add__script_destroyed(script_unregister_statusbars);
 }
 
 static void statusbar_item_def_destroy(void *key, void *value)
@@ -40,7 +40,7 @@ static void statusbar_item_def_destroy(void *key, void *value)
 
 void perl_statusbar_deinit(void)
 {
-	signal_remove("script destroyed", (SIGNAL_FUNC) script_unregister_statusbars);
+	signal_remove__script_destroyed(script_unregister_statusbars);
 
 	g_hash_table_foreach(perl_sbar_defs,
 			     (GHFunc) statusbar_item_def_destroy, NULL);

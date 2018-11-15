@@ -656,10 +656,10 @@ void fe_exec_init(void)
 	command_set_options("exec", "!- interactive nosh +name out +msg +notice +in window close +level quiet");
 
         signal_exec_input = signal_get_uniq_id("exec input");
-        signal_add("pidwait", (SIGNAL_FUNC) sig_pidwait);
-        signal_add("exec input", (SIGNAL_FUNC) sig_exec_input);
-        signal_add("window destroyed", (SIGNAL_FUNC) sig_window_destroyed);
-	signal_add_first("send text", (SIGNAL_FUNC) event_text);
+        signal_add__pidwait(sig_pidwait);
+        signal_add__exec_input(sig_exec_input);
+        signal_add__window_destroyed(sig_window_destroyed);
+	signal_add_first__send_text(event_text);
 }
 
 void fe_exec_deinit(void)
@@ -675,8 +675,8 @@ void fe_exec_deinit(void)
 
 	command_unbind("exec", (SIGNAL_FUNC) cmd_exec);
 
-        signal_remove("pidwait", (SIGNAL_FUNC) sig_pidwait);
-        signal_remove("exec input", (SIGNAL_FUNC) sig_exec_input);
-        signal_remove("window destroyed", (SIGNAL_FUNC) sig_window_destroyed);
-	signal_remove("send text", (SIGNAL_FUNC) event_text);
+        signal_remove__pidwait(sig_pidwait);
+        signal_remove__exec_input(sig_exec_input);
+        signal_remove__window_destroyed(sig_window_destroyed);
+	signal_remove__send_text(event_text);
 }

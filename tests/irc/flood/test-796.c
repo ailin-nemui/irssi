@@ -81,16 +81,16 @@ static void server_destroy_flood_set_up(ServerDestroyFloodData *fixture, const v
 	fe_common_irc_init();
 	signal_emit__irssi_init_finished();
 	command_bind("echo", NULL, (SIGNAL_FUNC) cmd_echo);
-	signal_add("message public", (SIGNAL_FUNC) sig_public);
-	signal_add("server destroyed", (SIGNAL_FUNC) print_destroyed);
-	signal_add_first("server disconnected", (SIGNAL_FUNC) print_disconnect);
+	signal_add__message_public(sig_public);
+	signal_add__server_destroyed(print_destroyed);
+	signal_add_first__server_disconnected(print_disconnect);
 }
 
 static void server_destroy_flood_tear_down(ServerDestroyFloodData *fixture, const void *data)
 {
-	signal_remove("server disconnected", (SIGNAL_FUNC) print_disconnect);
-	signal_remove("server destroyed", (SIGNAL_FUNC) print_destroyed);
-	signal_remove("message public", (SIGNAL_FUNC) sig_public);
+	signal_remove__server_disconnected(print_disconnect);
+	signal_remove__server_destroyed(print_destroyed);
+	signal_remove__message_public(sig_public);
 	command_unbind("echo", (SIGNAL_FUNC) cmd_echo);
 	fe_common_irc_deinit();
 	fe_common_core_deinit();

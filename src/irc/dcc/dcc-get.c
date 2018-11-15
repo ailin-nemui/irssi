@@ -616,16 +616,16 @@ void dcc_get_init(void)
 	settings_add_str("dcc", "dcc_download_path", "~");
 	settings_add_int("dcc", "dcc_file_create_mode", 644);
 
-	signal_add("dcc destroyed", (SIGNAL_FUNC) sig_dcc_destroyed);
-	signal_add("ctcp msg dcc send", (SIGNAL_FUNC) ctcp_msg_dcc_send);
+	signal_add__dcc_destroyed(sig_dcc_destroyed);
+	signal_add__ctcp_msg_dcc_send(ctcp_msg_dcc_send);
 	command_bind("dcc get", NULL, (SIGNAL_FUNC) cmd_dcc_get);
 }
 
 void dcc_get_deinit(void)
 {
         dcc_unregister_type("GET");
-	signal_remove("dcc destroyed", (SIGNAL_FUNC) sig_dcc_destroyed);
-	signal_remove("ctcp msg dcc send", (SIGNAL_FUNC) ctcp_msg_dcc_send);
+	signal_remove__dcc_destroyed(sig_dcc_destroyed);
+	signal_remove__ctcp_msg_dcc_send(ctcp_msg_dcc_send);
 	command_unbind("dcc get", (SIGNAL_FUNC) cmd_dcc_get);
 	g_free_and_null(dcc_get_recv_buffer);
 }

@@ -587,14 +587,14 @@ int nick_match_msg_everywhere(CHANNEL_REC *channel, const char *msg, const char 
 
 void nicklist_init(void)
 {
-	signal_add_first("channel created", (SIGNAL_FUNC) sig_channel_created);
-	signal_add("channel destroyed", (SIGNAL_FUNC) sig_channel_destroyed);
+	signal_add_first__channel_created(sig_channel_created);
+	signal_add__channel_destroyed(sig_channel_destroyed);
 }
 
 void nicklist_deinit(void)
 {
-	signal_remove("channel created", (SIGNAL_FUNC) sig_channel_created);
-	signal_remove("channel destroyed", (SIGNAL_FUNC) sig_channel_destroyed);
+	signal_remove__channel_created(sig_channel_created);
+	signal_remove__channel_destroyed(sig_channel_destroyed);
 
 	module_uniq_destroy("NICK");
 }

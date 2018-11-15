@@ -36,7 +36,7 @@ void perl_expando_init(void)
 {
 	perl_expando_defs = g_hash_table_new((GHashFunc) g_str_hash,
 					     (GCompareFunc) g_str_equal);
-	signal_add("script destroyed", (SIGNAL_FUNC) script_unregister_expandos);
+	signal_add__script_destroyed(script_unregister_expandos);
 }
 
 static void expando_def_destroy(char *key, PerlExpando *rec)
@@ -48,7 +48,7 @@ static void expando_def_destroy(char *key, PerlExpando *rec)
 
 void perl_expando_deinit(void)
 {
-	signal_remove("script destroyed", (SIGNAL_FUNC) script_unregister_expandos);
+	signal_remove__script_destroyed(script_unregister_expandos);
 
 	g_hash_table_foreach(perl_expando_defs,
 			     (GHFunc) expando_def_destroy, NULL);

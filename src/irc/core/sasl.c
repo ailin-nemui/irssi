@@ -333,33 +333,33 @@ void sasl_init(void)
 {
 	settings_add_bool("server", "sasl_disconnect_on_failure", TRUE);
 
-	signal_add_first("event 001", (SIGNAL_FUNC) sig_sasl_over);
+	signal_add_first__event_001(sig_sasl_over);
 	/* this event can get us connected on broken ircds, see irc-servers.c */
-	signal_add_first("event 375", (SIGNAL_FUNC) sig_sasl_over);
-	signal_add_first("server cap ack sasl", (SIGNAL_FUNC) sasl_start);
-	signal_add_first("server cap end", (SIGNAL_FUNC) sig_sasl_over);
-	signal_add_first("event authenticate", (SIGNAL_FUNC) sasl_step);
-	signal_add_first("event 903", (SIGNAL_FUNC) sasl_success);
-	signal_add_first("event 902", (SIGNAL_FUNC) sasl_fail);
-	signal_add_first("event 904", (SIGNAL_FUNC) sasl_fail);
-	signal_add_first("event 905", (SIGNAL_FUNC) sasl_fail);
-	signal_add_first("event 906", (SIGNAL_FUNC) sasl_fail);
-	signal_add_first("event 907", (SIGNAL_FUNC) sasl_already);
-	signal_add_first("server disconnected", (SIGNAL_FUNC) sasl_disconnected);
+	signal_add_first__event_375(sig_sasl_over);
+	signal_add_first__server_cap_ack_sasl(sasl_start);
+	signal_add_first__server_cap_end(sig_sasl_over);
+	signal_add_first__event_authenticate(sasl_step);
+	signal_add_first__event_903(sasl_success);
+	signal_add_first__event_902(sasl_fail);
+	signal_add_first__event_904(sasl_fail);
+	signal_add_first__event_905(sasl_fail);
+	signal_add_first__event_906(sasl_fail);
+	signal_add_first__event_907(sasl_already);
+	signal_add_first__server_disconnected(sasl_disconnected);
 }
 
 void sasl_deinit(void)
 {
-	signal_remove("event 001", (SIGNAL_FUNC) sig_sasl_over);
-	signal_remove("event 375", (SIGNAL_FUNC) sig_sasl_over);
-	signal_remove("server cap ack sasl", (SIGNAL_FUNC) sasl_start);
-	signal_remove("server cap end", (SIGNAL_FUNC) sig_sasl_over);
-	signal_remove("event authenticate", (SIGNAL_FUNC) sasl_step);
-	signal_remove("event 903", (SIGNAL_FUNC) sasl_success);
-	signal_remove("event 902", (SIGNAL_FUNC) sasl_fail);
-	signal_remove("event 904", (SIGNAL_FUNC) sasl_fail);
-	signal_remove("event 905", (SIGNAL_FUNC) sasl_fail);
-	signal_remove("event 906", (SIGNAL_FUNC) sasl_fail);
-	signal_remove("event 907", (SIGNAL_FUNC) sasl_already);
-	signal_remove("server disconnected", (SIGNAL_FUNC) sasl_disconnected);
+	signal_remove__event_("001", sig_sasl_over);
+	signal_remove__event_("375", sig_sasl_over);
+	signal_remove__server_cap_ack_sasl(sasl_start);
+	signal_remove__server_cap_end(sig_sasl_over);
+	signal_remove__event_("authenticate", sasl_step);
+	signal_remove__event_("903", sasl_success);
+	signal_remove__event_("902", sasl_fail);
+	signal_remove__event_("904", sasl_fail);
+	signal_remove__event_("905", sasl_fail);
+	signal_remove__event_("906", sasl_fail);
+	signal_remove__event_("907", sasl_already);
+	signal_remove__server_disconnected(sasl_disconnected);
 }

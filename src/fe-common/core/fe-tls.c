@@ -85,10 +85,10 @@ void fe_tls_init(void)
 {
 	settings_add_bool("lookandfeel", "tls_verbose_connect", TRUE);
 
-	signal_add("tls handshake finished", (SIGNAL_FUNC)tls_handshake_finished);
+	signal_add__tls_handshake_finished(tls_handshake_finished);
 }
 
 void fe_tls_deinit(void)
 {
-	signal_remove("tls handshake finished", (SIGNAL_FUNC)tls_handshake_finished);
+	signal_remove__tls_handshake_finished(tls_handshake_finished);
 }

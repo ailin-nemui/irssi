@@ -117,12 +117,12 @@ void log_away_init(void)
 	g_free(awaylog_file);
 	settings_add_level("log", "awaylog_level", "msgs hilight");
 
-	signal_add("log written", (SIGNAL_FUNC) sig_log_written);
-	signal_add("away mode changed", (SIGNAL_FUNC) sig_away_changed);
+	signal_add__log_written(sig_log_written);
+	signal_add__away_mode_changed(sig_away_changed);
 }
 
 void log_away_deinit(void)
 {
-	signal_remove("log written", (SIGNAL_FUNC) sig_log_written);
-	signal_remove("away mode changed", (SIGNAL_FUNC) sig_away_changed);
+	signal_remove__log_written(sig_log_written);
+	signal_remove__away_mode_changed(sig_away_changed);
 }

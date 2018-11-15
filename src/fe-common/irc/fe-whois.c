@@ -407,48 +407,48 @@ void fe_whois_init(void)
 {
 	settings_add_bool("lookandfeel", "whois_hide_safe_channel_id", TRUE);
 
-	signal_add("event 311", (SIGNAL_FUNC) event_whois);
-	signal_add("event 312", (SIGNAL_FUNC) event_whois_server);
+	signal_add__event_("311", event_whois);
+	signal_add__event_("312", event_whois_server);
 	/* readding this events fixes the printing of /whois -yes *
 	   Bug http://bugs.irssi.org/?do=details&task_id=123 */
-	signal_add("event 317", (SIGNAL_FUNC) event_whois_idle);
-	signal_add("event 319", (SIGNAL_FUNC) event_whois_channels);
-	signal_add("event 313", (SIGNAL_FUNC) event_whois_oper);
-	signal_add("event 330", (SIGNAL_FUNC) event_whois_auth);
-	signal_add("event 377", (SIGNAL_FUNC) event_whois_usermode);
-	signal_add("event 378", (SIGNAL_FUNC) event_whois_realhost);
-	signal_add("event 379", (SIGNAL_FUNC) event_whois_modes);
-	signal_add("event 327", (SIGNAL_FUNC) event_whois_realhost327);
-	signal_add("event 326", (SIGNAL_FUNC) event_whois_usermode326);
-	signal_add("event 338", (SIGNAL_FUNC) event_whois_realhost338);
-	signal_add("whois away", (SIGNAL_FUNC) event_whois_away);
-	signal_add("whois oper", (SIGNAL_FUNC) event_whois_oper);
-	signal_add("whowas away", (SIGNAL_FUNC) event_whois_away);
-	signal_add("whois default event", (SIGNAL_FUNC) event_whois_default);
-	signal_add("event 318", (SIGNAL_FUNC) event_end_of_whois);
-	signal_add("event 314", (SIGNAL_FUNC) event_whowas);
-	signal_add("event 369", (SIGNAL_FUNC) event_end_of_whowas);
+	signal_add__event_("317", event_whois_idle);
+	signal_add__event_("319", event_whois_channels);
+	signal_add__event_("313", event_whois_oper);
+	signal_add__event_("330", event_whois_auth);
+	signal_add__event_("377", event_whois_usermode);
+	signal_add__event_("378", event_whois_realhost);
+	signal_add__event_("379", event_whois_modes);
+	signal_add__event_("327", event_whois_realhost327);
+	signal_add__event_("326", event_whois_usermode326);
+	signal_add__event_("338", event_whois_realhost338);
+	signal_add__whois_away(event_whois_away);
+	signal_add__whois_oper(event_whois_oper);
+	signal_add__whowas_away(event_whois_away);
+	signal_add__whois_default_event(event_whois_default);
+	signal_add__event_("318", event_end_of_whois);
+	signal_add__event_("314", event_whowas);
+	signal_add__event_("369", event_end_of_whowas);
 }
 
 void fe_whois_deinit(void)
 {
-	signal_remove("event 311", (SIGNAL_FUNC) event_whois);
-	signal_remove("event 312", (SIGNAL_FUNC) event_whois_server);
-	signal_remove("event 317", (SIGNAL_FUNC) event_whois_idle);
-	signal_remove("event 319", (SIGNAL_FUNC) event_whois_channels);
-	signal_remove("event 313", (SIGNAL_FUNC) event_whois_oper);
-	signal_remove("event 330", (SIGNAL_FUNC) event_whois_auth);
-	signal_remove("event 377", (SIGNAL_FUNC) event_whois_usermode);
-	signal_remove("event 378", (SIGNAL_FUNC) event_whois_realhost);
-	signal_remove("event 379", (SIGNAL_FUNC) event_whois_modes);
-	signal_remove("event 327", (SIGNAL_FUNC) event_whois_realhost327);
-	signal_remove("event 326", (SIGNAL_FUNC) event_whois_usermode326);
-	signal_remove("event 338", (SIGNAL_FUNC) event_whois_realhost338);
-	signal_remove("whois away", (SIGNAL_FUNC) event_whois_away);
-	signal_remove("whois oper", (SIGNAL_FUNC) event_whois_oper);
-	signal_remove("whowas away", (SIGNAL_FUNC) event_whois_away);
-	signal_remove("whois default event", (SIGNAL_FUNC) event_whois_default);
-	signal_remove("event 318", (SIGNAL_FUNC) event_end_of_whois);
-	signal_remove("event 314", (SIGNAL_FUNC) event_whowas);
-	signal_remove("event 369", (SIGNAL_FUNC) event_end_of_whowas);
+	signal_remove__event_("311", event_whois);
+	signal_remove__event_("312", event_whois_server);
+	signal_remove__event_("317", event_whois_idle);
+	signal_remove__event_("319", event_whois_channels);
+	signal_remove__event_("313", event_whois_oper);
+	signal_remove__event_("330", event_whois_auth);
+	signal_remove__event_("377", event_whois_usermode);
+	signal_remove__event_("378", event_whois_realhost);
+	signal_remove__event_("379", event_whois_modes);
+	signal_remove__event_("327", event_whois_realhost327);
+	signal_remove__event_("326", event_whois_usermode326);
+	signal_remove__event_("338", event_whois_realhost338);
+	signal_remove__whois_away(event_whois_away);
+	signal_remove__whois_oper(event_whois_oper);
+	signal_remove__whowas_away(event_whois_away);
+	signal_remove__whois_default_event(event_whois_default);
+	signal_remove__event_("318", event_end_of_whois);
+	signal_remove__event_("314", event_whowas);
+	signal_remove__event_("369", event_end_of_whowas);
 }

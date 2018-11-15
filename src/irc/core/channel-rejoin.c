@@ -268,11 +268,11 @@ void channel_rejoin_init(void)
 				   (GSourceFunc) sig_rejoin, NULL);
 
 	command_bind_irc("rmrejoins", NULL, (SIGNAL_FUNC) cmd_rmrejoins);
-	signal_add_first("event 407", (SIGNAL_FUNC) event_duplicate_channel);
-	signal_add_first("event 437", (SIGNAL_FUNC) event_target_unavailable);
-	signal_add_first("channel joined", (SIGNAL_FUNC) sig_remove_rejoin);
-	signal_add_first("channel destroyed", (SIGNAL_FUNC) sig_remove_rejoin);
-	signal_add("server disconnected", (SIGNAL_FUNC) sig_disconnected);
+	signal_add_first__event_407(event_duplicate_channel);
+	signal_add_first__event_437(event_target_unavailable);
+	signal_add_first__channel_joined(sig_remove_rejoin);
+	signal_add_first__channel_destroyed(sig_remove_rejoin);
+	signal_add__server_disconnected(sig_disconnected);
 }
 
 void channel_rejoin_deinit(void)
@@ -280,9 +280,9 @@ void channel_rejoin_deinit(void)
 	g_source_remove(rejoin_tag);
 
 	command_unbind("rmrejoins", (SIGNAL_FUNC) cmd_rmrejoins);
-	signal_remove("event 407", (SIGNAL_FUNC) event_duplicate_channel);
-	signal_remove("event 437", (SIGNAL_FUNC) event_target_unavailable);
-	signal_remove("channel joined", (SIGNAL_FUNC) sig_remove_rejoin);
-	signal_remove("channel destroyed", (SIGNAL_FUNC) sig_remove_rejoin);
-	signal_remove("server disconnected", (SIGNAL_FUNC) sig_disconnected);
+	signal_remove__event_("407", event_duplicate_channel);
+	signal_remove__event_("437", event_target_unavailable);
+	signal_remove__channel_joined(sig_remove_rejoin);
+	signal_remove__channel_destroyed(sig_remove_rejoin);
+	signal_remove__server_disconnected(sig_disconnected);
 }

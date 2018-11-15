@@ -80,10 +80,10 @@ void autoignore_init(void)
 	settings_add_time("flood", "autoignore_time", "5min");
 	settings_add_level("flood", "autoignore_level", "");
 
-  	signal_add("flood", (SIGNAL_FUNC) sig_flood);
+  	signal_add__flood(sig_flood);
 }
 
 void autoignore_deinit(void)
 {
-	signal_remove("flood", (SIGNAL_FUNC) sig_flood);
+	signal_remove__flood(sig_flood);
 }

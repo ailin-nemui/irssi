@@ -79,7 +79,6 @@ inline static void signal_register_fix_name(char *var) {
 		signal_remove_full__ ## SIGNAL (func, data); \
 	}								\
 
-
 #define SIGNAL_REGISTER_F(SIGNAL, NUM, PROTO, ARG, ...)			\
 	inline static int signal_emit__ ## SIGNAL ## _ PROTO  {	\
 		int ret;						\
@@ -139,7 +138,6 @@ inline static void signal_register_fix_name(char *var) {
 	inline static void signal_remove_data__ ## SIGNAL ## _ (const char *arg, signal_func_ ## SIGNAL ## __t func, void *data) { \
 		signal_remove_full__ ## SIGNAL ## _ (arg, func, data);	\
 	}								\
-
 
 #define STYPE(TYPE) typedef struct _ ## TYPE TYPE
 

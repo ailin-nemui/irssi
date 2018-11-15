@@ -239,9 +239,9 @@ static void cmd_unload(const char *data)
 
 void fe_modules_init(void)
 {
-	signal_add("module error", (SIGNAL_FUNC) sig_module_error);
-	signal_add("module loaded", (SIGNAL_FUNC) sig_module_loaded);
-	signal_add("module unloaded", (SIGNAL_FUNC) sig_module_unloaded);
+	signal_add__module_error(sig_module_error);
+	signal_add__module_loaded(sig_module_loaded);
+	signal_add__module_unloaded(sig_module_unloaded);
 
 	command_bind("load", NULL, (SIGNAL_FUNC) cmd_load);
 	command_bind("unload", NULL, (SIGNAL_FUNC) cmd_unload);
@@ -249,9 +249,9 @@ void fe_modules_init(void)
 
 void fe_modules_deinit(void)
 {
-	signal_remove("module error", (SIGNAL_FUNC) sig_module_error);
-	signal_remove("module loaded", (SIGNAL_FUNC) sig_module_loaded);
-	signal_remove("module unloaded", (SIGNAL_FUNC) sig_module_unloaded);
+	signal_remove__module_error(sig_module_error);
+	signal_remove__module_loaded(sig_module_loaded);
+	signal_remove__module_unloaded(sig_module_unloaded);
 
 	command_unbind("load", (SIGNAL_FUNC) cmd_load);
 	command_unbind("unload", (SIGNAL_FUNC) cmd_unload);

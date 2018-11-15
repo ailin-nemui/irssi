@@ -767,7 +767,7 @@ static void sig_print_text(void)
 		return;
 
 	daycheck = 2;
-	signal_remove("print text", (SIGNAL_FUNC) sig_print_text);
+	signal_remove__print_text(sig_print_text);
 
 	/* day changed, print notice about it to every window */
 	for (tmp = windows; tmp != NULL; tmp = tmp->next)
@@ -795,7 +795,7 @@ static int sig_check_daychange(void)
 	/* time is 23:59 */
 	if (daycheck == 0) {
 		daycheck = 1;
-		signal_add("print text", (SIGNAL_FUNC) sig_print_text);
+		signal_add__print_text(sig_print_text);
 	}
 	return TRUE;
 }
@@ -822,23 +822,23 @@ void windows_init(void)
 	settings_add_level("lookandfeel", "window_default_level", "NONE");
 
 	read_settings();
-	signal_add("server looking", (SIGNAL_FUNC) sig_server_connected);
-	signal_add("server connected", (SIGNAL_FUNC) sig_server_connected);
-	signal_add("server disconnected", (SIGNAL_FUNC) sig_server_disconnected);
-	signal_add("server connect failed", (SIGNAL_FUNC) sig_server_disconnected);
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add__server_looking(sig_server_connected);
+	signal_add__server_connected(sig_server_connected);
+	signal_add__server_disconnected(sig_server_disconnected);
+	signal_add__server_connect_failed(sig_server_disconnected);
+	signal_add__setup_changed(read_settings);
 }
 
 void windows_deinit(void)
 {
 	if (daytag != -1) g_source_remove(daytag);
-	if (daycheck == 1) signal_remove("print text", (SIGNAL_FUNC) sig_print_text);
+	if (daycheck == 1) signal_remove__print_text(sig_print_text);
 
-	signal_remove("server looking", (SIGNAL_FUNC) sig_server_connected);
-	signal_remove("server connected", (SIGNAL_FUNC) sig_server_connected);
-	signal_remove("server disconnected", (SIGNAL_FUNC) sig_server_disconnected);
-	signal_remove("server connect failed", (SIGNAL_FUNC) sig_server_disconnected);
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__server_looking(sig_server_connected);
+	signal_remove__server_connected(sig_server_connected);
+	signal_remove__server_disconnected(sig_server_disconnected);
+	signal_remove__server_connect_failed(sig_server_disconnected);
+	signal_remove__setup_changed(read_settings);
 	g_sequence_free(windows_seq);
 	windows_seq = NULL;
 }

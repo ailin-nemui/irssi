@@ -203,18 +203,18 @@ static void sig_connected(IRC_SERVER_REC *server)
 
 void irc_session_init(void)
 {
-	signal_add("session save server", (SIGNAL_FUNC) sig_session_save_server);
-	signal_add("session restore server", (SIGNAL_FUNC) sig_session_restore_server);
-	signal_add("session restore nick", (SIGNAL_FUNC) sig_session_restore_nick);
+	signal_add__session_save_server(sig_session_save_server);
+	signal_add__session_restore_server(sig_session_restore_server);
+	signal_add__session_restore_nick(sig_session_restore_nick);
 
-	signal_add("server connected", (SIGNAL_FUNC) sig_connected);
+	signal_add__server_connected(sig_connected);
 }
 
 void irc_session_deinit(void)
 {
-	signal_remove("session save server", (SIGNAL_FUNC) sig_session_save_server);
-	signal_remove("session restore server", (SIGNAL_FUNC) sig_session_restore_server);
-	signal_remove("session restore nick", (SIGNAL_FUNC) sig_session_restore_nick);
+	signal_remove__session_save_server(sig_session_save_server);
+	signal_remove__session_restore_server(sig_session_restore_server);
+	signal_remove__session_restore_nick(sig_session_restore_nick);
 
-	signal_remove("server connected", (SIGNAL_FUNC) sig_connected);
+	signal_remove__server_connected(sig_connected);
 }

@@ -92,10 +92,10 @@ void fe_irc_queries_init(void)
 {
         settings_add_bool("lookandfeel", "query_track_nick_changes", TRUE);
 
-	signal_add_first("event privmsg", (SIGNAL_FUNC) event_privmsg);
+	signal_add_first__event_privmsg(event_privmsg);
 }
 
 void fe_irc_queries_deinit(void)
 {
-	signal_remove("event privmsg", (SIGNAL_FUNC) event_privmsg);
+	signal_remove__event_("privmsg", event_privmsg);
 }

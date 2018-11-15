@@ -598,9 +598,9 @@ void log_init(void)
 			 "--- Day changed %a %b %d %Y");
 
 	read_settings();
-        signal_add("setup changed", (SIGNAL_FUNC) read_settings);
-        signal_add("setup reread", (SIGNAL_FUNC) log_read_config);
-        signal_add("irssi init finished", (SIGNAL_FUNC) log_read_config);
+        signal_add__setup_changed(read_settings);
+        signal_add__setup_reread(log_read_config);
+        signal_add__irssi_init_finished(log_read_config);
 }
 
 void log_deinit(void)
@@ -612,7 +612,7 @@ void log_deinit(void)
 
 	g_free_not_null(log_timestamp);
 
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
-	signal_remove("setup reread", (SIGNAL_FUNC) log_read_config);
-	signal_remove("irssi init finished", (SIGNAL_FUNC) log_read_config);
+	signal_remove__setup_changed(read_settings);
+	signal_remove__setup_reread(log_read_config);
+	signal_remove__irssi_init_finished(log_read_config);
 }

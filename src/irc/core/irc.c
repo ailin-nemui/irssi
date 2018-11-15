@@ -443,9 +443,9 @@ static void irc_init_server(IRC_SERVER_REC *server)
 
 void irc_irc_init(void)
 {
-	signal_add("server event", (SIGNAL_FUNC) irc_server_event);
-	signal_add("server connected", (SIGNAL_FUNC) irc_init_server);
-	signal_add("server incoming", (SIGNAL_FUNC) irc_parse_incoming_line);
+	signal_add__server_event(irc_server_event);
+	signal_add__server_connected(irc_init_server);
+	signal_add__server_incoming(irc_parse_incoming_line);
 
 	current_server_event = NULL;
 	signal_default_event = signal_get_uniq_id("default event");
@@ -455,7 +455,7 @@ void irc_irc_init(void)
 
 void irc_irc_deinit(void)
 {
-	signal_remove("server event", (SIGNAL_FUNC) irc_server_event);
-	signal_remove("server connected", (SIGNAL_FUNC) irc_init_server);
-	signal_remove("server incoming", (SIGNAL_FUNC) irc_parse_incoming_line);
+	signal_remove__server_event(irc_server_event);
+	signal_remove__server_connected(irc_init_server);
+	signal_remove__server_incoming(irc_parse_incoming_line);
 }

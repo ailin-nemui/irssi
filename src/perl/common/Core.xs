@@ -186,7 +186,6 @@ CODE:
 		perl_signal_register(key, arr);
 	}
 
-
 int
 SIGNAL_PRIORITY_LOW()
 CODE:
@@ -267,7 +266,6 @@ timeout_remove(tag)
 	int tag
 CODE:
 	perl_source_remove(tag);
-
 
 int
 INPUT_READ()
@@ -710,7 +708,6 @@ command(server, cmd)
 	char *cmd
 CODE:
 	perl_command(cmd, server, NULL);
-
 
 #*******************************
 MODULE = Irssi::Core	PACKAGE = Irssi::Windowitem

@@ -42,12 +42,12 @@ static void sig_sasl_failure(IRC_SERVER_REC *server, const char *reason)
 
 void fe_sasl_init(void)
 {
-	signal_add("server sasl success", (SIGNAL_FUNC) sig_sasl_success);
-	signal_add("server sasl failure", (SIGNAL_FUNC) sig_sasl_failure);
+	signal_add__server_sasl_success(sig_sasl_success);
+	signal_add__server_sasl_failure(sig_sasl_failure);
 }
 
 void fe_sasl_deinit(void)
 {
-	signal_remove("server sasl success", (SIGNAL_FUNC) sig_sasl_success);
-	signal_remove("server sasl failure", (SIGNAL_FUNC) sig_sasl_failure);
+	signal_remove__server_sasl_success(sig_sasl_success);
+	signal_remove__server_sasl_failure(sig_sasl_failure);
 }

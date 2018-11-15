@@ -65,8 +65,7 @@ static void sig_layout_restore_item(WINDOW_REC *window, const char *type,
 	} else if (g_ascii_strcasecmp(type, "QUERY") == 0 && chat_type != NULL) {
 		CHAT_PROTOCOL_REC *protocol;
 		/* create query immediately */
-		signal_add("query created",
-			   (SIGNAL_FUNC) signal_query_created_curwin);
+		signal_add__query_created(signal_query_created_curwin);
 
                 restore_win = window;
 
@@ -85,8 +84,7 @@ static void sig_layout_restore_item(WINDOW_REC *window, const char *type,
 			query_init(query, TRUE);
 		}
 
-		signal_remove("query created",
-			      (SIGNAL_FUNC) signal_query_created_curwin);
+		signal_remove__query_created(signal_query_created_curwin);
 	}
 }
 
@@ -264,14 +262,14 @@ void windows_layout_reset(void)
 
 void windows_layout_init(void)
 {
-	signal_add("layout restore item", (SIGNAL_FUNC) sig_layout_restore_item);
-	signal_add("layout restore", (SIGNAL_FUNC) sig_layout_restore);
-	signal_add("layout save item", (SIGNAL_FUNC) sig_layout_save_item);
+	signal_add__layout_restore_item(sig_layout_restore_item);
+	signal_add__layout_restore(sig_layout_restore);
+	signal_add__layout_save_item(sig_layout_save_item);
 }
 
 void windows_layout_deinit(void)
 {
-	signal_remove("layout restore item", (SIGNAL_FUNC) sig_layout_restore_item);
-	signal_remove("layout restore", (SIGNAL_FUNC) sig_layout_restore);
-	signal_remove("layout save item", (SIGNAL_FUNC) sig_layout_save_item);
+	signal_remove__layout_restore_item(sig_layout_restore_item);
+	signal_remove__layout_restore(sig_layout_restore);
+	signal_remove__layout_save_item(sig_layout_save_item);
 }

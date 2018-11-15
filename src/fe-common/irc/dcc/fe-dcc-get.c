@@ -92,7 +92,6 @@ static void dcc_error_file_create(GET_DCC_REC *dcc, const char *fname,
 		    fname, error);
 }
 
-
 static void dcc_error_get_not_found(const char *nick)
 {
 	g_return_if_fail(nick != NULL);
@@ -127,24 +126,24 @@ static void sig_dcc_list_print(GET_DCC_REC *dcc)
 
 void fe_dcc_get_init(void)
 {
-	signal_add("dcc request", (SIGNAL_FUNC) dcc_request);
-	signal_add("dcc connected", (SIGNAL_FUNC) dcc_connected);
-	signal_add("dcc closed", (SIGNAL_FUNC) dcc_closed);
-	signal_add("dcc error file create", (SIGNAL_FUNC) dcc_error_file_create);
-	signal_add("dcc error get not found", (SIGNAL_FUNC) dcc_error_get_not_found);
-	signal_add("dcc error close not found", (SIGNAL_FUNC) dcc_error_close_not_found);
-	signal_add("dcc error write", (SIGNAL_FUNC) dcc_error_write);
-        signal_add("dcc list print", (SIGNAL_FUNC) sig_dcc_list_print);
+	signal_add__dcc_request(dcc_request);
+	signal_add__dcc_connected(dcc_connected);
+	signal_add__dcc_closed(dcc_closed);
+	signal_add__dcc_error_file_create(dcc_error_file_create);
+	signal_add__dcc_error_get_not_found(dcc_error_get_not_found);
+	signal_add__dcc_error_close_not_found(dcc_error_close_not_found);
+	signal_add__dcc_error_write(dcc_error_write);
+        signal_add__dcc_list_print(sig_dcc_list_print);
 }
 
 void fe_dcc_get_deinit(void)
 {
-	signal_remove("dcc request", (SIGNAL_FUNC) dcc_request);
-	signal_remove("dcc connected", (SIGNAL_FUNC) dcc_connected);
-	signal_remove("dcc closed", (SIGNAL_FUNC) dcc_closed);
-	signal_remove("dcc error file create", (SIGNAL_FUNC) dcc_error_file_create);
-	signal_remove("dcc error get not found", (SIGNAL_FUNC) dcc_error_get_not_found);
-	signal_remove("dcc error close not found", (SIGNAL_FUNC) dcc_error_close_not_found);
-	signal_remove("dcc error write", (SIGNAL_FUNC) dcc_error_write);
-        signal_remove("dcc list print", (SIGNAL_FUNC) sig_dcc_list_print);
+	signal_remove__dcc_request(dcc_request);
+	signal_remove__dcc_connected(dcc_connected);
+	signal_remove__dcc_closed(dcc_closed);
+	signal_remove__dcc_error_file_create(dcc_error_file_create);
+	signal_remove__dcc_error_get_not_found(dcc_error_get_not_found);
+	signal_remove__dcc_error_close_not_found(dcc_error_close_not_found);
+	signal_remove__dcc_error_write(dcc_error_write);
+        signal_remove__dcc_list_print(sig_dcc_list_print);
 }

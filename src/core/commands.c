@@ -988,7 +988,7 @@ void commands_init(void)
 	signal_default_command = signal_get_uniq_id("default command");
 
 	settings_add_str("misc", "cmdchars", "/");
-	signal_add("send command", (SIGNAL_FUNC) event_command);
+	signal_add__send_command(event_command);
 
 	command_bind("eval", NULL, (SIGNAL_FUNC) cmd_eval);
 	command_bind("cd", NULL, (SIGNAL_FUNC) cmd_cd);
@@ -998,7 +998,7 @@ void commands_deinit(void)
 {
 	g_free_not_null(current_command);
 
-	signal_remove("send command", (SIGNAL_FUNC) event_command);
+	signal_remove__send_command(event_command);
 
 	command_unbind("eval", (SIGNAL_FUNC) cmd_eval);
 	command_unbind("cd", (SIGNAL_FUNC) cmd_cd);

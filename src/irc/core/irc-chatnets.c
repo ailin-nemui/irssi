@@ -106,12 +106,11 @@ static void sig_chatnet_destroyed(IRC_CHATNET_REC *rec)
 	}
 }
 
-
 void irc_chatnets_init(void)
 {
-	signal_add("chatnet read", (SIGNAL_FUNC) sig_chatnet_read);
-	signal_add("chatnet saved", (SIGNAL_FUNC) sig_chatnet_saved);
-	signal_add("chatnet destroyed", (SIGNAL_FUNC) sig_chatnet_destroyed);
+	signal_add__chatnet_read(sig_chatnet_read);
+	signal_add__chatnet_saved(sig_chatnet_saved);
+	signal_add__chatnet_destroyed(sig_chatnet_destroyed);
 }
 
 void irc_chatnets_deinit(void)
@@ -126,7 +125,7 @@ void irc_chatnets_deinit(void)
                         chatnet_destroy(rec);
 	}
 
-	signal_remove("chatnet read", (SIGNAL_FUNC) sig_chatnet_read);
-	signal_remove("chatnet saved", (SIGNAL_FUNC) sig_chatnet_saved);
-	signal_remove("chatnet destroyed", (SIGNAL_FUNC) sig_chatnet_destroyed);
+	signal_remove__chatnet_read(sig_chatnet_read);
+	signal_remove__chatnet_saved(sig_chatnet_saved);
+	signal_remove__chatnet_destroyed(sig_chatnet_destroyed);
 }

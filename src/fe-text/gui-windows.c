@@ -309,11 +309,11 @@ void gui_windows_init(void)
 	window_create_override = MAIN_WINDOW_TYPE_NONE;
 
 	read_settings();
-	signal_add("gui window create override", (SIGNAL_FUNC) sig_window_create_override);
-	signal_add("window created", (SIGNAL_FUNC) gui_window_created);
-	signal_add("window destroyed", (SIGNAL_FUNC) gui_window_destroyed);
-	signal_add_first("window changed", (SIGNAL_FUNC) signal_window_changed);
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add__gui_window_create_override(sig_window_create_override);
+	signal_add__window_created(gui_window_created);
+	signal_add__window_destroyed(gui_window_destroyed);
+	signal_add_first__window_changed(signal_window_changed);
+	signal_add__setup_changed(read_settings);
 }
 
 void gui_windows_deinit(void)
@@ -321,9 +321,9 @@ void gui_windows_deinit(void)
 	while (windows != NULL)
 		window_destroy(windows->data);
 
-	signal_remove("gui window create override", (SIGNAL_FUNC) sig_window_create_override);
-	signal_remove("window created", (SIGNAL_FUNC) gui_window_created);
-	signal_remove("window destroyed", (SIGNAL_FUNC) gui_window_destroyed);
-	signal_remove("window changed", (SIGNAL_FUNC) signal_window_changed);
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__gui_window_create_override(sig_window_create_override);
+	signal_remove__window_created(gui_window_created);
+	signal_remove__window_destroyed(gui_window_destroyed);
+	signal_remove__window_changed(signal_window_changed);
+	signal_remove__setup_changed(read_settings);
 }

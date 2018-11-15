@@ -135,9 +135,9 @@ void notifylist_whois_init(void)
 {
 	last_notify_nick = NULL;
 
-	signal_add("notifylist event whois", (SIGNAL_FUNC) event_whois);
-	signal_add("notifylist event whois away", (SIGNAL_FUNC) event_whois_away);
-	signal_add("notifylist event whois end", (SIGNAL_FUNC) event_whois_end);
+	signal_add__notifylist_event_whois(event_whois);
+	signal_add__notifylist_event_whois_away(event_whois_away);
+	signal_add__notifylist_event_whois_end(event_whois_end);
 	expando_create("D", expando_lastnotify,
 		       "notifylist event whois", EXPANDO_ARG_SERVER, NULL);
 }
@@ -146,8 +146,8 @@ void notifylist_whois_deinit(void)
 {
 	g_free_not_null(last_notify_nick);
 
-	signal_remove("notifylist event whois", (SIGNAL_FUNC) event_whois);
-	signal_remove("notifylist event whois away", (SIGNAL_FUNC) event_whois_away);
-	signal_remove("notifylist event whois end", (SIGNAL_FUNC) event_whois_end);
+	signal_remove__notifylist_event_whois(event_whois);
+	signal_remove__notifylist_event_whois_away(event_whois_away);
+	signal_remove__notifylist_event_whois_end(event_whois_end);
 	expando_destroy("D", expando_lastnotify);
 }

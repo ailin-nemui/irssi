@@ -152,7 +152,7 @@ static void cmd_server_list(const char *data)
 
 void fe_irc_server_init(void)
 {
-	signal_add("server add fill", (SIGNAL_FUNC) sig_server_add_fill);
+	signal_add__server_add_fill(sig_server_add_fill);
 	command_bind("server list", NULL, (SIGNAL_FUNC) cmd_server_list);
 
 	command_set_options("server add", "-ircnet -network -cmdspeed -cmdmax -querychans");
@@ -160,6 +160,6 @@ void fe_irc_server_init(void)
 
 void fe_irc_server_deinit(void)
 {
-	signal_remove("server add fill", (SIGNAL_FUNC) sig_server_add_fill);
+	signal_remove__server_add_fill(sig_server_add_fill);
 	command_unbind("server list", (SIGNAL_FUNC) cmd_server_list);
 }

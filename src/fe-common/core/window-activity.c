@@ -149,10 +149,10 @@ void window_activity_init(void)
 	signal_window_hilight_check = signal_get_uniq_id("window hilight check");
 
 	read_settings();
-	signal_add("print text", (SIGNAL_FUNC) sig_hilight_text);
-	signal_add("window changed", (SIGNAL_FUNC) sig_dehilight_window);
-	signal_add("window dehilight", (SIGNAL_FUNC) sig_dehilight_window);
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add__print_text(sig_hilight_text);
+	signal_add__window_changed(sig_dehilight_window);
+	signal_add__window_dehilight(sig_dehilight_window);
+	signal_add__setup_changed(read_settings);
 }
 
 void window_activity_deinit(void)
@@ -160,8 +160,8 @@ void window_activity_deinit(void)
 	if (hide_targets != NULL)
 		g_strfreev(hide_targets);
 
-	signal_remove("print text", (SIGNAL_FUNC) sig_hilight_text);
-	signal_remove("window changed", (SIGNAL_FUNC) sig_dehilight_window);
-	signal_remove("window dehilight", (SIGNAL_FUNC) sig_dehilight_window);
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__print_text(sig_hilight_text);
+	signal_remove__window_changed(sig_dehilight_window);
+	signal_remove__window_dehilight(sig_dehilight_window);
+	signal_remove__setup_changed(read_settings);
 }

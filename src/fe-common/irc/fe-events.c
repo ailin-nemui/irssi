@@ -442,58 +442,58 @@ static void event_received(IRC_SERVER_REC *server, const char *data,
 
 void fe_events_init(void)
 {
-	signal_add("event privmsg", (SIGNAL_FUNC) event_privmsg);
-	signal_add("ctcp action", (SIGNAL_FUNC) ctcp_action);
-	signal_add("event notice", (SIGNAL_FUNC) event_notice);
-	signal_add("event join", (SIGNAL_FUNC) event_join);
-	signal_add("event part", (SIGNAL_FUNC) event_part);
-	signal_add("event quit", (SIGNAL_FUNC) event_quit);
-	signal_add("event kick", (SIGNAL_FUNC) event_kick);
-	signal_add("event kill", (SIGNAL_FUNC) event_kill);
-	signal_add("event nick", (SIGNAL_FUNC) event_nick);
-	signal_add("event mode", (SIGNAL_FUNC) event_mode);
-	signal_add("event pong", (SIGNAL_FUNC) event_pong);
-	signal_add("event invite", (SIGNAL_FUNC) event_invite);
-	signal_add("event topic", (SIGNAL_FUNC) event_topic);
-	signal_add("event error", (SIGNAL_FUNC) event_error);
-	signal_add("event wallops", (SIGNAL_FUNC) event_wallops);
-	signal_add("event silence", (SIGNAL_FUNC) event_silence);
+	signal_add__event_("privmsg", event_privmsg);
+	signal_add__ctcp_action(ctcp_action);
+	signal_add__event_("notice", event_notice);
+	signal_add__event_("join", event_join);
+	signal_add__event_("part", event_part);
+	signal_add__event_("quit", event_quit);
+	signal_add__event_("kick", event_kick);
+	signal_add__event_("kill", event_kill);
+	signal_add__event_("nick", event_nick);
+	signal_add__event_("mode", event_mode);
+	signal_add__event_("pong", event_pong);
+	signal_add__event_("invite", event_invite);
+	signal_add__event_("topic", event_topic);
+	signal_add__event_("error", event_error);
+	signal_add__event_("wallops", event_wallops);
+	signal_add__event_("silence", event_silence);
 
-	signal_add("default event", (SIGNAL_FUNC) event_received);
+	signal_add__default_event(event_received);
 
-	signal_add("channel sync", (SIGNAL_FUNC) channel_sync);
-	signal_add("event connected", (SIGNAL_FUNC) event_connected);
-	signal_add("nickfind event whois", (SIGNAL_FUNC) event_nickfind_whois);
-	signal_add("ban type changed", (SIGNAL_FUNC) event_ban_type_changed);
-	signal_add("whois event not found", (SIGNAL_FUNC) sig_whois_event_not_found);
-	signal_add("whowas event end", (SIGNAL_FUNC) sig_whowas_event_end);
+	signal_add__channel_sync(channel_sync);
+	signal_add__event_("connected", event_connected);
+	signal_add__nickfind_event_whois(event_nickfind_whois);
+	signal_add__ban_type_changed(event_ban_type_changed);
+	signal_add__whois_event_not_found(sig_whois_event_not_found);
+	signal_add__whowas_event_end(sig_whowas_event_end);
 }
 
 void fe_events_deinit(void)
 {
-	signal_remove("event privmsg", (SIGNAL_FUNC) event_privmsg);
-	signal_remove("ctcp action", (SIGNAL_FUNC) ctcp_action);
-	signal_remove("event notice", (SIGNAL_FUNC) event_notice);
-	signal_remove("event join", (SIGNAL_FUNC) event_join);
-	signal_remove("event part", (SIGNAL_FUNC) event_part);
-	signal_remove("event quit", (SIGNAL_FUNC) event_quit);
-	signal_remove("event kick", (SIGNAL_FUNC) event_kick);
-	signal_remove("event kill", (SIGNAL_FUNC) event_kill);
-	signal_remove("event nick", (SIGNAL_FUNC) event_nick);
-	signal_remove("event mode", (SIGNAL_FUNC) event_mode);
-	signal_remove("event pong", (SIGNAL_FUNC) event_pong);
-	signal_remove("event invite", (SIGNAL_FUNC) event_invite);
-	signal_remove("event topic", (SIGNAL_FUNC) event_topic);
-	signal_remove("event error", (SIGNAL_FUNC) event_error);
-	signal_remove("event wallops", (SIGNAL_FUNC) event_wallops);
-	signal_remove("event silence", (SIGNAL_FUNC) event_silence);
+	signal_remove__event_("privmsg", event_privmsg);
+	signal_remove__ctcp_action(ctcp_action);
+	signal_remove__event_("notice", event_notice);
+	signal_remove__event_("join", event_join);
+	signal_remove__event_("part", event_part);
+	signal_remove__event_("quit", event_quit);
+	signal_remove__event_("kick", event_kick);
+	signal_remove__event_("kill", event_kill);
+	signal_remove__event_("nick", event_nick);
+	signal_remove__event_("mode", event_mode);
+	signal_remove__event_("pong", event_pong);
+	signal_remove__event_("invite", event_invite);
+	signal_remove__event_("topic", event_topic);
+	signal_remove__event_("error", event_error);
+	signal_remove__event_("wallops", event_wallops);
+	signal_remove__event_("silence", event_silence);
 
-	signal_remove("default event", (SIGNAL_FUNC) event_received);
+	signal_remove__default_event(event_received);
 
-	signal_remove("channel sync", (SIGNAL_FUNC) channel_sync);
-	signal_remove("event connected", (SIGNAL_FUNC) event_connected);
-	signal_remove("nickfind event whois", (SIGNAL_FUNC) event_nickfind_whois);
-	signal_remove("ban type changed", (SIGNAL_FUNC) event_ban_type_changed);
-	signal_remove("whois event not found", (SIGNAL_FUNC) sig_whois_event_not_found);
-	signal_remove("whowas event end", (SIGNAL_FUNC) sig_whowas_event_end);
+	signal_remove__channel_sync(channel_sync);
+	signal_remove__event_("connected", event_connected);
+	signal_remove__nickfind_event_whois(event_nickfind_whois);
+	signal_remove__ban_type_changed(event_ban_type_changed);
+	signal_remove__whois_event_not_found(sig_whois_event_not_found);
+	signal_remove__whowas_event_end(sig_whowas_event_end);
 }

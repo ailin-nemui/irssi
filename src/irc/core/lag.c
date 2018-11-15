@@ -127,15 +127,15 @@ void lag_init(void)
 	settings_add_time("misc", "lag_max_before_disconnect", "5min");
 
 	timeout_tag = g_timeout_add(1000, (GSourceFunc) sig_check_lag, NULL);
-	signal_add_first("lag pong", (SIGNAL_FUNC) lag_event_pong);
-        signal_add("lag ping error", (SIGNAL_FUNC) lag_ping_error);
-        signal_add("event 421", (SIGNAL_FUNC) sig_unknown_command);
+	signal_add_first__lag_pong(lag_event_pong);
+        signal_add__lag_ping_error(lag_ping_error);
+        signal_add__event_("421", sig_unknown_command);
 }
 
 void lag_deinit(void)
 {
 	g_source_remove(timeout_tag);
-	signal_remove("lag pong", (SIGNAL_FUNC) lag_event_pong);
-        signal_remove("lag ping error", (SIGNAL_FUNC) lag_ping_error);
-        signal_remove("event 421", (SIGNAL_FUNC) sig_unknown_command);
+	signal_remove__lag_pong(lag_event_pong);
+        signal_remove__lag_ping_error(lag_ping_error);
+        signal_remove__event_("421", sig_unknown_command);
 }

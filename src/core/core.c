@@ -142,8 +142,8 @@ static void sig_init_finished(void)
 {
 	GSList *type, *text;
 
-        signal_remove("gui dialog", (SIGNAL_FUNC) sig_gui_dialog);
-	signal_remove("irssi init finished", (SIGNAL_FUNC) sig_init_finished);
+        signal_remove__gui_dialog(sig_gui_dialog);
+	signal_remove__irssi_init_finished(sig_init_finished);
 
 	/* send the dialog texts that were in queue before irssi
 	   was initialized */
@@ -235,8 +235,8 @@ void core_init(void)
 	net_disconnect_init();
 	signals_init();
 
-	signal_add_first("gui dialog", (SIGNAL_FUNC) sig_gui_dialog);
-	signal_add_first("irssi init finished", (SIGNAL_FUNC) sig_init_finished);
+	signal_add_first__gui_dialog(sig_gui_dialog);
+	signal_add_first__irssi_init_finished(sig_init_finished);
 
 	settings_init();
 	commands_init();
@@ -271,8 +271,8 @@ void core_init(void)
 	getrlimit(RLIMIT_CORE, &orig_core_rlimit);
 #endif
 	read_settings();
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
-	signal_add("irssi init finished", (SIGNAL_FUNC) sig_irssi_init_finished);
+	signal_add__setup_changed(read_settings);
+	signal_add__irssi_init_finished(sig_irssi_init_finished);
 
 	settings_check();
 
@@ -283,8 +283,8 @@ void core_deinit(void)
 {
 	module_uniq_destroy("WINDOW ITEM TYPE");
 
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
-	signal_remove("irssi init finished", (SIGNAL_FUNC) sig_irssi_init_finished);
+	signal_remove__setup_changed(read_settings);
+	signal_remove__irssi_init_finished(sig_irssi_init_finished);
 
 	wcwidth_wrapper_deinit();
 	chat_commands_deinit();

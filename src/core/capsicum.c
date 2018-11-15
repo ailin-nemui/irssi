@@ -492,7 +492,7 @@ void capsicum_init(void)
 	settings_add_int("misc", "capsicum_port_min", 6667);
 	settings_add_int("misc", "capsicum_port_max", 9999);
 
-	signal_add("irssi init finished", (SIGNAL_FUNC) sig_init_finished);
+	signal_add__irssi_init_finished(sig_init_finished);
 
 	command_bind("capsicum", NULL, (SIGNAL_FUNC) cmd_capsicum);
 	command_bind("capsicum enter", NULL, (SIGNAL_FUNC) cmd_capsicum_enter);
@@ -501,7 +501,7 @@ void capsicum_init(void)
 
 void capsicum_deinit(void)
 {
-	signal_remove("irssi init finished", (SIGNAL_FUNC) sig_init_finished);
+	signal_remove__irssi_init_finished(sig_init_finished);
 
 	command_unbind("capsicum", (SIGNAL_FUNC) cmd_capsicum);
 	command_unbind("capsicum enter", (SIGNAL_FUNC) cmd_capsicum_enter);

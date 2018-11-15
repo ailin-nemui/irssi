@@ -21,7 +21,7 @@
 #include "module.h"
 #include "signals.h"
 #include "signal-registry.h"
-#include "signal-registry.h"
+#include "irc/core/signal-registry.h"
 #include "misc.h"
 #include "special-vars.h"
 
@@ -301,12 +301,12 @@ void channels_init(void)
 {
 	channels_setup_init();
 
-	signal_add("event connected", (SIGNAL_FUNC) event_connected);
+	signal_add__event_connected(event_connected);
 }
 
 void channels_deinit(void)
 {
 	channels_setup_deinit();
 
-	signal_remove("event connected", (SIGNAL_FUNC) event_connected);
+	signal_remove__event_connected(event_connected);
 }

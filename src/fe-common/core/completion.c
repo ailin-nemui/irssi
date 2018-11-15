@@ -900,17 +900,17 @@ void completion_init(void)
 
 	command_bind("completion", NULL, (SIGNAL_FUNC) cmd_completion);
 
-	signal_add_first("complete word", (SIGNAL_FUNC) sig_complete_word);
-	signal_add_first("complete erase", (SIGNAL_FUNC) sig_complete_erase);
-	signal_add("complete command set", (SIGNAL_FUNC) sig_complete_set);
-	signal_add("complete command toggle", (SIGNAL_FUNC) sig_complete_toggle);
-	signal_add("complete command load", (SIGNAL_FUNC) sig_complete_filename);
-	signal_add("complete command cat", (SIGNAL_FUNC) sig_complete_filename);
-	signal_add("complete command save", (SIGNAL_FUNC) sig_complete_filename);
-	signal_add("complete command reload", (SIGNAL_FUNC) sig_complete_filename);
-	signal_add("complete command rawlog open", (SIGNAL_FUNC) sig_complete_filename);
-	signal_add("complete command rawlog save", (SIGNAL_FUNC) sig_complete_filename);
-	signal_add("complete command help", (SIGNAL_FUNC) sig_complete_command);
+	signal_add_first__complete_word(sig_complete_word);
+	signal_add_first__complete_erase(sig_complete_erase);
+	signal_add__complete_command_("set", sig_complete_set);
+	signal_add__complete_command_("toggle", sig_complete_toggle);
+	signal_add__complete_command_("load", sig_complete_filename);
+	signal_add__complete_command_("cat", sig_complete_filename);
+	signal_add__complete_command_("save", sig_complete_filename);
+	signal_add__complete_command_("reload", sig_complete_filename);
+	signal_add__complete_command_("rawlog open", sig_complete_filename);
+	signal_add__complete_command_("rawlog save", sig_complete_filename);
+	signal_add__complete_command_("help", sig_complete_command);
 
 	command_set_options("completion", "auto delete");
 }
@@ -923,15 +923,15 @@ void completion_deinit(void)
 
 	command_unbind("completion", (SIGNAL_FUNC) cmd_completion);
 
-	signal_remove("complete word", (SIGNAL_FUNC) sig_complete_word);
-	signal_remove("complete erase", (SIGNAL_FUNC) sig_complete_erase);
-	signal_remove("complete command set", (SIGNAL_FUNC) sig_complete_set);
-	signal_remove("complete command toggle", (SIGNAL_FUNC) sig_complete_toggle);
-	signal_remove("complete command load", (SIGNAL_FUNC) sig_complete_filename);
-	signal_remove("complete command cat", (SIGNAL_FUNC) sig_complete_filename);
-	signal_remove("complete command save", (SIGNAL_FUNC) sig_complete_filename);
-	signal_remove("complete command reload", (SIGNAL_FUNC) sig_complete_filename);
-	signal_remove("complete command rawlog open", (SIGNAL_FUNC) sig_complete_filename);
-	signal_remove("complete command rawlog save", (SIGNAL_FUNC) sig_complete_filename);
-	signal_remove("complete command help", (SIGNAL_FUNC) sig_complete_command);
+	signal_remove__complete_word(sig_complete_word);
+	signal_remove__complete_erase(sig_complete_erase);
+	signal_remove__complete_command_("set", sig_complete_set);
+	signal_remove__complete_command_("toggle", sig_complete_toggle);
+	signal_remove__complete_command_("load", sig_complete_filename);
+	signal_remove__complete_command_("cat", sig_complete_filename);
+	signal_remove__complete_command_("save", sig_complete_filename);
+	signal_remove__complete_command_("reload", sig_complete_filename);
+	signal_remove__complete_command_("rawlog open", sig_complete_filename);
+	signal_remove__complete_command_("rawlog save", sig_complete_filename);
+	signal_remove__complete_command_("help", sig_complete_command);
 }

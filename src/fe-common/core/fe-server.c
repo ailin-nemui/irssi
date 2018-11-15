@@ -458,18 +458,18 @@ void fe_server_init(void)
 	command_set_options("server add", "4 6 !! ssl nossl +ssl_cert +ssl_pkey +ssl_pass ssl_verify nossl_verify +ssl_cafile +ssl_capath +ssl_ciphers +ssl_fingerprint tls notls +tls_cert +tls_pkey +tls_pass tls_verify notls_verify +tls_cafile +tls_capath +tls_ciphers +tls_pinned_cert +tls_pinned_pubkey auto noauto proxy noproxy -host -port noautosendcmd");
 	command_set_options("server modify", "4 6 !! ssl nossl +ssl_cert +ssl_pkey +ssl_pass ssl_verify nossl_verify +ssl_cafile +ssl_capath +ssl_ciphers +ssl_fingerprint tls notls +tls_cert +tls_pkey +tls_pass tls_verify notls_verify +tls_cafile +tls_capath +tls_ciphers +tls_pinned_cert +tls_pinned_pubkey auto noauto proxy noproxy -host -port noautosendcmd");
 
-	signal_add("server looking", (SIGNAL_FUNC) sig_server_looking);
-	signal_add("server connecting", (SIGNAL_FUNC) sig_server_connecting);
-	signal_add("server connected", (SIGNAL_FUNC) sig_server_connected);
-	signal_add("server connect failed", (SIGNAL_FUNC) sig_connect_failed);
-	signal_add("server disconnected", (SIGNAL_FUNC) sig_server_disconnected);
-	signal_add("server quit", (SIGNAL_FUNC) sig_server_quit);
+	signal_add__server_looking(sig_server_looking);
+	signal_add__server_connecting(sig_server_connecting);
+	signal_add__server_connected(sig_server_connected);
+	signal_add__server_connect_failed(sig_connect_failed);
+	signal_add__server_disconnected(sig_server_disconnected);
+	signal_add__server_quit(sig_server_quit);
 
-	signal_add("server lag disconnect", (SIGNAL_FUNC) sig_server_lag_disconnected);
-	signal_add("server reconnect remove", (SIGNAL_FUNC) sig_server_reconnect_removed);
-	signal_add("server reconnect not found", (SIGNAL_FUNC) sig_server_reconnect_not_found);
+	signal_add__server_lag_disconnect(sig_server_lag_disconnected);
+	signal_add__server_reconnect_remove(sig_server_reconnect_removed);
+	signal_add__server_reconnect_not_found(sig_server_reconnect_not_found);
 
-	signal_add("chat protocol unknown", (SIGNAL_FUNC) sig_chat_protocol_unknown);
+	signal_add__chat_protocol_unknown(sig_chat_protocol_unknown);
 }
 
 void fe_server_deinit(void)
@@ -482,16 +482,16 @@ void fe_server_deinit(void)
 	command_unbind("server", (SIGNAL_FUNC) server_command);
 	command_unbind("disconnect", (SIGNAL_FUNC) server_command);
 
-	signal_remove("server looking", (SIGNAL_FUNC) sig_server_looking);
-	signal_remove("server connecting", (SIGNAL_FUNC) sig_server_connecting);
-	signal_remove("server connected", (SIGNAL_FUNC) sig_server_connected);
-	signal_remove("server connect failed", (SIGNAL_FUNC) sig_connect_failed);
-	signal_remove("server disconnected", (SIGNAL_FUNC) sig_server_disconnected);
-	signal_remove("server quit", (SIGNAL_FUNC) sig_server_quit);
+	signal_remove__server_looking(sig_server_looking);
+	signal_remove__server_connecting(sig_server_connecting);
+	signal_remove__server_connected(sig_server_connected);
+	signal_remove__server_connect_failed(sig_connect_failed);
+	signal_remove__server_disconnected(sig_server_disconnected);
+	signal_remove__server_quit(sig_server_quit);
 
-	signal_remove("server lag disconnect", (SIGNAL_FUNC) sig_server_lag_disconnected);
-	signal_remove("server reconnect remove", (SIGNAL_FUNC) sig_server_reconnect_removed);
-	signal_remove("server reconnect not found", (SIGNAL_FUNC) sig_server_reconnect_not_found);
+	signal_remove__server_lag_disconnect(sig_server_lag_disconnected);
+	signal_remove__server_reconnect_remove(sig_server_reconnect_removed);
+	signal_remove__server_reconnect_not_found(sig_server_reconnect_not_found);
 
-	signal_remove("chat protocol unknown", (SIGNAL_FUNC) sig_chat_protocol_unknown);
+	signal_remove__chat_protocol_unknown(sig_chat_protocol_unknown);
 }

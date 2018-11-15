@@ -489,28 +489,28 @@ void channels_query_init(void)
 	settings_add_bool("misc", "channel_sync", TRUE);
 	settings_add_int("misc", "channel_max_who_sync", 1000);
 
-	signal_add("server connected", (SIGNAL_FUNC) sig_connected);
-	signal_add("server disconnected", (SIGNAL_FUNC) sig_disconnected);
-	signal_add("channel joined", (SIGNAL_FUNC) sig_channel_joined);
-	signal_add("channel destroyed", (SIGNAL_FUNC) sig_channel_destroyed);
+	signal_add__server_connected(sig_connected);
+	signal_add__server_disconnected(sig_disconnected);
+	signal_add__channel_joined(sig_channel_joined);
+	signal_add__channel_destroyed(sig_channel_destroyed);
 
-	signal_add("chanquery mode", (SIGNAL_FUNC) event_channel_mode);
-	signal_add("chanquery who end", (SIGNAL_FUNC) event_end_of_who);
+	signal_add__chanquery_mode(event_channel_mode);
+	signal_add__chanquery_who_end(event_end_of_who);
 
-	signal_add("chanquery ban end", (SIGNAL_FUNC) event_end_of_banlist);
-	signal_add("chanquery abort", (SIGNAL_FUNC) query_current_error);
+	signal_add__chanquery_ban_end(event_end_of_banlist);
+	signal_add__chanquery_abort(query_current_error);
 }
 
 void channels_query_deinit(void)
 {
-	signal_remove("server connected", (SIGNAL_FUNC) sig_connected);
-	signal_remove("server disconnected", (SIGNAL_FUNC) sig_disconnected);
-	signal_remove("channel joined", (SIGNAL_FUNC) sig_channel_joined);
-	signal_remove("channel destroyed", (SIGNAL_FUNC) sig_channel_destroyed);
+	signal_remove__server_connected(sig_connected);
+	signal_remove__server_disconnected(sig_disconnected);
+	signal_remove__channel_joined(sig_channel_joined);
+	signal_remove__channel_destroyed(sig_channel_destroyed);
 
-	signal_remove("chanquery mode", (SIGNAL_FUNC) event_channel_mode);
-	signal_remove("chanquery who end", (SIGNAL_FUNC) event_end_of_who);
+	signal_remove__chanquery_mode(event_channel_mode);
+	signal_remove__chanquery_who_end(event_end_of_who);
 
-	signal_remove("chanquery ban end", (SIGNAL_FUNC) event_end_of_banlist);
-	signal_remove("chanquery abort", (SIGNAL_FUNC) query_current_error);
+	signal_remove__chanquery_ban_end(event_end_of_banlist);
+	signal_remove__chanquery_abort(query_current_error);
 }

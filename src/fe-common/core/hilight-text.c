@@ -715,9 +715,9 @@ void hilight_text_init(void)
 	nickmatch = nickmatch_init(hilight_nick_cache);
 	read_hilight_config();
 
-	signal_add_first("print text", (SIGNAL_FUNC) sig_print_text);
-	signal_add("setup reread", (SIGNAL_FUNC) read_hilight_config);
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add_first__print_text(sig_print_text);
+	signal_add__setup_reread(read_hilight_config);
+	signal_add__setup_changed(read_settings);
 
 	command_bind("hilight", NULL, (SIGNAL_FUNC) cmd_hilight);
 	command_bind("dehilight", NULL, (SIGNAL_FUNC) cmd_dehilight);
@@ -729,9 +729,9 @@ void hilight_text_deinit(void)
 	hilights_destroy_all();
 	nickmatch_deinit(nickmatch);
 
-	signal_remove("print text", (SIGNAL_FUNC) sig_print_text);
-	signal_remove("setup reread", (SIGNAL_FUNC) read_hilight_config);
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__print_text(sig_print_text);
+	signal_remove__setup_reread(read_hilight_config);
+	signal_remove__setup_changed(read_settings);
 
 	command_unbind("hilight", (SIGNAL_FUNC) cmd_hilight);
 	command_unbind("dehilight", (SIGNAL_FUNC) cmd_dehilight);

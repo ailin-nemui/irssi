@@ -471,8 +471,8 @@ void dcc_send_init(void)
         dcc_register_type("SEND");
 	settings_add_str("dcc", "dcc_upload_path", "~");
 	settings_add_bool("dcc", "dcc_send_replace_space_with_underscore", FALSE);
-	signal_add("dcc destroyed", (SIGNAL_FUNC) sig_dcc_destroyed);
-	signal_add("dcc send pasv", (SIGNAL_FUNC) dcc_send_connect);
+	signal_add__dcc_destroyed(sig_dcc_destroyed);
+	signal_add__dcc_send_pasv(dcc_send_connect);
 	command_bind("dcc send", NULL, (SIGNAL_FUNC) cmd_dcc_send);
 	command_set_options("dcc send", "append flush prepend rmhead rmtail passive");
 
@@ -484,7 +484,7 @@ void dcc_send_deinit(void)
 	dcc_queue_deinit();
 
         dcc_unregister_type("SEND");
-	signal_remove("dcc destroyed", (SIGNAL_FUNC) sig_dcc_destroyed);
-	signal_remove("dcc send pasv", (SIGNAL_FUNC) dcc_send_connect);
+	signal_remove__dcc_destroyed(sig_dcc_destroyed);
+	signal_remove__dcc_send_pasv(dcc_send_connect);
 	command_unbind("dcc send", (SIGNAL_FUNC) cmd_dcc_send);
 }

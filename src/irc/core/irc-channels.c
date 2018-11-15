@@ -244,9 +244,9 @@ static void sig_channel_destroyed(IRC_CHANNEL_REC *channel)
 
 void irc_channels_init(void)
 {
-	signal_add_first("server connected", (SIGNAL_FUNC) sig_server_connected);
-	signal_add("channel created", (SIGNAL_FUNC) sig_channel_created);
-	signal_add("channel destroyed", (SIGNAL_FUNC) sig_channel_destroyed);
+	signal_add_first__server_connected(sig_server_connected);
+	signal_add__channel_created(sig_channel_created);
+	signal_add__channel_destroyed(sig_channel_destroyed);
 
 	channel_events_init();
 	channel_rejoin_init(); /* after channel_events_init() */
@@ -262,9 +262,9 @@ void irc_channels_init(void)
 
 void irc_channels_deinit(void)
 {
-	signal_remove("server connected", (SIGNAL_FUNC) sig_server_connected);
-	signal_remove("channel created", (SIGNAL_FUNC) sig_channel_created);
-	signal_remove("channel destroyed", (SIGNAL_FUNC) sig_channel_destroyed);
+	signal_remove__server_connected(sig_server_connected);
+	signal_remove__channel_created(sig_channel_created);
+	signal_remove__channel_destroyed(sig_channel_destroyed);
 
 	channel_events_deinit();
 	channel_rejoin_deinit();

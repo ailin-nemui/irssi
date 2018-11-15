@@ -475,20 +475,20 @@ void command_history_init(void)
 	global_history = command_history_create(NULL);
 
 	read_settings();
-	signal_add("window created", (SIGNAL_FUNC) sig_window_created);
-	signal_add("window destroyed", (SIGNAL_FUNC) sig_window_destroyed);
-	signal_add("window history changed", (SIGNAL_FUNC) sig_window_history_changed);
-	signal_add_last("window history cleared", (SIGNAL_FUNC) sig_window_history_cleared);
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add__window_created(sig_window_created);
+	signal_add__window_destroyed(sig_window_destroyed);
+	signal_add__window_history_changed(sig_window_history_changed);
+	signal_add_last__window_history_cleared(sig_window_history_cleared);
+	signal_add__setup_changed(read_settings);
 }
 
 void command_history_deinit(void)
 {
-	signal_remove("window created", (SIGNAL_FUNC) sig_window_created);
-	signal_remove("window destroyed", (SIGNAL_FUNC) sig_window_destroyed);
-	signal_remove("window history changed", (SIGNAL_FUNC) sig_window_history_changed);
-	signal_remove("window history cleared", (SIGNAL_FUNC) sig_window_history_cleared);
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__window_created(sig_window_created);
+	signal_remove__window_destroyed(sig_window_destroyed);
+	signal_remove__window_history_changed(sig_window_history_changed);
+	signal_remove__window_history_cleared(sig_window_history_cleared);
+	signal_remove__setup_changed(read_settings);
 
 	command_history_destroy(global_history);
 

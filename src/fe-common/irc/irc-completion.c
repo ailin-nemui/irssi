@@ -32,10 +32,10 @@ static void sig_complete_stats(GList **list, WINDOW_REC *window,
 
 void irc_completion_init(void)
 {
-	signal_add("complete command stats", (SIGNAL_FUNC) sig_complete_stats);
+	signal_add__complete_command_("stats", sig_complete_stats);
 }
 
 void irc_completion_deinit(void)
 {
-	signal_remove("complete command stats", (SIGNAL_FUNC) sig_complete_stats);
+	signal_remove__complete_command_("stats", sig_complete_stats);
 }

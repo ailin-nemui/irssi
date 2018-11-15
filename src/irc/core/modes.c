@@ -899,12 +899,12 @@ void modes_init(void)
 	settings_add_str("misc", "opermode", "");
 	settings_add_int("misc", "max_wildcard_modes", 6);
 
-	signal_add("event 221", (SIGNAL_FUNC) event_user_mode);
-	signal_add("event 305", (SIGNAL_FUNC) event_unaway);
-	signal_add("event 306", (SIGNAL_FUNC) event_away);
-	signal_add("event 381", (SIGNAL_FUNC) event_oper);
-	signal_add("event mode", (SIGNAL_FUNC) event_mode);
-        signal_add("requested usermode change", (SIGNAL_FUNC) sig_req_usermode_change);
+	signal_add__event_("221", event_user_mode);
+	signal_add__event_("305", event_unaway);
+	signal_add__event_("306", event_away);
+	signal_add__event_("381", event_oper);
+	signal_add__event_("mode", event_mode);
+        signal_add__requested_usermode_change(sig_req_usermode_change);
 
 	command_bind_irc("op", NULL, (SIGNAL_FUNC) cmd_op);
 	command_bind_irc("deop", NULL, (SIGNAL_FUNC) cmd_deop);
@@ -917,12 +917,12 @@ void modes_init(void)
 
 void modes_deinit(void)
 {
-	signal_remove("event 221", (SIGNAL_FUNC) event_user_mode);
-	signal_remove("event 305", (SIGNAL_FUNC) event_unaway);
-	signal_remove("event 306", (SIGNAL_FUNC) event_away);
-	signal_remove("event 381", (SIGNAL_FUNC) event_oper);
-	signal_remove("event mode", (SIGNAL_FUNC) event_mode);
-        signal_remove("requested usermode change", (SIGNAL_FUNC) sig_req_usermode_change);
+	signal_remove__event_("221", event_user_mode);
+	signal_remove__event_("305", event_unaway);
+	signal_remove__event_("306", event_away);
+	signal_remove__event_("381", event_oper);
+	signal_remove__event_("mode", event_mode);
+        signal_remove__requested_usermode_change(sig_req_usermode_change);
 
 	command_unbind("op", (SIGNAL_FUNC) cmd_op);
 	command_unbind("deop", (SIGNAL_FUNC) cmd_deop);

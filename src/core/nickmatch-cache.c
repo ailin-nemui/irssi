@@ -103,10 +103,10 @@ static void sig_nick_remove(CHANNEL_REC *channel, NICK_REC *nick)
 void nickmatch_cache_init(void)
 {
 	lists = NULL;
-        signal_add("nicklist new", (SIGNAL_FUNC) sig_nick_new);
-        signal_add("nicklist changed", (SIGNAL_FUNC) sig_nick_new);
-        signal_add("nicklist host changed", (SIGNAL_FUNC) sig_nick_new);
-        signal_add("nicklist remove", (SIGNAL_FUNC) sig_nick_remove);
+        signal_add__nicklist_new(sig_nick_new);
+        signal_add__nicklist_changed(sig_nick_new);
+        signal_add__nicklist_host_changed(sig_nick_new);
+        signal_add__nicklist_remove(sig_nick_remove);
 }
 
 void nickmatch_cache_deinit(void)
@@ -114,8 +114,8 @@ void nickmatch_cache_deinit(void)
 	g_slist_foreach(lists, (GFunc) nickmatch_deinit, NULL);
         g_slist_free(lists);
 
-	signal_remove("nicklist new", (SIGNAL_FUNC) sig_nick_new);
-        signal_remove("nicklist changed", (SIGNAL_FUNC) sig_nick_new);
-        signal_remove("nicklist host changed", (SIGNAL_FUNC) sig_nick_new);
-        signal_remove("nicklist remove", (SIGNAL_FUNC) sig_nick_remove);
+	signal_remove__nicklist_new(sig_nick_new);
+        signal_remove__nicklist_changed(sig_nick_new);
+        signal_remove__nicklist_host_changed(sig_nick_new);
+        signal_remove__nicklist_remove(sig_nick_remove);
 }

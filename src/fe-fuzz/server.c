@@ -144,7 +144,7 @@ int LLVMFuzzerInitialize(int *argc, char ***argv) {
 	irc_init();
 	fe_common_core_init();
 	fe_common_irc_init();
-	signal_add("event 001", (SIGNAL_FUNC) event_connected);
+	signal_add__event_("001", event_connected);
 	module_register("core", "fe-fuzz");
 	return 0;
 }

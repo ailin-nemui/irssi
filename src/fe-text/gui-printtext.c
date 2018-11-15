@@ -352,9 +352,9 @@ void gui_printtext_init(void)
 	settings_add_time("history", "scrollback_time", "1day");
 	settings_add_int("history", "scrollback_burst_remove", 10);
 
-	signal_add("gui print text", (SIGNAL_FUNC) sig_gui_print_text);
-	signal_add("gui print text finished", (SIGNAL_FUNC) sig_gui_printtext_finished);
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add__gui_print_text(sig_gui_print_text);
+	signal_add__gui_print_text_finished(sig_gui_printtext_finished);
+	signal_add__setup_changed(read_settings);
 
 	read_settings();
 }
@@ -363,7 +363,7 @@ void gui_printtext_deinit(void)
 {
 	g_hash_table_destroy(indent_functions);
 
-	signal_remove("gui print text", (SIGNAL_FUNC) sig_gui_print_text);
-	signal_remove("gui print text finished", (SIGNAL_FUNC) sig_gui_printtext_finished);
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__gui_print_text(sig_gui_print_text);
+	signal_remove__gui_print_text_finished(sig_gui_printtext_finished);
+	signal_remove__setup_changed(read_settings);
 }

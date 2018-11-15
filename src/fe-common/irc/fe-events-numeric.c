@@ -647,92 +647,92 @@ void fe_events_numeric_init(void)
 	last_away_nick = NULL;
 	last_away_msg = NULL;
 
-	signal_add("event 221", (SIGNAL_FUNC) event_user_mode);
-	signal_add("event 303", (SIGNAL_FUNC) event_ison);
-	signal_add("event 353", (SIGNAL_FUNC) event_names_list);
-	signal_add_first("event 366", (SIGNAL_FUNC) event_end_of_names);
-	signal_add("event 352", (SIGNAL_FUNC) event_who);
-	signal_add("event 315", (SIGNAL_FUNC) event_end_of_who);
-	signal_add("event 271", (SIGNAL_FUNC) event_silence_list);
-	signal_add("event 272", (SIGNAL_FUNC) sig_empty);
-	signal_add("event 281", (SIGNAL_FUNC) event_accept_list);
-	signal_add("event 367", (SIGNAL_FUNC) event_ban_list);
-	signal_add("event 348", (SIGNAL_FUNC) event_eban_list);
-	signal_add("event 346", (SIGNAL_FUNC) event_invite_list);
-	signal_add("event 433", (SIGNAL_FUNC) event_nick_in_use);
-	signal_add("event 332", (SIGNAL_FUNC) event_topic_get);
-	signal_add("event 333", (SIGNAL_FUNC) event_topic_info);
-	signal_add("event 324", (SIGNAL_FUNC) event_channel_mode);
-	signal_add("event 329", (SIGNAL_FUNC) event_channel_created);
-	signal_add("event 306", (SIGNAL_FUNC) event_nowaway);
-	signal_add("event 305", (SIGNAL_FUNC) event_unaway);
-	signal_add("event 301", (SIGNAL_FUNC) event_away);
-	signal_add("event 328", (SIGNAL_FUNC) event_chanserv_url);
-	signal_add("event 302", (SIGNAL_FUNC) event_userhost);
-	signal_add("event 341", (SIGNAL_FUNC) event_sent_invite);
+	signal_add__event_("221", event_user_mode);
+	signal_add__event_("303", event_ison);
+	signal_add__event_("353", event_names_list);
+	signal_add_first__event_366(event_end_of_names);
+	signal_add__event_("352", event_who);
+	signal_add__event_("315", event_end_of_who);
+	signal_add__event_("271", event_silence_list);
+	signal_add__event_("272", sig_empty);
+	signal_add__event_("281", event_accept_list);
+	signal_add__event_("367", event_ban_list);
+	signal_add__event_("348", event_eban_list);
+	signal_add__event_("346", event_invite_list);
+	signal_add__event_("433", event_nick_in_use);
+	signal_add__event_("332", event_topic_get);
+	signal_add__event_("333", event_topic_info);
+	signal_add__event_("324", event_channel_mode);
+	signal_add__event_("329", event_channel_created);
+	signal_add__event_("306", event_nowaway);
+	signal_add__event_("305", event_unaway);
+	signal_add__event_("301", event_away);
+	signal_add__event_("328", event_chanserv_url);
+	signal_add__event_("302", event_userhost);
+	signal_add__event_("341", event_sent_invite);
 
-	signal_add("event 437", (SIGNAL_FUNC) event_target_unavailable);
-	signal_add("event 401", (SIGNAL_FUNC) event_no_such_nick);
-	signal_add("event 403", (SIGNAL_FUNC) event_no_such_channel);
-	signal_add("event 405", (SIGNAL_FUNC) event_too_many_channels);
-	signal_add("event 407", (SIGNAL_FUNC) event_duplicate_channel);
-	signal_add("event 471", (SIGNAL_FUNC) event_channel_is_full);
-	signal_add("event 472", (SIGNAL_FUNC) event_unknown_mode);
-	signal_add("event 473", (SIGNAL_FUNC) event_invite_only);
-	signal_add("event 474", (SIGNAL_FUNC) event_banned);
-	signal_add("event 475", (SIGNAL_FUNC) event_bad_channel_key);
-	signal_add("event 476", (SIGNAL_FUNC) event_bad_channel_mask);
-	signal_add("event 477", (SIGNAL_FUNC) event_477);
-	signal_add("event 375", (SIGNAL_FUNC) event_motd);
-	signal_add("event 376", (SIGNAL_FUNC) event_motd);
-	signal_add("event 372", (SIGNAL_FUNC) event_motd);
-	signal_add("event 422", (SIGNAL_FUNC) event_motd);
-	signal_add("event 439", (SIGNAL_FUNC) event_target_too_fast);
-	signal_add("event 707", (SIGNAL_FUNC) event_target_too_fast);
+	signal_add__event_("437", event_target_unavailable);
+	signal_add__event_("401", event_no_such_nick);
+	signal_add__event_("403", event_no_such_channel);
+	signal_add__event_("405", event_too_many_channels);
+	signal_add__event_("407", event_duplicate_channel);
+	signal_add__event_("471", event_channel_is_full);
+	signal_add__event_("472", event_unknown_mode);
+	signal_add__event_("473", event_invite_only);
+	signal_add__event_("474", event_banned);
+	signal_add__event_("475", event_bad_channel_key);
+	signal_add__event_("476", event_bad_channel_mask);
+	signal_add__event_("477", event_477);
+	signal_add__event_("375", event_motd);
+	signal_add__event_("376", event_motd);
+	signal_add__event_("372", event_motd);
+	signal_add__event_("422", event_motd);
+	signal_add__event_("439", event_target_too_fast);
+	signal_add__event_("707", event_target_too_fast);
 
-        signal_add("default event numeric", (SIGNAL_FUNC) event_numeric);
+        signal_add__default_event_numeric(event_numeric);
 	/* Because default event numeric only fires if there is no specific
 	 * event, add all numerics with a handler elsewhere in irssi that
 	 * should not be printed specially here.
 	 */
-	signal_add("event 001", (SIGNAL_FUNC) event_received);
-	signal_add("event 004", (SIGNAL_FUNC) event_received);
-	signal_add("event 005", (SIGNAL_FUNC) event_received);
-	signal_add("event 254", (SIGNAL_FUNC) event_received);
-	signal_add("event 364", (SIGNAL_FUNC) event_received);
-	signal_add("event 365", (SIGNAL_FUNC) event_received);
-	signal_add("event 381", (SIGNAL_FUNC) event_received);
-	signal_add("event 396", (SIGNAL_FUNC) event_received);
-	signal_add("event 421", (SIGNAL_FUNC) event_received);
-	signal_add("event 432", (SIGNAL_FUNC) event_received);
-	signal_add("event 436", (SIGNAL_FUNC) event_received);
-	signal_add("event 438", (SIGNAL_FUNC) event_received);
-	signal_add("event 465", (SIGNAL_FUNC) event_received);
-	signal_add("event 470", (SIGNAL_FUNC) event_received);
-	signal_add("event 479", (SIGNAL_FUNC) event_received);
+	signal_add__event_("001", event_received);
+	signal_add__event_("004", event_received);
+	signal_add__event_("005", event_received);
+	signal_add__event_("254", event_received);
+	signal_add__event_("364", event_received);
+	signal_add__event_("365", event_received);
+	signal_add__event_("381", event_received);
+	signal_add__event_("396", event_received);
+	signal_add__event_("421", event_received);
+	signal_add__event_("432", event_received);
+	signal_add__event_("436", event_received);
+	signal_add__event_("438", event_received);
+	signal_add__event_("465", event_received);
+	signal_add__event_("470", event_received);
+	signal_add__event_("479", event_received);
 
-	signal_add("event 344", (SIGNAL_FUNC) event_target_received); /* reop list */
-	signal_add("event 345", (SIGNAL_FUNC) event_target_received); /* end of reop list */
-	signal_add("event 347", (SIGNAL_FUNC) event_target_received); /* end of invite exception list */
-	signal_add("event 349", (SIGNAL_FUNC) event_target_received); /* end of ban exception list */
-	signal_add("event 368", (SIGNAL_FUNC) event_target_received); /* end of ban list */
-	signal_add("event 386", (SIGNAL_FUNC) event_target_received); /* owner list; old rsa challenge (harmless) */
-	signal_add("event 387", (SIGNAL_FUNC) event_target_received); /* end of owner list */
-	signal_add("event 388", (SIGNAL_FUNC) event_target_received); /* protect list */
-	signal_add("event 389", (SIGNAL_FUNC) event_target_received); /* end of protect list */
-	signal_add("event 404", (SIGNAL_FUNC) event_target_received); /* cannot send to channel */
-	signal_add("event 408", (SIGNAL_FUNC) event_target_received); /* cannot send (+c) */
-	signal_add("event 442", (SIGNAL_FUNC) event_target_received); /* you're not on that channel */
-	signal_add("event 478", (SIGNAL_FUNC) event_target_received); /* ban list is full */
-	signal_add("event 482", (SIGNAL_FUNC) event_target_received); /* not chanop */
-	signal_add("event 486", (SIGNAL_FUNC) event_target_received); /* cannot /msg (+R) */
-	signal_add("event 489", (SIGNAL_FUNC) event_target_received); /* not chanop or voice */
-	signal_add("event 494", (SIGNAL_FUNC) event_target_received); /* cannot /msg (own +R) */
-	signal_add("event 506", (SIGNAL_FUNC) event_target_received); /* cannot send (+R) */
-	signal_add("event 716", (SIGNAL_FUNC) event_target_received); /* cannot /msg (+g) */
-	signal_add("event 717", (SIGNAL_FUNC) event_target_received); /* +g notified */
-	signal_add("event 728", (SIGNAL_FUNC) event_target_received); /* quiet (or other) list */
-	signal_add("event 729", (SIGNAL_FUNC) event_target_received); /* end of quiet (or other) list */
+	signal_add__event_("344", event_target_received); /* reop list */
+	signal_add__event_("345", event_target_received); /* end of reop list */
+	signal_add__event_("347", event_target_received); /* end of invite exception list */
+	signal_add__event_("349", event_target_received); /* end of ban exception list */
+	signal_add__event_("368", event_target_received); /* end of ban list */
+	signal_add__event_("386", event_target_received); /* owner list; old rsa challenge (harmless) */
+	signal_add__event_("387", event_target_received); /* end of owner list */
+	signal_add__event_("388", event_target_received); /* protect list */
+	signal_add__event_("389", event_target_received); /* end of protect list */
+	signal_add__event_("404", event_target_received); /* cannot send to channel */
+	signal_add__event_("408", event_target_received); /* cannot send (+c) */
+	signal_add__event_("442", event_target_received); /* you're not on that channel */
+	signal_add__event_("478", event_target_received); /* ban list is full */
+	signal_add__event_("482", event_target_received); /* not chanop */
+	signal_add__event_("486", event_target_received); /* cannot /msg (+R) */
+	signal_add__event_("489", event_target_received); /* not chanop or voice */
+	signal_add__event_("494", event_target_received); /* cannot /msg (own +R) */
+	signal_add__event_("506", event_target_received); /* cannot send (+R) */
+	signal_add__event_("716", event_target_received); /* cannot /msg (+g) */
+	signal_add__event_("717", event_target_received); /* +g notified */
+	signal_add__event_("728", event_target_received); /* quiet (or other) list */
+	signal_add__event_("729", event_target_received); /* end of quiet (or other) list */
 }
 
 void fe_events_numeric_deinit(void)
@@ -740,86 +740,86 @@ void fe_events_numeric_deinit(void)
 	g_free_not_null(last_away_nick);
 	g_free_not_null(last_away_msg);
 
-	signal_remove("event 221", (SIGNAL_FUNC) event_user_mode);
-	signal_remove("event 303", (SIGNAL_FUNC) event_ison);
-	signal_remove("event 353", (SIGNAL_FUNC) event_names_list);
-	signal_remove("event 366", (SIGNAL_FUNC) event_end_of_names);
-	signal_remove("event 352", (SIGNAL_FUNC) event_who);
-	signal_remove("event 315", (SIGNAL_FUNC) event_end_of_who);
-	signal_remove("event 271", (SIGNAL_FUNC) event_silence_list);
-	signal_remove("event 272", (SIGNAL_FUNC) sig_empty);
-	signal_remove("event 281", (SIGNAL_FUNC) event_accept_list);
-	signal_remove("event 367", (SIGNAL_FUNC) event_ban_list);
-	signal_remove("event 348", (SIGNAL_FUNC) event_eban_list);
-	signal_remove("event 346", (SIGNAL_FUNC) event_invite_list);
-	signal_remove("event 433", (SIGNAL_FUNC) event_nick_in_use);
-	signal_remove("event 332", (SIGNAL_FUNC) event_topic_get);
-	signal_remove("event 333", (SIGNAL_FUNC) event_topic_info);
-	signal_remove("event 324", (SIGNAL_FUNC) event_channel_mode);
-	signal_remove("event 329", (SIGNAL_FUNC) event_channel_created);
-	signal_remove("event 306", (SIGNAL_FUNC) event_nowaway);
-	signal_remove("event 305", (SIGNAL_FUNC) event_unaway);
-	signal_remove("event 301", (SIGNAL_FUNC) event_away);
-	signal_remove("event 328", (SIGNAL_FUNC) event_chanserv_url);
-	signal_remove("event 302", (SIGNAL_FUNC) event_userhost);
-	signal_remove("event 341", (SIGNAL_FUNC) event_sent_invite);
+	signal_remove__event_("221", event_user_mode);
+	signal_remove__event_("303", event_ison);
+	signal_remove__event_("353", event_names_list);
+	signal_remove__event_("366", event_end_of_names);
+	signal_remove__event_("352", event_who);
+	signal_remove__event_("315", event_end_of_who);
+	signal_remove__event_("271", event_silence_list);
+	signal_remove__event_("272", sig_empty);
+	signal_remove__event_("281", event_accept_list);
+	signal_remove__event_("367", event_ban_list);
+	signal_remove__event_("348", event_eban_list);
+	signal_remove__event_("346", event_invite_list);
+	signal_remove__event_("433", event_nick_in_use);
+	signal_remove__event_("332", event_topic_get);
+	signal_remove__event_("333", event_topic_info);
+	signal_remove__event_("324", event_channel_mode);
+	signal_remove__event_("329", event_channel_created);
+	signal_remove__event_("306", event_nowaway);
+	signal_remove__event_("305", event_unaway);
+	signal_remove__event_("301", event_away);
+	signal_remove__event_("328", event_chanserv_url);
+	signal_remove__event_("302", event_userhost);
+	signal_remove__event_("341", event_sent_invite);
 
-	signal_remove("event 437", (SIGNAL_FUNC) event_target_unavailable);
-	signal_remove("event 401", (SIGNAL_FUNC) event_no_such_nick);
-	signal_remove("event 403", (SIGNAL_FUNC) event_no_such_channel);
-	signal_remove("event 405", (SIGNAL_FUNC) event_too_many_channels);
-	signal_remove("event 407", (SIGNAL_FUNC) event_duplicate_channel);
-	signal_remove("event 471", (SIGNAL_FUNC) event_channel_is_full);
-	signal_remove("event 472", (SIGNAL_FUNC) event_unknown_mode);
-	signal_remove("event 473", (SIGNAL_FUNC) event_invite_only);
-	signal_remove("event 474", (SIGNAL_FUNC) event_banned);
-	signal_remove("event 475", (SIGNAL_FUNC) event_bad_channel_key);
-	signal_remove("event 476", (SIGNAL_FUNC) event_bad_channel_mask);
-	signal_remove("event 477", (SIGNAL_FUNC) event_477);
-	signal_remove("event 375", (SIGNAL_FUNC) event_motd);
-	signal_remove("event 376", (SIGNAL_FUNC) event_motd);
-	signal_remove("event 372", (SIGNAL_FUNC) event_motd);
-	signal_remove("event 422", (SIGNAL_FUNC) event_motd);
-	signal_remove("event 439", (SIGNAL_FUNC) event_target_too_fast);
-	signal_remove("event 707", (SIGNAL_FUNC) event_target_too_fast);
+	signal_remove__event_("437", event_target_unavailable);
+	signal_remove__event_("401", event_no_such_nick);
+	signal_remove__event_("403", event_no_such_channel);
+	signal_remove__event_("405", event_too_many_channels);
+	signal_remove__event_("407", event_duplicate_channel);
+	signal_remove__event_("471", event_channel_is_full);
+	signal_remove__event_("472", event_unknown_mode);
+	signal_remove__event_("473", event_invite_only);
+	signal_remove__event_("474", event_banned);
+	signal_remove__event_("475", event_bad_channel_key);
+	signal_remove__event_("476", event_bad_channel_mask);
+	signal_remove__event_("477", event_477);
+	signal_remove__event_("375", event_motd);
+	signal_remove__event_("376", event_motd);
+	signal_remove__event_("372", event_motd);
+	signal_remove__event_("422", event_motd);
+	signal_remove__event_("439", event_target_too_fast);
+	signal_remove__event_("707", event_target_too_fast);
 
-        signal_remove("default event numeric", (SIGNAL_FUNC) event_numeric);
-	signal_remove("event 001", (SIGNAL_FUNC) event_received);
-	signal_remove("event 004", (SIGNAL_FUNC) event_received);
-	signal_remove("event 005", (SIGNAL_FUNC) event_received);
-	signal_remove("event 254", (SIGNAL_FUNC) event_received);
-	signal_remove("event 364", (SIGNAL_FUNC) event_received);
-	signal_remove("event 365", (SIGNAL_FUNC) event_received);
-	signal_remove("event 381", (SIGNAL_FUNC) event_received);
-	signal_remove("event 396", (SIGNAL_FUNC) event_received);
-	signal_remove("event 421", (SIGNAL_FUNC) event_received);
-	signal_remove("event 432", (SIGNAL_FUNC) event_received);
-	signal_remove("event 436", (SIGNAL_FUNC) event_received);
-	signal_remove("event 438", (SIGNAL_FUNC) event_received);
-	signal_remove("event 465", (SIGNAL_FUNC) event_received);
-	signal_remove("event 470", (SIGNAL_FUNC) event_received);
-	signal_remove("event 479", (SIGNAL_FUNC) event_received);
+        signal_remove__default_event_numeric(event_numeric);
+	signal_remove__event_("001", event_received);
+	signal_remove__event_("004", event_received);
+	signal_remove__event_("005", event_received);
+	signal_remove__event_("254", event_received);
+	signal_remove__event_("364", event_received);
+	signal_remove__event_("365", event_received);
+	signal_remove__event_("381", event_received);
+	signal_remove__event_("396", event_received);
+	signal_remove__event_("421", event_received);
+	signal_remove__event_("432", event_received);
+	signal_remove__event_("436", event_received);
+	signal_remove__event_("438", event_received);
+	signal_remove__event_("465", event_received);
+	signal_remove__event_("470", event_received);
+	signal_remove__event_("479", event_received);
 
-	signal_remove("event 344", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 345", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 347", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 349", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 368", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 386", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 387", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 388", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 389", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 404", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 408", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 442", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 478", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 482", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 486", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 489", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 494", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 506", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 716", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 717", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 728", (SIGNAL_FUNC) event_target_received);
-	signal_remove("event 729", (SIGNAL_FUNC) event_target_received);
+	signal_remove__event_("344", event_target_received);
+	signal_remove__event_("345", event_target_received);
+	signal_remove__event_("347", event_target_received);
+	signal_remove__event_("349", event_target_received);
+	signal_remove__event_("368", event_target_received);
+	signal_remove__event_("386", event_target_received);
+	signal_remove__event_("387", event_target_received);
+	signal_remove__event_("388", event_target_received);
+	signal_remove__event_("389", event_target_received);
+	signal_remove__event_("404", event_target_received);
+	signal_remove__event_("408", event_target_received);
+	signal_remove__event_("442", event_target_received);
+	signal_remove__event_("478", event_target_received);
+	signal_remove__event_("482", event_target_received);
+	signal_remove__event_("486", event_target_received);
+	signal_remove__event_("489", event_target_received);
+	signal_remove__event_("494", event_target_received);
+	signal_remove__event_("506", event_target_received);
+	signal_remove__event_("716", event_target_received);
+	signal_remove__event_("717", event_target_received);
+	signal_remove__event_("728", event_target_received);
+	signal_remove__event_("729", event_target_received);
 }

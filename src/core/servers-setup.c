@@ -658,9 +658,9 @@ void servers_setup_init(void)
         old_source_host = NULL;
 	read_settings();
 
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
-	signal_add("setup reread", (SIGNAL_FUNC) read_servers);
-        signal_add("irssi init read settings", (SIGNAL_FUNC) read_servers);
+	signal_add__setup_changed(read_settings);
+	signal_add__setup_reread(read_servers);
+        signal_add__irssi_init_read_settings(read_servers);
 }
 
 void servers_setup_deinit(void)
@@ -672,9 +672,9 @@ void servers_setup_deinit(void)
 	while (setupservers != NULL)
 		server_setup_destroy(setupservers->data);
 
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
-	signal_remove("setup reread", (SIGNAL_FUNC) read_servers);
-        signal_remove("irssi init read settings", (SIGNAL_FUNC) read_servers);
+	signal_remove__setup_changed(read_settings);
+	signal_remove__setup_reread(read_servers);
+        signal_remove__irssi_init_read_settings(read_servers);
 
 	module_uniq_destroy("SERVER SETUP");
 }

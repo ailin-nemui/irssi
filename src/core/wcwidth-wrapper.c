@@ -133,10 +133,10 @@ void wcwidth_wrapper_init(void)
 #endif
 
 	read_settings();
-	signal_add_first("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add_first__setup_changed(read_settings);
 }
 
 void wcwidth_wrapper_deinit(void)
 {
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__setup_changed(read_settings);
 }

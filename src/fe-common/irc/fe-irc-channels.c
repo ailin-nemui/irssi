@@ -100,12 +100,12 @@ static void sig_event_forward(SERVER_REC *server, const char *data,
 
 void fe_irc_channels_init(void)
 {
-	signal_add("channel rejoin new", (SIGNAL_FUNC) sig_channel_rejoin);
-	signal_add_first("event 470", (SIGNAL_FUNC) sig_event_forward);
+	signal_add__channel_rejoin_new(sig_channel_rejoin);
+	signal_add_first__event_470(sig_event_forward);
 }
 
 void fe_irc_channels_deinit(void)
 {
-	signal_remove("channel rejoin new", (SIGNAL_FUNC) sig_channel_rejoin);
-	signal_remove("event 470", (SIGNAL_FUNC) sig_event_forward);
+	signal_remove__channel_rejoin_new(sig_channel_rejoin);
+	signal_remove__event_("470", sig_event_forward);
 }

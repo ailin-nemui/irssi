@@ -57,8 +57,8 @@ void noui_init(void)
 
 	module_register("core", "fe-none");
 
-	signal_add("reload", (SIGNAL_FUNC) sig_reload);
-	signal_add("gui exit", (SIGNAL_FUNC) sig_exit);
+	signal_add__reload(sig_reload);
+	signal_add__gui_exit(sig_exit);
 
 #ifdef HAVE_STATIC_PERL
         perl_core_init();
@@ -73,8 +73,8 @@ void noui_deinit(void)
         perl_core_deinit();
 #endif
 
-	signal_remove("reload", (SIGNAL_FUNC) sig_reload);
-	signal_remove("gui exit", (SIGNAL_FUNC) sig_exit);
+	signal_remove__reload(sig_reload);
+	signal_remove__gui_exit(sig_exit);
 	irc_deinit();
 	core_deinit();
 }

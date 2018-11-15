@@ -1032,21 +1032,21 @@ void irc_servers_init(void)
 
 	cmd_tag = -1;
 
-	signal_add_first("server connected", (SIGNAL_FUNC) sig_connected);
-	signal_add_last("server destroyed", (SIGNAL_FUNC) sig_destroyed);
-	signal_add_last("server quit", (SIGNAL_FUNC) sig_server_quit);
-	signal_add("event 001", (SIGNAL_FUNC) event_connected);
-	signal_add("event 004", (SIGNAL_FUNC) event_server_info);
-	signal_add("event 005", (SIGNAL_FUNC) event_isupport);
-	signal_add("event 375", (SIGNAL_FUNC) event_motd);
-	signal_add_last("event 376", (SIGNAL_FUNC) event_end_of_motd);
-	signal_add_last("event 422", (SIGNAL_FUNC) event_end_of_motd); /* no motd */
-	signal_add("event 254", (SIGNAL_FUNC) event_channels_formed);
-	signal_add("event 396", (SIGNAL_FUNC) event_hosthidden);
-	signal_add("event 465", (SIGNAL_FUNC) event_server_banned);
-	signal_add("event error", (SIGNAL_FUNC) event_error);
-	signal_add("event ping", (SIGNAL_FUNC) event_ping);
-	signal_add("event empty", (SIGNAL_FUNC) event_empty);
+	signal_add_first__server_connected(sig_connected);
+	signal_add_last__server_destroyed(sig_destroyed);
+	signal_add_last__server_quit(sig_server_quit);
+	signal_add__event_("001", event_connected);
+	signal_add__event_("004", event_server_info);
+	signal_add__event_("005", event_isupport);
+	signal_add__event_("375", event_motd);
+	signal_add_last__event_376(event_end_of_motd);
+	signal_add_last__event_422(event_end_of_motd); /* no motd */
+	signal_add__event_("254", event_channels_formed);
+	signal_add__event_("396", event_hosthidden);
+	signal_add__event_("465", event_server_banned);
+	signal_add__event_("error", event_error);
+	signal_add__event_("ping", event_ping);
+	signal_add__event_("empty", event_empty);
 
 	irc_servers_setup_init();
 	irc_servers_reconnect_init();
@@ -1059,21 +1059,21 @@ void irc_servers_deinit(void)
 	if (cmd_tag != -1)
 		g_source_remove(cmd_tag);
 
-	signal_remove("server connected", (SIGNAL_FUNC) sig_connected);
-	signal_remove("server destroyed", (SIGNAL_FUNC) sig_destroyed);
-        signal_remove("server quit", (SIGNAL_FUNC) sig_server_quit);
-	signal_remove("event 001", (SIGNAL_FUNC) event_connected);
-	signal_remove("event 004", (SIGNAL_FUNC) event_server_info);
-	signal_remove("event 005", (SIGNAL_FUNC) event_isupport);
-	signal_remove("event 375", (SIGNAL_FUNC) event_motd);
-	signal_remove("event 376", (SIGNAL_FUNC) event_end_of_motd);
-	signal_remove("event 422", (SIGNAL_FUNC) event_end_of_motd); /* no motd */
-	signal_remove("event 254", (SIGNAL_FUNC) event_channels_formed);
-	signal_remove("event 396", (SIGNAL_FUNC) event_hosthidden);
-	signal_remove("event 465", (SIGNAL_FUNC) event_server_banned);
-	signal_remove("event error", (SIGNAL_FUNC) event_error);
-	signal_remove("event ping", (SIGNAL_FUNC) event_ping);
-	signal_remove("event empty", (SIGNAL_FUNC) event_empty);
+	signal_remove__server_connected(sig_connected);
+	signal_remove__server_destroyed(sig_destroyed);
+        signal_remove__server_quit(sig_server_quit);
+	signal_remove__event_("001", event_connected);
+	signal_remove__event_("004", event_server_info);
+	signal_remove__event_("005", event_isupport);
+	signal_remove__event_("375", event_motd);
+	signal_remove__event_("376", event_end_of_motd);
+	signal_remove__event_("422", event_end_of_motd); /* no motd */
+	signal_remove__event_("254", event_channels_formed);
+	signal_remove__event_("396", event_hosthidden);
+	signal_remove__event_("465", event_server_banned);
+	signal_remove__event_("error", event_error);
+	signal_remove__event_("ping", event_ping);
+	signal_remove__event_("empty", event_empty);
 
 	irc_servers_setup_deinit();
 	irc_servers_reconnect_deinit();

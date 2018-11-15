@@ -252,8 +252,7 @@ static void cmd_query(const char *data, SERVER_REC *server, WI_ITEM_REC *item)
 		cmd_param_error(CMDERR_NOT_CONNECTED);
 
 	if (g_hash_table_lookup(optlist, "window") != NULL) {
-		signal_add("query created",
-			   (SIGNAL_FUNC) signal_query_created_curwin);
+		signal_add__query_created(signal_query_created_curwin);
 	}
 
 	query = query_find(server, nick);
@@ -270,8 +269,7 @@ static void cmd_query(const char *data, SERVER_REC *server, WI_ITEM_REC *item)
 	}
 
 	if (g_hash_table_lookup(optlist, "window") != NULL) {
-		signal_remove("query created",
-			      (SIGNAL_FUNC) signal_query_created_curwin);
+		signal_remove__query_created(signal_query_created_curwin);
 	}
 
 	if (*msg != '\0') {
@@ -363,15 +361,15 @@ void fe_queries_init(void)
 	queryclose_tag = -1;
 	read_settings();
 
-	signal_add("query created", (SIGNAL_FUNC) signal_query_created);
-	signal_add("query destroyed", (SIGNAL_FUNC) signal_query_destroyed);
-	signal_add("query server changed", (SIGNAL_FUNC) signal_query_server_changed);
-	signal_add("query nick changed", (SIGNAL_FUNC) signal_query_nick_changed);
-        signal_add("window item server changed", (SIGNAL_FUNC) signal_window_item_server_changed);
-	signal_add("server connected", (SIGNAL_FUNC) sig_server_connected);
-	signal_add("window changed", (SIGNAL_FUNC) sig_window_changed);
-	signal_add_first("message private", (SIGNAL_FUNC) sig_message_private);
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add__query_created(signal_query_created);
+	signal_add__query_destroyed(signal_query_destroyed);
+	signal_add__query_server_changed(signal_query_server_changed);
+	signal_add__query_nick_changed(signal_query_nick_changed);
+        signal_add__window_item_server_changed(signal_window_item_server_changed);
+	signal_add__server_connected(sig_server_connected);
+	signal_add__window_changed(sig_window_changed);
+	signal_add_first__message_private(sig_message_private);
+	signal_add__setup_changed(read_settings);
 
 	command_bind("query", NULL, (SIGNAL_FUNC) cmd_query);
 	command_bind("unquery", NULL, (SIGNAL_FUNC) cmd_unquery);
@@ -384,15 +382,15 @@ void fe_queries_deinit(void)
 {
 	if (queryclose_tag != -1) g_source_remove(queryclose_tag);
 
-	signal_remove("query created", (SIGNAL_FUNC) signal_query_created);
-	signal_remove("query destroyed", (SIGNAL_FUNC) signal_query_destroyed);
-	signal_remove("query server changed", (SIGNAL_FUNC) signal_query_server_changed);
-	signal_remove("query nick changed", (SIGNAL_FUNC) signal_query_nick_changed);
-        signal_remove("window item server changed", (SIGNAL_FUNC) signal_window_item_server_changed);
-	signal_remove("server connected", (SIGNAL_FUNC) sig_server_connected);
-	signal_remove("window changed", (SIGNAL_FUNC) sig_window_changed);
-	signal_remove("message private", (SIGNAL_FUNC) sig_message_private);
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__query_created(signal_query_created);
+	signal_remove__query_destroyed(signal_query_destroyed);
+	signal_remove__query_server_changed(signal_query_server_changed);
+	signal_remove__query_nick_changed(signal_query_nick_changed);
+        signal_remove__window_item_server_changed(signal_window_item_server_changed);
+	signal_remove__server_connected(sig_server_connected);
+	signal_remove__window_changed(sig_window_changed);
+	signal_remove__message_private(sig_message_private);
+	signal_remove__setup_changed(read_settings);
 
 	command_unbind("query", (SIGNAL_FUNC) cmd_query);
 	command_unbind("unquery", (SIGNAL_FUNC) cmd_unquery);

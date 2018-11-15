@@ -186,8 +186,8 @@ void term_common_init(void)
 		term_set_input_type(TERM_TYPE_UTF8);
 	}
 
-	signal_add("beep", (SIGNAL_FUNC) term_beep);
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add__beep(term_beep);
+	signal_add__setup_changed(read_settings);
 	command_bind("resize", NULL, (SIGNAL_FUNC) cmd_resize);
 	command_bind("redraw", NULL, (SIGNAL_FUNC) cmd_redraw);
 
@@ -203,6 +203,6 @@ void term_common_deinit(void)
 {
 	command_unbind("resize", (SIGNAL_FUNC) cmd_resize);
 	command_unbind("redraw", (SIGNAL_FUNC) cmd_redraw);
-	signal_remove("beep", (SIGNAL_FUNC) term_beep);
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__beep(term_beep);
+	signal_remove__setup_changed(read_settings);
 }

@@ -760,7 +760,7 @@ void servers_redirect_init(void)
 				 NULL,
 				 NULL);
 
-	signal_add("server disconnected", (SIGNAL_FUNC) sig_disconnected);
+	signal_add__server_disconnected(sig_disconnected);
 }
 
 void servers_redirect_deinit(void)
@@ -769,5 +769,5 @@ void servers_redirect_deinit(void)
 			     (GHFunc) cmd_redirect_destroy, NULL);
         g_hash_table_destroy(command_redirects);
 
-	signal_remove("server disconnected", (SIGNAL_FUNC) sig_disconnected);
+	signal_remove__server_disconnected(sig_disconnected);
 }

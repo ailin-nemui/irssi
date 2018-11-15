@@ -95,7 +95,7 @@ void irc_proxy_init(void)
 	command_bind("irssiproxy", NULL, (SIGNAL_FUNC) cmd_irssiproxy);
 	command_bind("irssiproxy status", NULL, (SIGNAL_FUNC) cmd_irssiproxy_status);
 
-	signal_add_first("setup changed", (SIGNAL_FUNC) irc_proxy_setup_changed);
+	signal_add_first__setup_changed(irc_proxy_setup_changed);
 
 	if (settings_get_bool("irssiproxy")) {
 		proxy_listen_init();

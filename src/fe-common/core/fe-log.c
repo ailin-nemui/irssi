@@ -701,7 +701,7 @@ static void read_settings(void)
 
 	/* write to log files with different theme? */
 	if (log_theme_name != NULL)
-		signal_remove("print format", (SIGNAL_FUNC) sig_print_format);
+		signal_remove__print_format(sig_print_format);
 
 	g_free_not_null(log_theme_name);
 	log_theme_name = g_strdup(settings_get_str("log_theme"));
@@ -711,7 +711,7 @@ static void read_settings(void)
 		log_theme_name = NULL;
 	}
 	else
-		signal_add("print format", (SIGNAL_FUNC) sig_print_format);
+		signal_add__print_format(sig_print_format);
 
 	log_theme = log_theme_name == NULL ? NULL :
 		theme_load(log_theme_name);
@@ -747,18 +747,18 @@ void fe_log_init(void)
 	command_bind("log stop", NULL, (SIGNAL_FUNC) cmd_log_stop);
 	command_bind("window log", NULL, (SIGNAL_FUNC) cmd_window_log);
 	command_bind("window logfile", NULL, (SIGNAL_FUNC) cmd_window_logfile);
-	signal_add_first("print text", (SIGNAL_FUNC) sig_printtext);
-	signal_add("window item remove", (SIGNAL_FUNC) sig_window_item_remove);
-	signal_add("window refnum changed", (SIGNAL_FUNC) sig_window_refnum_changed);
-	signal_add("server disconnected", (SIGNAL_FUNC) sig_server_disconnected);
-	signal_add("log locked", (SIGNAL_FUNC) sig_log_locked);
-	signal_add("log create failed", (SIGNAL_FUNC) sig_log_create_failed);
-	signal_add("log new", (SIGNAL_FUNC) sig_log_new);
-	signal_add("log config read", (SIGNAL_FUNC) sig_log_config_read);
-	signal_add("log config save", (SIGNAL_FUNC) sig_log_config_save);
-	signal_add("awaylog show", (SIGNAL_FUNC) sig_awaylog_show);
-	signal_add("theme destroyed", (SIGNAL_FUNC) sig_theme_destroyed);
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add_first__print_text(sig_printtext);
+	signal_add__window_item_remove(sig_window_item_remove);
+	signal_add__window_refnum_changed(sig_window_refnum_changed);
+	signal_add__server_disconnected(sig_server_disconnected);
+	signal_add__log_locked(sig_log_locked);
+	signal_add__log_create_failed(sig_log_create_failed);
+	signal_add__log_new(sig_log_new);
+	signal_add__log_config_read(sig_log_config_read);
+	signal_add__log_config_save(sig_log_config_save);
+	signal_add__awaylog_show(sig_awaylog_show);
+	signal_add__theme_destroyed(sig_theme_destroyed);
+	signal_add__setup_changed(read_settings);
 
 	command_set_options("log open", "noopen autoopen -targets window colors");
 }
@@ -767,7 +767,7 @@ void fe_log_deinit(void)
 {
 	g_source_remove(autoremove_tag);
 	if (log_theme_name != NULL)
-		signal_remove("print format", (SIGNAL_FUNC) sig_print_format);
+		signal_remove__print_format(sig_print_format);
 
 	command_unbind("log", (SIGNAL_FUNC) cmd_log);
 	command_unbind("log open", (SIGNAL_FUNC) cmd_log_open);
@@ -776,18 +776,18 @@ void fe_log_deinit(void)
 	command_unbind("log stop", (SIGNAL_FUNC) cmd_log_stop);
 	command_unbind("window log", (SIGNAL_FUNC) cmd_window_log);
 	command_unbind("window logfile", (SIGNAL_FUNC) cmd_window_logfile);
-	signal_remove("print text", (SIGNAL_FUNC) sig_printtext);
-	signal_remove("window item remove", (SIGNAL_FUNC) sig_window_item_remove);
-	signal_remove("window refnum changed", (SIGNAL_FUNC) sig_window_refnum_changed);
-	signal_remove("server disconnected", (SIGNAL_FUNC) sig_server_disconnected);
-	signal_remove("log locked", (SIGNAL_FUNC) sig_log_locked);
-	signal_remove("log create failed", (SIGNAL_FUNC) sig_log_create_failed);
-	signal_remove("log new", (SIGNAL_FUNC) sig_log_new);
-	signal_remove("log config read", (SIGNAL_FUNC) sig_log_config_read);
-	signal_remove("log config save", (SIGNAL_FUNC) sig_log_config_save);
-	signal_remove("awaylog show", (SIGNAL_FUNC) sig_awaylog_show);
-	signal_remove("theme destroyed", (SIGNAL_FUNC) sig_theme_destroyed);
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__print_text(sig_printtext);
+	signal_remove__window_item_remove(sig_window_item_remove);
+	signal_remove__window_refnum_changed(sig_window_refnum_changed);
+	signal_remove__server_disconnected(sig_server_disconnected);
+	signal_remove__log_locked(sig_log_locked);
+	signal_remove__log_create_failed(sig_log_create_failed);
+	signal_remove__log_new(sig_log_new);
+	signal_remove__log_config_read(sig_log_config_read);
+	signal_remove__log_config_save(sig_log_config_save);
+	signal_remove__awaylog_show(sig_awaylog_show);
+	signal_remove__theme_destroyed(sig_theme_destroyed);
+	signal_remove__setup_changed(read_settings);
 
 	if (autolog_ignore_targets != NULL)
 		g_strfreev(autolog_ignore_targets);

@@ -197,18 +197,18 @@ void irc_servers_setup_init(void)
 	settings_add_str("server", "alternate_nick", "");
 
 	init_userinfo();
-	signal_add("server setup fill reconn", (SIGNAL_FUNC) sig_server_setup_fill_reconn);
-	signal_add("server setup fill connect", (SIGNAL_FUNC) sig_server_setup_fill_connect);
-	signal_add("server setup fill chatnet", (SIGNAL_FUNC) sig_server_setup_fill_chatnet);
-	signal_add("server setup read", (SIGNAL_FUNC) sig_server_setup_read);
-	signal_add("server setup saved", (SIGNAL_FUNC) sig_server_setup_saved);
+	signal_add__server_setup_fill_reconn(sig_server_setup_fill_reconn);
+	signal_add__server_setup_fill_connect(sig_server_setup_fill_connect);
+	signal_add__server_setup_fill_chatnet(sig_server_setup_fill_chatnet);
+	signal_add__server_setup_read(sig_server_setup_read);
+	signal_add__server_setup_saved(sig_server_setup_saved);
 }
 
 void irc_servers_setup_deinit(void)
 {
-	signal_remove("server setup fill reconn", (SIGNAL_FUNC) sig_server_setup_fill_reconn);
-	signal_remove("server setup fill connect", (SIGNAL_FUNC) sig_server_setup_fill_connect);
-	signal_remove("server setup fill chatnet", (SIGNAL_FUNC) sig_server_setup_fill_chatnet);
-	signal_remove("server setup read", (SIGNAL_FUNC) sig_server_setup_read);
-	signal_remove("server setup saved", (SIGNAL_FUNC) sig_server_setup_saved);
+	signal_remove__server_setup_fill_reconn(sig_server_setup_fill_reconn);
+	signal_remove__server_setup_fill_connect(sig_server_setup_fill_connect);
+	signal_remove__server_setup_fill_chatnet(sig_server_setup_fill_chatnet);
+	signal_remove__server_setup_read(sig_server_setup_read);
+	signal_remove__server_setup_saved(sig_server_setup_saved);
 }

@@ -884,7 +884,7 @@ void window_commands_init(void)
 	settings_add_bool("lookandfeel", "active_window_ignore_refnum", TRUE);
 	settings_add_bool("misc", "window_number_commands", TRUE);
 
-	signal_add("default command", (SIGNAL_FUNC) cmd_window_default_command);
+	signal_add__default_command(cmd_window_default_command);
 
 	command_bind("window", NULL, (SIGNAL_FUNC) cmd_window);
 	command_bind("window new", NULL, (SIGNAL_FUNC) cmd_window_new);
@@ -960,5 +960,5 @@ void window_commands_deinit(void)
 	command_unbind("layout reset", (SIGNAL_FUNC) windows_layout_reset);
 	command_unbind("foreach window", (SIGNAL_FUNC) cmd_foreach_window);
 
-	signal_remove("default command", (SIGNAL_FUNC) cmd_window_default_command);
+	signal_remove__default_command(cmd_window_default_command);
 }

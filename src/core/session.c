@@ -346,13 +346,13 @@ void session_init(void)
 {
 	command_bind("upgrade", NULL, (SIGNAL_FUNC) cmd_upgrade);
 
-	signal_add("session save", (SIGNAL_FUNC) sig_session_save);
-	signal_add("session restore", (SIGNAL_FUNC) sig_session_restore);
-	signal_add("session save server", (SIGNAL_FUNC) session_save_server_channels);
-	signal_add("session restore server", (SIGNAL_FUNC) session_restore_server_channels);
-	signal_add("session save channel", (SIGNAL_FUNC) session_save_channel_nicks);
-	signal_add("session restore channel", (SIGNAL_FUNC) session_restore_channel_nicks);
-	signal_add("irssi init finished", (SIGNAL_FUNC) sig_init_finished);
+	signal_add__session_save(sig_session_save);
+	signal_add__session_restore(sig_session_restore);
+	signal_add__session_save_server(session_save_server_channels);
+	signal_add__session_restore_server(session_restore_server_channels);
+	signal_add__session_save_channel(session_save_channel_nicks);
+	signal_add__session_restore_channel(session_restore_channel_nicks);
+	signal_add__irssi_init_finished(sig_init_finished);
 }
 
 void session_deinit(void)
@@ -361,11 +361,11 @@ void session_deinit(void)
 
         command_unbind("upgrade", (SIGNAL_FUNC) cmd_upgrade);
 
-	signal_remove("session save", (SIGNAL_FUNC) sig_session_save);
-	signal_remove("session restore", (SIGNAL_FUNC) sig_session_restore);
-	signal_remove("session save server", (SIGNAL_FUNC) session_save_server_channels);
-	signal_remove("session restore server", (SIGNAL_FUNC) session_restore_server_channels);
-	signal_remove("session save channel", (SIGNAL_FUNC) session_save_channel_nicks);
-	signal_remove("session restore channel", (SIGNAL_FUNC) session_restore_channel_nicks);
-	signal_remove("irssi init finished", (SIGNAL_FUNC) sig_init_finished);
+	signal_remove__session_save(sig_session_save);
+	signal_remove__session_restore(sig_session_restore);
+	signal_remove__session_save_server(session_save_server_channels);
+	signal_remove__session_restore_server(session_restore_server_channels);
+	signal_remove__session_save_channel(session_save_channel_nicks);
+	signal_remove__session_restore_channel(session_restore_channel_nicks);
+	signal_remove__irssi_init_finished(sig_init_finished);
 }

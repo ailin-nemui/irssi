@@ -73,12 +73,12 @@ static void sig_server_cap_req(IRC_SERVER_REC *server, char *caps)
 
 void fe_cap_init(void)
 {
-	signal_add("event cap", (SIGNAL_FUNC) event_cap);
-	signal_add("server cap req", (SIGNAL_FUNC) sig_server_cap_req);
+	signal_add__event_("cap", event_cap);
+	signal_add__server_cap_req(sig_server_cap_req);
 }
 
 void fe_cap_deinit(void)
 {
-	signal_remove("event cap", (SIGNAL_FUNC) event_cap);
-	signal_remove("server cap req", (SIGNAL_FUNC) sig_server_cap_req);
+	signal_remove__event_("cap", event_cap);
+	signal_remove__server_cap_req(sig_server_cap_req);
 }

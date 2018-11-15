@@ -833,17 +833,17 @@ void proxy_listen_init(void)
 	proxy_listens = NULL;
 	read_settings();
 
-	signal_add("server incoming", (SIGNAL_FUNC) sig_incoming);
-	signal_add("server event", (SIGNAL_FUNC) sig_server_event);
-	signal_add("event connected", (SIGNAL_FUNC) event_connected);
-	signal_add("server disconnected", (SIGNAL_FUNC) sig_server_disconnected);
-	signal_add_first("event nick", (SIGNAL_FUNC) event_nick);
-	signal_add("message own_public", (SIGNAL_FUNC) sig_message_own_public);
-	signal_add("message own_private", (SIGNAL_FUNC) sig_message_own_private);
-	signal_add("message irc own_action", (SIGNAL_FUNC) sig_message_own_action);
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add__server_incoming(sig_incoming);
+	signal_add__server_event(sig_server_event);
+	signal_add__event_("connected", event_connected);
+	signal_add__server_disconnected(sig_server_disconnected);
+	signal_add_first__event_nick(event_nick);
+	signal_add__message_own__public(sig_message_own_public);
+	signal_add__message_own__private(sig_message_own_private);
+	signal_add__message_irc_own__action(sig_message_own_action);
+	signal_add__setup_changed(read_settings);
 
-	signal_add("proxy client dump", (SIGNAL_FUNC) sig_dump);
+	signal_add__proxy_client_dump(sig_dump);
 }
 
 void proxy_listen_deinit(void)
@@ -857,15 +857,15 @@ void proxy_listen_deinit(void)
 		remove_listen(proxy_listens->data);
 	g_string_free(next_line, TRUE);
 
-	signal_remove("server incoming", (SIGNAL_FUNC) sig_incoming);
-	signal_remove("server event", (SIGNAL_FUNC) sig_server_event);
-	signal_remove("event connected", (SIGNAL_FUNC) event_connected);
-	signal_remove("server disconnected", (SIGNAL_FUNC) sig_server_disconnected);
-	signal_remove("event nick", (SIGNAL_FUNC) event_nick);
-	signal_remove("message own_public", (SIGNAL_FUNC) sig_message_own_public);
-	signal_remove("message own_private", (SIGNAL_FUNC) sig_message_own_private);
-	signal_remove("message irc own_action", (SIGNAL_FUNC) sig_message_own_action);
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__server_incoming(sig_incoming);
+	signal_remove__server_event(sig_server_event);
+	signal_remove__event_("connected", event_connected);
+	signal_remove__server_disconnected(sig_server_disconnected);
+	signal_remove__event_("nick", event_nick);
+	signal_remove__message_own__public(sig_message_own_public);
+	signal_remove__message_own__private(sig_message_own_private);
+	signal_remove__message_irc_own__action(sig_message_own_action);
+	signal_remove__setup_changed(read_settings);
 
-	signal_remove("proxy client dump", (SIGNAL_FUNC) sig_dump);
+	signal_remove__proxy_client_dump(sig_dump);
 }

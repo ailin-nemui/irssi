@@ -299,26 +299,26 @@ void fe_irc_messages_init(void)
 {
 	settings_add_bool("misc", "notice_channel_context", TRUE);
 
-        signal_add_last("message own_public", (SIGNAL_FUNC) sig_message_own_public);
-        signal_add_last("message irc op_public", (SIGNAL_FUNC) sig_message_irc_op_public);
-        signal_add_last("message irc own_wall", (SIGNAL_FUNC) sig_message_own_wall);
-        signal_add_last("message irc own_action", (SIGNAL_FUNC) sig_message_own_action);
-        signal_add_last("message irc action", (SIGNAL_FUNC) sig_message_irc_action);
-        signal_add_last("message irc own_notice", (SIGNAL_FUNC) sig_message_own_notice);
-        signal_add_last("message irc notice", (SIGNAL_FUNC) sig_message_irc_notice);
-        signal_add_last("message irc own_ctcp", (SIGNAL_FUNC) sig_message_own_ctcp);
-        signal_add_last("message irc ctcp", (SIGNAL_FUNC) sig_message_irc_ctcp);
+        signal_add_last__message_own__public(sig_message_own_public);
+        signal_add_last__message_irc_op__public(sig_message_irc_op_public);
+        signal_add_last__message_irc_own__wall(sig_message_own_wall);
+        signal_add_last__message_irc_own__action(sig_message_own_action);
+        signal_add_last__message_irc_action(sig_message_irc_action);
+        signal_add_last__message_irc_own__notice(sig_message_own_notice);
+        signal_add_last__message_irc_notice(sig_message_irc_notice);
+        signal_add_last__message_irc_own__ctcp(sig_message_own_ctcp);
+        signal_add_last__message_irc_ctcp(sig_message_irc_ctcp);
 }
 
 void fe_irc_messages_deinit(void)
 {
-        signal_remove("message own_public", (SIGNAL_FUNC) sig_message_own_public);
-        signal_remove("message irc op_public", (SIGNAL_FUNC) sig_message_irc_op_public);
-        signal_remove("message irc own_wall", (SIGNAL_FUNC) sig_message_own_wall);
-        signal_remove("message irc own_action", (SIGNAL_FUNC) sig_message_own_action);
-        signal_remove("message irc action", (SIGNAL_FUNC) sig_message_irc_action);
-        signal_remove("message irc own_notice", (SIGNAL_FUNC) sig_message_own_notice);
-        signal_remove("message irc notice", (SIGNAL_FUNC) sig_message_irc_notice);
-        signal_remove("message irc own_ctcp", (SIGNAL_FUNC) sig_message_own_ctcp);
-        signal_remove("message irc ctcp", (SIGNAL_FUNC) sig_message_irc_ctcp);
+        signal_remove__message_own__public(sig_message_own_public);
+        signal_remove__message_irc_op__public(sig_message_irc_op_public);
+        signal_remove__message_irc_own__wall(sig_message_own_wall);
+        signal_remove__message_irc_own__action(sig_message_own_action);
+        signal_remove__message_irc_action(sig_message_irc_action);
+        signal_remove__message_irc_own__notice(sig_message_own_notice);
+        signal_remove__message_irc_notice(sig_message_irc_notice);
+        signal_remove__message_irc_own__ctcp(sig_message_own_ctcp);
+        signal_remove__message_irc_ctcp(sig_message_irc_ctcp);
 }

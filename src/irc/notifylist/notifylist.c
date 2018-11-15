@@ -329,13 +329,13 @@ void irc_notifylist_init(void)
 	notifylist_commands_init();
 	notifylist_ison_init();
 	notifylist_whois_init();
-	signal_add("server connected", (SIGNAL_FUNC) notifylist_init_server);
-	signal_add("server destroyed", (SIGNAL_FUNC) notifylist_deinit_server);
-	signal_add("event quit", (SIGNAL_FUNC) event_quit);
-	signal_add("event privmsg", (SIGNAL_FUNC) event_privmsg);
-	signal_add("event join", (SIGNAL_FUNC) event_join);
-	signal_add("channel wholist", (SIGNAL_FUNC) sig_channel_wholist);
-	signal_add("setup reread", (SIGNAL_FUNC) notifylist_read_config);
+	signal_add__server_connected(notifylist_init_server);
+	signal_add__server_destroyed(notifylist_deinit_server);
+	signal_add__event_("quit", event_quit);
+	signal_add__event_("privmsg", event_privmsg);
+	signal_add__event_("join", event_join);
+	signal_add__channel_wholist(sig_channel_wholist);
+	signal_add__setup_reread(notifylist_read_config);
 
 	settings_check();
 	module_register("notifylist", "irc");
@@ -347,13 +347,13 @@ void irc_notifylist_deinit(void)
 	notifylist_ison_deinit();
 	notifylist_whois_deinit();
 
-	signal_remove("server connected", (SIGNAL_FUNC) notifylist_init_server);
-	signal_remove("server destroyed", (SIGNAL_FUNC) notifylist_deinit_server);
-	signal_remove("event quit", (SIGNAL_FUNC) event_quit);
-	signal_remove("event privmsg", (SIGNAL_FUNC) event_privmsg);
-	signal_remove("event join", (SIGNAL_FUNC) event_join);
-	signal_remove("channel wholist", (SIGNAL_FUNC) sig_channel_wholist);
-	signal_remove("setup reread", (SIGNAL_FUNC) notifylist_read_config);
+	signal_remove__server_connected(notifylist_init_server);
+	signal_remove__server_destroyed(notifylist_deinit_server);
+	signal_remove__event_("quit", event_quit);
+	signal_remove__event_("privmsg", event_privmsg);
+	signal_remove__event_("join", event_join);
+	signal_remove__channel_wholist(sig_channel_wholist);
+	signal_remove__setup_reread(notifylist_read_config);
 
 	notifylist_destroy_all();
 }

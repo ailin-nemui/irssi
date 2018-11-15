@@ -162,11 +162,11 @@ void fe_irc_dcc_init(void)
 	fe_dcc_send_init();
 	fe_dcc_server_init();
 
-	signal_add("dcc request", (SIGNAL_FUNC) dcc_request);
-	signal_add("dcc rejected", (SIGNAL_FUNC) dcc_rejected);
-	signal_add("dcc request send", (SIGNAL_FUNC) dcc_request_send);
-	signal_add("dcc error connect", (SIGNAL_FUNC) dcc_error_connect);
-	signal_add("dcc error unknown type", (SIGNAL_FUNC) dcc_error_unknown_type);
+	signal_add__dcc_request(dcc_request);
+	signal_add__dcc_rejected(dcc_rejected);
+	signal_add__dcc_request_send(dcc_request_send);
+	signal_add__dcc_error_connect(dcc_error_connect);
+	signal_add__dcc_error_unknown_type(dcc_error_unknown_type);
 	command_bind("dcc", NULL, (SIGNAL_FUNC) cmd_dcc);
 	command_bind("dcc list", NULL, (SIGNAL_FUNC) cmd_dcc_list);
 
@@ -184,11 +184,11 @@ void fe_irc_dcc_deinit(void)
 
 	theme_unregister();
 
-	signal_remove("dcc request", (SIGNAL_FUNC) dcc_request);
-	signal_remove("dcc rejected", (SIGNAL_FUNC) dcc_rejected);
-	signal_remove("dcc request send", (SIGNAL_FUNC) dcc_request_send);
-	signal_remove("dcc error connect", (SIGNAL_FUNC) dcc_error_connect);
-	signal_remove("dcc error unknown type", (SIGNAL_FUNC) dcc_error_unknown_type);
+	signal_remove__dcc_request(dcc_request);
+	signal_remove__dcc_rejected(dcc_rejected);
+	signal_remove__dcc_request_send(dcc_request_send);
+	signal_remove__dcc_error_connect(dcc_error_connect);
+	signal_remove__dcc_error_unknown_type(dcc_error_unknown_type);
 	command_unbind("dcc", (SIGNAL_FUNC) cmd_dcc);
 	command_unbind("dcc list", (SIGNAL_FUNC) cmd_dcc_list);
 }

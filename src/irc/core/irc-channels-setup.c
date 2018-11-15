@@ -24,12 +24,12 @@
 
 void irc_channels_setup_init(void)
 {
-	signal_add("channel wholist", (SIGNAL_FUNC) channel_send_botcommands);
-	signal_add("channel joined", (SIGNAL_FUNC) channel_send_autocommands);
+	signal_add__channel_wholist(channel_send_botcommands);
+	signal_add__channel_joined(channel_send_autocommands);
 }
 
 void irc_channels_setup_deinit(void)
 {
-	signal_remove("channel wholist", (SIGNAL_FUNC) channel_send_botcommands);
-	signal_remove("channel joined", (SIGNAL_FUNC) channel_send_autocommands);
+	signal_remove__channel_wholist(channel_send_botcommands);
+	signal_remove__channel_joined(channel_send_autocommands);
 }

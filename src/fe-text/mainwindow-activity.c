@@ -46,12 +46,12 @@ static void sig_activity(WINDOW_REC *window)
 
 void mainwindow_activity_init(void)
 {
-	signal_add_first("window hilight", (SIGNAL_FUNC) sig_activity);
-	signal_add_first("window activity", (SIGNAL_FUNC) sig_activity);
+	signal_add_first__window_hilight(sig_activity);
+	signal_add_first__window_activity(sig_activity);
 }
 
 void mainwindow_activity_deinit(void)
 {
-	signal_remove("window hilight", (SIGNAL_FUNC) sig_activity);
-	signal_remove("window activity", (SIGNAL_FUNC) sig_activity);
+	signal_remove__window_hilight(sig_activity);
+	signal_remove__window_activity(sig_activity);
 }

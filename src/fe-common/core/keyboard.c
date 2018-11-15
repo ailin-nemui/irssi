@@ -979,9 +979,9 @@ void keyboard_init(void)
 	key_bind("nothing", "Do nothing", NULL, NULL, (SIGNAL_FUNC) sig_nothing);
 
 	/* read the keyboard config when all key binds are known */
-	signal_add("irssi init read settings", (SIGNAL_FUNC) read_keyboard_config);
-	signal_add("setup reread", (SIGNAL_FUNC) read_keyboard_config);
-	signal_add("complete command bind", (SIGNAL_FUNC) sig_complete_bind);
+	signal_add__irssi_init_read_settings(read_keyboard_config);
+	signal_add__setup_reread(read_keyboard_config);
+	signal_add__complete_command_("bind", sig_complete_bind);
 
 	command_bind("bind", NULL, (SIGNAL_FUNC) cmd_bind);
 	command_set_options("bind", "delete reset list");
@@ -1003,8 +1003,8 @@ void keyboard_deinit(void)
 			NULL);
 	g_tree_destroy(key_states);
 
-	signal_remove("irssi init read settings", (SIGNAL_FUNC) read_keyboard_config);
-        signal_remove("setup reread", (SIGNAL_FUNC) read_keyboard_config);
-	signal_remove("complete command bind", (SIGNAL_FUNC) sig_complete_bind);
+	signal_remove__irssi_init_read_settings(read_keyboard_config);
+        signal_remove__setup_reread(read_keyboard_config);
+	signal_remove__complete_command_("bind", sig_complete_bind);
 	command_unbind("bind", (SIGNAL_FUNC) cmd_bind);
 }

@@ -400,8 +400,8 @@ void dcc_server_init(void)
 	dcc_register_type("SERVER");
 	command_bind("dcc server", NULL, (SIGNAL_FUNC) cmd_dcc_server);
 	command_bind("dcc close", NULL, (SIGNAL_FUNC) cmd_dcc_close);
-	signal_add("dcc destroyed", (SIGNAL_FUNC) sig_dcc_destroyed);
-	signal_add_first("dcc server message", (SIGNAL_FUNC) dcc_server_msg);
+	signal_add__dcc_destroyed(sig_dcc_destroyed);
+	signal_add_first__dcc_server_message(dcc_server_msg);
 }
 
 void dcc_server_deinit(void)
@@ -409,7 +409,7 @@ void dcc_server_deinit(void)
 	dcc_unregister_type("SERVER");
 	command_unbind("dcc server", (SIGNAL_FUNC) cmd_dcc_server);
 	command_unbind("dcc close", (SIGNAL_FUNC) cmd_dcc_close);
-	signal_remove("dcc destroyed", (SIGNAL_FUNC) sig_dcc_destroyed);
-	signal_remove("dcc server message", (SIGNAL_FUNC) dcc_server_msg);
+	signal_remove__dcc_destroyed(sig_dcc_destroyed);
+	signal_remove__dcc_server_message(dcc_server_msg);
 }
 

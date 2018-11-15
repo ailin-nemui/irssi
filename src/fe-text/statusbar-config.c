@@ -765,8 +765,8 @@ static void cmd_statusbar(const char *data)
 void statusbar_config_init(void)
 {
         read_statusbar_config();
-	signal_add_last("setup reread", (SIGNAL_FUNC) read_statusbar_config);
-	signal_add("theme changed", (SIGNAL_FUNC) read_statusbar_config);
+	signal_add_last__setup_reread(read_statusbar_config);
+	signal_add__theme_changed(read_statusbar_config);
 
 	command_bind("statusbar", NULL, (SIGNAL_FUNC) cmd_statusbar);
 	command_bind("statusbar list", NULL, (SIGNAL_FUNC) cmd_statusbar_list);
@@ -788,8 +788,8 @@ void statusbar_config_init(void)
 
 void statusbar_config_deinit(void)
 {
-	signal_remove("setup reread", (SIGNAL_FUNC) read_statusbar_config);
-	signal_remove("theme changed", (SIGNAL_FUNC) read_statusbar_config);
+	signal_remove__setup_reread(read_statusbar_config);
+	signal_remove__theme_changed(read_statusbar_config);
 
 	command_unbind("statusbar", (SIGNAL_FUNC) cmd_statusbar);
 	command_unbind("statusbar list", (SIGNAL_FUNC) cmd_statusbar_list);

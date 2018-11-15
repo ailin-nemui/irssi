@@ -706,10 +706,10 @@ void expandos_init(void)
 	read_settings();
 
         timer_tag = g_timeout_add(1000, (GSourceFunc) sig_timer, NULL);
-	signal_add("message public", (SIGNAL_FUNC) sig_message_public);
-	signal_add("message private", (SIGNAL_FUNC) sig_message_private);
-	signal_add("message own_private", (SIGNAL_FUNC) sig_message_own_private);
-	signal_add_first("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add__message_public(sig_message_public);
+	signal_add__message_private(sig_message_private);
+	signal_add__message_own__private(sig_message_own_private);
+	signal_add_first__setup_changed(read_settings);
 }
 
 void expandos_deinit(void)
@@ -732,8 +732,8 @@ void expandos_deinit(void)
 	g_free_not_null(timestamp_format);
 
 	g_source_remove(timer_tag);
-	signal_remove("message public", (SIGNAL_FUNC) sig_message_public);
-	signal_remove("message private", (SIGNAL_FUNC) sig_message_private);
-	signal_remove("message own_private", (SIGNAL_FUNC) sig_message_own_private);
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__message_public(sig_message_public);
+	signal_remove__message_private(sig_message_private);
+	signal_remove__message_own__private(sig_message_own_private);
+	signal_remove__setup_changed(read_settings);
 }

@@ -186,7 +186,7 @@ void irc_expandos_init(void)
 
         expando_add_signal("I", "event invite", EXPANDO_ARG_SERVER);
 
-	signal_add("event join", (SIGNAL_FUNC) event_join);
+	signal_add__event_("join", event_join);
 }
 
 void irc_expandos_deinit(void)
@@ -201,5 +201,5 @@ void irc_expandos_deinit(void)
 	expando_destroy("usermode", expando_usermode);
 	expando_destroy("cumode", expando_cumode);
 
-	signal_remove("event join", (SIGNAL_FUNC) event_join);
+	signal_remove__event_("join", event_join);
 }

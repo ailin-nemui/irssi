@@ -69,15 +69,15 @@ static void sig_dcc_list_print(SERVER_DCC_REC *dcc)
 
 void fe_dcc_server_init(void)
 {
-	signal_add("dcc server started", (SIGNAL_FUNC) dcc_server_started);
-	signal_add("dcc closed", (SIGNAL_FUNC) dcc_closed);
-	signal_add("dcc list print", (SIGNAL_FUNC) sig_dcc_list_print);
+	signal_add__dcc_server_started(dcc_server_started);
+	signal_add__dcc_closed(dcc_closed);
+	signal_add__dcc_list_print(sig_dcc_list_print);
 }
 
 void fe_dcc_server_deinit(void)
 {
-	signal_remove("dcc server started", (SIGNAL_FUNC) dcc_server_started);
-	signal_remove("dcc closed", (SIGNAL_FUNC) dcc_closed);
-	signal_remove("dcc list print", (SIGNAL_FUNC) sig_dcc_list_print);
+	signal_remove__dcc_server_started(dcc_server_started);
+	signal_remove__dcc_closed(dcc_closed);
+	signal_remove__dcc_list_print(sig_dcc_list_print);
 }
 

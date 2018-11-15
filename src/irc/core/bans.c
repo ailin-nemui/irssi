@@ -346,7 +346,7 @@ void bans_init(void)
 	command_set_options("unban", "first last");
 
         read_settings();
-        signal_add("setup changed", (SIGNAL_FUNC) read_settings);
+        signal_add__setup_changed(read_settings);
 }
 
 void bans_deinit(void)
@@ -356,5 +356,5 @@ void bans_deinit(void)
 	command_unbind("ban", (SIGNAL_FUNC) cmd_ban);
 	command_unbind("unban", (SIGNAL_FUNC) cmd_unban);
 
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__setup_changed(read_settings);
 }

@@ -55,12 +55,12 @@ void perl_settings_init(void)
 {
 	perl_settings = g_hash_table_new((GHashFunc) g_direct_hash,
 					 (GCompareFunc) g_direct_equal);
-        signal_add("script destroyed", (SIGNAL_FUNC) sig_script_destroyed);
+        signal_add__script_destroyed(sig_script_destroyed);
 }
 
 void perl_settings_deinit(void)
 {
-        signal_remove("script destroyed", (SIGNAL_FUNC) sig_script_destroyed);
+        signal_remove__script_destroyed(sig_script_destroyed);
 
 	g_hash_table_foreach(perl_settings, (GHFunc) perl_settings_free, NULL);
 	g_hash_table_destroy(perl_settings);

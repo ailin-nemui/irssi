@@ -1432,10 +1432,10 @@ void formats_init(void)
 	signal_gui_print_text = signal_get_uniq_id("gui print text");
 
 	read_settings();
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add__setup_changed(read_settings);
 }
 
 void formats_deinit(void)
 {
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__setup_changed(read_settings);
 }

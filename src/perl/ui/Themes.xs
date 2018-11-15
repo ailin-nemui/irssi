@@ -41,12 +41,12 @@ static void sig_script_destroyed(PERL_SCRIPT_REC *script)
 
 void perl_themes_init(void)
 {
-	signal_add("script destroyed", (SIGNAL_FUNC) sig_script_destroyed);
+	signal_add__script_destroyed(sig_script_destroyed);
 }
 
 void perl_themes_deinit(void)
 {
-	signal_remove("script destroyed", (SIGNAL_FUNC) sig_script_destroyed);
+	signal_remove__script_destroyed(sig_script_destroyed);
 }
 
 MODULE = Irssi::UI::Themes  PACKAGE = Irssi

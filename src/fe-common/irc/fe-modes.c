@@ -122,7 +122,7 @@ static int sig_check_modes(void)
 	}
 
 	if (modes == NULL)
-		signal_remove("print starting", (SIGNAL_FUNC) sig_print_starting);
+		signal_remove__print_starting(sig_print_starting);
 	return 1;
 }
 
@@ -132,7 +132,7 @@ static void msg_multi_mode(IRC_CHANNEL_REC *channel, const char *sender,
 	MODE_REC *rec;
 
 	if (modes == NULL)
-		signal_add("print starting", (SIGNAL_FUNC) sig_print_starting);
+		signal_add__print_starting(sig_print_starting);
 
 	rec = mode_find_channel(channel);
 	if (rec != NULL && g_strcmp0(rec->mode, mode) != 0) {
@@ -217,8 +217,8 @@ void fe_modes_init(void)
         mode_tag = -1;
 
 	read_settings();
-	signal_add("message irc mode", (SIGNAL_FUNC) sig_message_mode);
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add__message_irc_mode(sig_message_mode);
+	signal_add__setup_changed(read_settings);
 }
 
 void fe_modes_deinit(void)
@@ -226,8 +226,8 @@ void fe_modes_deinit(void)
 	if (mode_tag != -1)
 		g_source_remove(mode_tag);
 
-	signal_remove("message irc mode", (SIGNAL_FUNC) sig_message_mode);
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__message_irc_mode(sig_message_mode);
+	signal_remove__setup_changed(read_settings);
 
-	signal_remove("print starting", (SIGNAL_FUNC) sig_print_starting);
+	signal_remove__print_starting(sig_print_starting);
 }

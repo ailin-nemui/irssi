@@ -331,16 +331,16 @@ void ctcp_init(void)
 	settings_add_str("misc", "ctcp_userinfo_reply", "$Y");
 	settings_add_int("flood", "max_ctcp_queue", 5);
 
-	signal_add("server disconnected", (SIGNAL_FUNC) sig_disconnected);
-	signal_add_first("event privmsg", (SIGNAL_FUNC) event_privmsg);
-	signal_add_first("event notice", (SIGNAL_FUNC) event_notice);
-	signal_add("ctcp msg", (SIGNAL_FUNC) ctcp_msg);
-	signal_add("ctcp reply", (SIGNAL_FUNC) ctcp_reply);
-	signal_add("ctcp msg ping", (SIGNAL_FUNC) ctcp_ping);
-	signal_add("ctcp msg version", (SIGNAL_FUNC) ctcp_version);
-	signal_add("ctcp msg time", (SIGNAL_FUNC) ctcp_time);
-	signal_add("ctcp msg userinfo", (SIGNAL_FUNC) ctcp_userinfo);
-	signal_add("ctcp msg clientinfo", (SIGNAL_FUNC) ctcp_clientinfo);
+	signal_add__server_disconnected(sig_disconnected);
+	signal_add_first__event_privmsg(event_privmsg);
+	signal_add_first__event_notice(event_notice);
+	signal_add__ctcp_msg(ctcp_msg);
+	signal_add__ctcp_reply(ctcp_reply);
+	signal_add__ctcp_msg_ping(ctcp_ping);
+	signal_add__ctcp_msg_version(ctcp_version);
+	signal_add__ctcp_msg_time(ctcp_time);
+	signal_add__ctcp_msg_userinfo(ctcp_userinfo);
+	signal_add__ctcp_msg_clientinfo(ctcp_clientinfo);
 
         ctcp_register("ping");
         ctcp_register("version");
@@ -354,14 +354,14 @@ void ctcp_deinit(void)
 	while (ctcp_cmds != NULL)
 		ctcp_cmd_destroy(ctcp_cmds->data);
 
-	signal_remove("server disconnected", (SIGNAL_FUNC) sig_disconnected);
-	signal_remove("event privmsg", (SIGNAL_FUNC) event_privmsg);
-	signal_remove("event notice", (SIGNAL_FUNC) event_notice);
-	signal_remove("ctcp msg", (SIGNAL_FUNC) ctcp_msg);
-	signal_remove("ctcp reply", (SIGNAL_FUNC) ctcp_reply);
-	signal_remove("ctcp msg ping", (SIGNAL_FUNC) ctcp_ping);
-	signal_remove("ctcp msg version", (SIGNAL_FUNC) ctcp_version);
-	signal_remove("ctcp msg time", (SIGNAL_FUNC) ctcp_time);
-	signal_remove("ctcp msg userinfo", (SIGNAL_FUNC) ctcp_userinfo);
-	signal_remove("ctcp msg clientinfo", (SIGNAL_FUNC) ctcp_clientinfo);
+	signal_remove__server_disconnected(sig_disconnected);
+	signal_remove__event_("privmsg", event_privmsg);
+	signal_remove__event_("notice", event_notice);
+	signal_remove__ctcp_msg(ctcp_msg);
+	signal_remove__ctcp_reply(ctcp_reply);
+	signal_remove__ctcp_msg_ping(ctcp_ping);
+	signal_remove__ctcp_msg_version(ctcp_version);
+	signal_remove__ctcp_msg_time(ctcp_time);
+	signal_remove__ctcp_msg_userinfo(ctcp_userinfo);
+	signal_remove__ctcp_msg_clientinfo(ctcp_clientinfo);
 }

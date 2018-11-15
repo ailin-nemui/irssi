@@ -61,7 +61,6 @@ static void cmd_script_exec(const char *data)
                 perl_script_unload(script);
 	}
 
-
 	cmd_params_free(free_arg);
 }
 
@@ -266,9 +265,9 @@ void fe_perl_init(void)
 	command_set_options("script exec", "permanent");
 	command_set_options("script reset", "autorun");
 
-        signal_add("script error", (SIGNAL_FUNC) sig_script_error);
-	signal_add("complete command script load", (SIGNAL_FUNC) sig_complete_load);
-	signal_add("complete command script unload", (SIGNAL_FUNC) sig_complete_unload);
+        signal_add__script_error(sig_script_error);
+	signal_add__complete_command_("script load", sig_complete_load);
+	signal_add__complete_command_("script unload", sig_complete_unload);
 
         perl_core_print_script_error(FALSE);
 	module_register("perl", "fe");
@@ -286,9 +285,9 @@ void fe_perl_deinit(void)
 	command_unbind("script list", (SIGNAL_FUNC) cmd_script_list);
 	command_unbind("load", (SIGNAL_FUNC) cmd_load);
 
-        signal_remove("script error", (SIGNAL_FUNC) sig_script_error);
-	signal_remove("complete command script load", (SIGNAL_FUNC) sig_complete_load);
-	signal_remove("complete command script unload", (SIGNAL_FUNC) sig_complete_unload);
+        signal_remove__script_error(sig_script_error);
+	signal_remove__complete_command_("script load", sig_complete_load);
+	signal_remove__complete_command_("script unload", sig_complete_unload);
 
         perl_core_print_script_error(TRUE);
 }

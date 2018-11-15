@@ -698,8 +698,8 @@ void perl_common_start(void)
         use_protocols = NULL;
 	g_slist_foreach(chat_protocols, (GFunc) perl_register_protocol, NULL);
 
-	signal_add("chat protocol created", (SIGNAL_FUNC) perl_register_protocol);
-	signal_add("chat protocol destroyed", (SIGNAL_FUNC) perl_unregister_protocol);
+	signal_add__chat_protocol_created(perl_register_protocol);
+	signal_add__chat_protocol_destroyed(perl_unregister_protocol);
 }
 
 void perl_common_stop(void)
@@ -716,6 +716,6 @@ void perl_common_stop(void)
 	g_slist_free(use_protocols);
         use_protocols = NULL;
 
-	signal_remove("chat protocol created", (SIGNAL_FUNC) perl_register_protocol);
-	signal_remove("chat protocol destroyed", (SIGNAL_FUNC) perl_unregister_protocol);
+	signal_remove__chat_protocol_created(perl_register_protocol);
+	signal_remove__chat_protocol_destroyed(perl_unregister_protocol);
 }

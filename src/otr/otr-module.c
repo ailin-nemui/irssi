@@ -231,9 +231,9 @@ void otr_core_init(void)
 	user_state_global = otr_init_user_state();
 	g_return_if_fail(user_state_global != NULL);
 
-	signal_add_first("server sendmsg", (SIGNAL_FUNC) sig_server_sendmsg);
-	signal_add_first("message private", (SIGNAL_FUNC) sig_message_private);
-	signal_add("query destroyed", (SIGNAL_FUNC) sig_query_destroyed);
+	signal_add_first__server_sendmsg(sig_server_sendmsg);
+	signal_add_first__message_private(sig_message_private);
+	signal_add__query_destroyed(sig_query_destroyed);
 
 	command_bind_first("quit", NULL, (SIGNAL_FUNC) cmd_quit);
 	command_bind_irc_first("me", NULL, (SIGNAL_FUNC) cmd_me);
@@ -246,9 +246,9 @@ void otr_core_init(void)
  */
 void otr_core_deinit(void)
 {
-	signal_remove("server sendmsg", (SIGNAL_FUNC) sig_server_sendmsg);
-	signal_remove("message private", (SIGNAL_FUNC) sig_message_private);
-	signal_remove("query destroyed", (SIGNAL_FUNC) sig_query_destroyed);
+	signal_remove__server_sendmsg(sig_server_sendmsg);
+	signal_remove__message_private(sig_message_private);
+	signal_remove__query_destroyed(sig_query_destroyed);
 
 	otr_fe_deinit();
 

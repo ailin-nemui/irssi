@@ -130,14 +130,14 @@ static void event_banlist(IRC_SERVER_REC *server, const char *data)
 
 void mode_lists_init(void)
 {
-	signal_add("channel destroyed", (SIGNAL_FUNC) channel_destroyed);
+	signal_add__channel_destroyed(channel_destroyed);
 
-	signal_add("chanquery ban", (SIGNAL_FUNC) event_banlist);
+	signal_add__chanquery_ban(event_banlist);
 }
 
 void mode_lists_deinit(void)
 {
-	signal_remove("channel destroyed", (SIGNAL_FUNC) channel_destroyed);
+	signal_remove__channel_destroyed(channel_destroyed);
 
-	signal_remove("chanquery ban", (SIGNAL_FUNC) event_banlist);
+	signal_remove__chanquery_ban(event_banlist);
 }

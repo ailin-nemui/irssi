@@ -144,24 +144,24 @@ static void ctcp_ping_reply(IRC_SERVER_REC *server, const char *data,
 
 void fe_ctcp_init(void)
 {
-	signal_add("default ctcp msg", (SIGNAL_FUNC) ctcp_default_msg);
-	signal_add("ctcp msg ping", (SIGNAL_FUNC) ctcp_ping_msg);
-	signal_add("ctcp msg version", (SIGNAL_FUNC) ctcp_version_msg);
-	signal_add("ctcp msg time", (SIGNAL_FUNC) ctcp_time_msg);
-	signal_add("ctcp msg userinfo", (SIGNAL_FUNC) ctcp_userinfo_msg);
-	signal_add("ctcp msg clientinfo", (SIGNAL_FUNC) ctcp_clientinfo_msg);
-	signal_add("default ctcp reply", (SIGNAL_FUNC) ctcp_default_reply);
-	signal_add("ctcp reply ping", (SIGNAL_FUNC) ctcp_ping_reply);
+	signal_add__default_ctcp_msg(ctcp_default_msg);
+	signal_add__ctcp_msg_ping(ctcp_ping_msg);
+	signal_add__ctcp_msg_version(ctcp_version_msg);
+	signal_add__ctcp_msg_time(ctcp_time_msg);
+	signal_add__ctcp_msg_userinfo(ctcp_userinfo_msg);
+	signal_add__ctcp_msg_clientinfo(ctcp_clientinfo_msg);
+	signal_add__default_ctcp_reply(ctcp_default_reply);
+	signal_add__ctcp_reply_ping(ctcp_ping_reply);
 }
 
 void fe_ctcp_deinit(void)
 {
-	signal_remove("default ctcp msg", (SIGNAL_FUNC) ctcp_default_msg);
-	signal_remove("ctcp msg ping", (SIGNAL_FUNC) ctcp_ping_msg);
-	signal_remove("ctcp msg version", (SIGNAL_FUNC) ctcp_version_msg);
-	signal_remove("ctcp msg time", (SIGNAL_FUNC) ctcp_time_msg);
-	signal_remove("ctcp msg userinfo", (SIGNAL_FUNC) ctcp_userinfo_msg);
-	signal_remove("ctcp msg clientinfo", (SIGNAL_FUNC) ctcp_clientinfo_msg);
-	signal_remove("default ctcp reply", (SIGNAL_FUNC) ctcp_default_reply);
-	signal_remove("ctcp reply ping", (SIGNAL_FUNC) ctcp_ping_reply);
+	signal_remove__default_ctcp_msg(ctcp_default_msg);
+	signal_remove__ctcp_msg_ping(ctcp_ping_msg);
+	signal_remove__ctcp_msg_version(ctcp_version_msg);
+	signal_remove__ctcp_msg_time(ctcp_time_msg);
+	signal_remove__ctcp_msg_userinfo(ctcp_userinfo_msg);
+	signal_remove__ctcp_msg_clientinfo(ctcp_clientinfo_msg);
+	signal_remove__default_ctcp_reply(ctcp_default_reply);
+	signal_remove__ctcp_reply_ping(ctcp_ping_reply);
 }

@@ -512,7 +512,7 @@ void chat_commands_init(void)
 	command_bind("foreach channel", NULL, (SIGNAL_FUNC) cmd_foreach_channel);
 	command_bind("foreach query", NULL, (SIGNAL_FUNC) cmd_foreach_query);
 
-	signal_add("server sendmsg", (SIGNAL_FUNC) sig_server_sendmsg);
+	signal_add__server_sendmsg(sig_server_sendmsg);
 
 	command_set_options("connect", "4 6 !! -network ssl +ssl_cert +ssl_pkey +ssl_pass ssl_verify +ssl_cafile +ssl_capath +ssl_ciphers +ssl_pinned_cert +ssl_pinned_pubkey tls +tls_cert +tls_pkey +tls_pass tls_verify +tls_cafile +tls_capath +tls_ciphers +tls_pinned_cert +tls_pinned_pubkey +host noproxy -rawlog noautosendcmd");
 	command_set_options("msg", "channel nick");
@@ -531,5 +531,5 @@ void chat_commands_deinit(void)
 	command_unbind("foreach channel", (SIGNAL_FUNC) cmd_foreach_channel);
 	command_unbind("foreach query", (SIGNAL_FUNC) cmd_foreach_query);
 
-	signal_remove("server sendmsg", (SIGNAL_FUNC) sig_server_sendmsg);
+	signal_remove__server_sendmsg(sig_server_sendmsg);
 }

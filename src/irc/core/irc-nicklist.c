@@ -472,44 +472,44 @@ static void sig_connected(IRC_SERVER_REC *server)
 
 void irc_nicklist_init(void)
 {
-	signal_add_first("event nick", (SIGNAL_FUNC) event_nick);
-	signal_add_first("event 352", (SIGNAL_FUNC) event_who);
-	signal_add("silent event who", (SIGNAL_FUNC) event_who);
-	signal_add("silent event whois", (SIGNAL_FUNC) event_whois);
-	signal_add_first("event 311", (SIGNAL_FUNC) event_whois);
-	signal_add_first("whois away", (SIGNAL_FUNC) event_whois_away);
-	signal_add_first("whois oper", (SIGNAL_FUNC) event_whois_ircop);
-	signal_add_first("event 306", (SIGNAL_FUNC) event_own_away);
-	signal_add_first("event 305", (SIGNAL_FUNC) event_own_unaway);
-	signal_add_first("event 353", (SIGNAL_FUNC) event_names_list);
-	signal_add_first("event 366", (SIGNAL_FUNC) event_end_of_names);
-	signal_add_first("event 432", (SIGNAL_FUNC) event_nick_invalid);
-	signal_add_first("event 433", (SIGNAL_FUNC) event_nick_in_use);
-	signal_add_first("event 437", (SIGNAL_FUNC) event_target_unavailable);
-	signal_add_first("event 302", (SIGNAL_FUNC) event_userhost);
-	signal_add("userhost event", (SIGNAL_FUNC) event_userhost);
-	signal_add("user mode changed", (SIGNAL_FUNC) sig_usermode);
-	signal_add("server connected", (SIGNAL_FUNC) sig_connected);
+	signal_add_first__event_nick(event_nick);
+	signal_add_first__event_352(event_who);
+	signal_add__silent_event_who(event_who);
+	signal_add__silent_event_whois(event_whois);
+	signal_add_first__event_311(event_whois);
+	signal_add_first__whois_away(event_whois_away);
+	signal_add_first__whois_oper(event_whois_ircop);
+	signal_add_first__event_306(event_own_away);
+	signal_add_first__event_305(event_own_unaway);
+	signal_add_first__event_353(event_names_list);
+	signal_add_first__event_366(event_end_of_names);
+	signal_add_first__event_432(event_nick_invalid);
+	signal_add_first__event_433(event_nick_in_use);
+	signal_add_first__event_437(event_target_unavailable);
+	signal_add_first__event_302(event_userhost);
+	signal_add__userhost_event(event_userhost);
+	signal_add__user_mode_changed(sig_usermode);
+	signal_add__server_connected(sig_connected);
 }
 
 void irc_nicklist_deinit(void)
 {
-	signal_remove("event nick", (SIGNAL_FUNC) event_nick);
-	signal_remove("event 352", (SIGNAL_FUNC) event_who);
-	signal_remove("silent event who", (SIGNAL_FUNC) event_who);
-	signal_remove("silent event whois", (SIGNAL_FUNC) event_whois);
-	signal_remove("event 311", (SIGNAL_FUNC) event_whois);
-	signal_remove("whois away", (SIGNAL_FUNC) event_whois_away);
-	signal_remove("whois oper", (SIGNAL_FUNC) event_whois_ircop);
-	signal_remove("event 306", (SIGNAL_FUNC) event_own_away);
-	signal_remove("event 305", (SIGNAL_FUNC) event_own_unaway);
-	signal_remove("event 353", (SIGNAL_FUNC) event_names_list);
-	signal_remove("event 366", (SIGNAL_FUNC) event_end_of_names);
-	signal_remove("event 432", (SIGNAL_FUNC) event_nick_invalid);
-	signal_remove("event 433", (SIGNAL_FUNC) event_nick_in_use);
-	signal_remove("event 437", (SIGNAL_FUNC) event_target_unavailable);
-	signal_remove("event 302", (SIGNAL_FUNC) event_userhost);
-	signal_remove("userhost event", (SIGNAL_FUNC) event_userhost);
-	signal_remove("user mode changed", (SIGNAL_FUNC) sig_usermode);
-	signal_remove("server connected", (SIGNAL_FUNC) sig_connected);
+	signal_remove__event_("nick", event_nick);
+	signal_remove__event_("352", event_who);
+	signal_remove__silent_event_who(event_who);
+	signal_remove__silent_event_whois(event_whois);
+	signal_remove__event_("311", event_whois);
+	signal_remove__whois_away(event_whois_away);
+	signal_remove__whois_oper(event_whois_ircop);
+	signal_remove__event_("306", event_own_away);
+	signal_remove__event_("305", event_own_unaway);
+	signal_remove__event_("353", event_names_list);
+	signal_remove__event_("366", event_end_of_names);
+	signal_remove__event_("432", event_nick_invalid);
+	signal_remove__event_("433", event_nick_in_use);
+	signal_remove__event_("437", event_target_unavailable);
+	signal_remove__event_("302", event_userhost);
+	signal_remove__userhost_event(event_userhost);
+	signal_remove__user_mode_changed(sig_usermode);
+	signal_remove__server_connected(sig_connected);
 }

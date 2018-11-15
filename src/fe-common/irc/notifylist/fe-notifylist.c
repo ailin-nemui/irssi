@@ -227,9 +227,9 @@ void fe_irc_notifylist_init(void)
 	theme_register(fecommon_irc_notifylist_formats);
 
 	command_bind("notify", NULL, (SIGNAL_FUNC) cmd_notify);
-	signal_add("notifylist joined", (SIGNAL_FUNC) notifylist_joined);
-	signal_add("notifylist left", (SIGNAL_FUNC) notifylist_left);
-	signal_add("notifylist away changed", (SIGNAL_FUNC) notifylist_away);
+	signal_add__notifylist_joined(notifylist_joined);
+	signal_add__notifylist_left(notifylist_left);
+	signal_add__notifylist_away_changed(notifylist_away);
 
 	command_set_options("notify", "list");
 
@@ -242,7 +242,7 @@ void fe_irc_notifylist_deinit(void)
 	theme_unregister();
 
 	command_unbind("notify", (SIGNAL_FUNC) cmd_notify);
-	signal_remove("notifylist joined", (SIGNAL_FUNC) notifylist_joined);
-	signal_remove("notifylist left", (SIGNAL_FUNC) notifylist_left);
-	signal_remove("notifylist away changed", (SIGNAL_FUNC) notifylist_away);
+	signal_remove__notifylist_joined(notifylist_joined);
+	signal_remove__notifylist_left(notifylist_left);
+	signal_remove__notifylist_away_changed(notifylist_away);
 }

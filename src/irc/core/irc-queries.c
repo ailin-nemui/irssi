@@ -105,12 +105,12 @@ static void event_nick(SERVER_REC *server, const char *data,
 
 void irc_queries_init(void)
 {
-	signal_add_last("ctcp action", (SIGNAL_FUNC) ctcp_action);
-	signal_add("event nick", (SIGNAL_FUNC) event_nick);
+	signal_add_last__ctcp_action(ctcp_action);
+	signal_add__event_("nick", event_nick);
 }
 
 void irc_queries_deinit(void)
 {
-	signal_remove("ctcp action", (SIGNAL_FUNC) ctcp_action);
-	signal_remove("event nick", (SIGNAL_FUNC) event_nick);
+	signal_remove__ctcp_action(ctcp_action);
+	signal_remove__event_("nick", event_nick);
 }

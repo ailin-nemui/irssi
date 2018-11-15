@@ -346,10 +346,10 @@ void window_items_init(void)
 	settings_add_bool("lookandfeel", "autocreate_split_windows", FALSE);
 	settings_add_bool("lookandfeel", "autofocus_new_items", TRUE);
 
-	signal_add_last("window item changed", (SIGNAL_FUNC) signal_window_item_changed);
+	signal_add_last__window_item_changed(signal_window_item_changed);
 }
 
 void window_items_deinit(void)
 {
-	signal_remove("window item changed", (SIGNAL_FUNC) signal_window_item_changed);
+	signal_remove__window_item_changed(signal_window_item_changed);
 }

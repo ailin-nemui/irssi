@@ -1463,10 +1463,10 @@ void themes_init(void)
 
 	command_bind("format", NULL, (SIGNAL_FUNC) cmd_format);
 	command_bind("save", NULL, (SIGNAL_FUNC) cmd_save);
-	signal_add("complete command format", (SIGNAL_FUNC) sig_complete_format);
-	signal_add("irssi init finished", (SIGNAL_FUNC) sig_print_errors);
-        signal_add("setup changed", (SIGNAL_FUNC) read_settings);
-	signal_add("setup reread", (SIGNAL_FUNC) themes_reload);
+	signal_add__complete_command_("format", sig_complete_format);
+	signal_add__irssi_init_finished(sig_print_errors);
+        signal_add__setup_changed(read_settings);
+	signal_add__setup_reread(themes_reload);
 
 	command_set_options("format", "delete reset");
 	command_set_options("save", "formats");
@@ -1483,8 +1483,8 @@ void themes_deinit(void)
 
 	command_unbind("format", (SIGNAL_FUNC) cmd_format);
 	command_unbind("save", (SIGNAL_FUNC) cmd_save);
-	signal_remove("complete command format", (SIGNAL_FUNC) sig_complete_format);
-	signal_remove("irssi init finished", (SIGNAL_FUNC) sig_print_errors);
-        signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
-        signal_remove("setup reread", (SIGNAL_FUNC) themes_reload);
+	signal_remove__complete_command_("format", sig_complete_format);
+	signal_remove__irssi_init_finished(sig_print_errors);
+        signal_remove__setup_changed(read_settings);
+        signal_remove__setup_reread(themes_reload);
 }

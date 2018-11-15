@@ -172,7 +172,7 @@ void write_buffer_init(void)
 
 	timeout_tag = -1;
 	read_settings();
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add__setup_changed(read_settings);
         command_bind("flushbuffer", NULL, (SIGNAL_FUNC) cmd_flushbuffer);
 }
 
@@ -187,6 +187,6 @@ void write_buffer_deinit(void)
 	g_slist_foreach(empty_blocks, (GFunc) g_free, NULL);
         g_slist_free(empty_blocks);
 
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__setup_changed(read_settings);
 	command_unbind("flushbuffer",  (SIGNAL_FUNC) cmd_flushbuffer);
 }

@@ -848,13 +848,13 @@ void dcc_chat_init(void)
 	command_bind("mircdcc", NULL, (SIGNAL_FUNC) cmd_mircdcc);
 	command_bind("dcc close", NULL, (SIGNAL_FUNC) cmd_dcc_close);
 	command_bind("whois", NULL, (SIGNAL_FUNC) cmd_whois);
-	signal_add("dcc destroyed", (SIGNAL_FUNC) sig_dcc_destroyed);
-	signal_add("ctcp msg dcc chat", (SIGNAL_FUNC) ctcp_msg_dcc_chat);
-	signal_add_first("dcc chat message", (SIGNAL_FUNC) dcc_chat_msg);
-	signal_add("dcc ctcp dcc", (SIGNAL_FUNC) dcc_ctcp_redirect);
-	signal_add("dcc reply dcc", (SIGNAL_FUNC) dcc_ctcp_reply_redirect);
-	signal_add("ctcp reply dcc reject", (SIGNAL_FUNC) ctcp_reply_dcc_reject);
-	signal_add("event nick", (SIGNAL_FUNC) event_nick);
+	signal_add__dcc_destroyed(sig_dcc_destroyed);
+	signal_add__ctcp_msg_dcc_chat(ctcp_msg_dcc_chat);
+	signal_add_first__dcc_chat_message(dcc_chat_msg);
+	signal_add__dcc_ctcp_dcc(dcc_ctcp_redirect);
+	signal_add__dcc_reply_dcc(dcc_ctcp_reply_redirect);
+	signal_add__ctcp_reply_dcc_reject(ctcp_reply_dcc_reject);
+	signal_add__event_("nick", event_nick);
 }
 
 void dcc_chat_deinit(void)
@@ -868,11 +868,11 @@ void dcc_chat_deinit(void)
 	command_unbind("mircdcc", (SIGNAL_FUNC) cmd_mircdcc);
 	command_unbind("dcc close", (SIGNAL_FUNC) cmd_dcc_close);
 	command_unbind("whois", (SIGNAL_FUNC) cmd_whois);
-	signal_remove("dcc destroyed", (SIGNAL_FUNC) sig_dcc_destroyed);
-	signal_remove("ctcp msg dcc chat", (SIGNAL_FUNC) ctcp_msg_dcc_chat);
-	signal_remove("dcc chat message", (SIGNAL_FUNC) dcc_chat_msg);
-	signal_remove("dcc ctcp dcc", (SIGNAL_FUNC) dcc_ctcp_redirect);
-	signal_remove("dcc reply dcc", (SIGNAL_FUNC) dcc_ctcp_reply_redirect);
-	signal_remove("ctcp reply dcc reject", (SIGNAL_FUNC) ctcp_reply_dcc_reject);
-	signal_remove("event nick", (SIGNAL_FUNC) event_nick);
+	signal_remove__dcc_destroyed(sig_dcc_destroyed);
+	signal_remove__ctcp_msg_dcc_chat(ctcp_msg_dcc_chat);
+	signal_remove__dcc_chat_message(dcc_chat_msg);
+	signal_remove__dcc_ctcp_dcc(dcc_ctcp_redirect);
+	signal_remove__dcc_reply_dcc(dcc_ctcp_reply_redirect);
+	signal_remove__ctcp_reply_dcc_reject(ctcp_reply_dcc_reject);
+	signal_remove__event_("nick", event_nick);
 }

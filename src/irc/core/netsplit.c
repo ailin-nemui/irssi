@@ -420,19 +420,19 @@ static int split_check_old(void)
 void netsplit_init(void)
 {
 	split_tag = g_timeout_add(1000, (GSourceFunc) split_check_old, NULL);
-	signal_add_first("event join", (SIGNAL_FUNC) event_join);
-	signal_add_last("event join", (SIGNAL_FUNC) event_join_last);
-	signal_add_first("event quit", (SIGNAL_FUNC) event_quit);
-	signal_add("event nick", (SIGNAL_FUNC) event_nick);
-	signal_add("server disconnected", (SIGNAL_FUNC) sig_disconnected);
+	signal_add_first__event_join(event_join);
+	signal_add_last__event_join(event_join_last);
+	signal_add_first__event_quit(event_quit);
+	signal_add__event_("nick", event_nick);
+	signal_add__server_disconnected(sig_disconnected);
 }
 
 void netsplit_deinit(void)
 {
 	g_source_remove(split_tag);
-	signal_remove("event join", (SIGNAL_FUNC) event_join);
-	signal_remove("event join", (SIGNAL_FUNC) event_join_last);
-	signal_remove("event quit", (SIGNAL_FUNC) event_quit);
-	signal_remove("event nick", (SIGNAL_FUNC) event_nick);
-	signal_remove("server disconnected", (SIGNAL_FUNC) sig_disconnected);
+	signal_remove__event_("join", event_join);
+	signal_remove__event_("join", event_join_last);
+	signal_remove__event_("quit", event_quit);
+	signal_remove__event_("nick", event_nick);
+	signal_remove__server_disconnected(sig_disconnected);
 }

@@ -288,7 +288,7 @@ static int sig_check_splits(void)
 
 	if (stop) {
 		g_source_remove(split_tag);
-		signal_remove("print starting", (SIGNAL_FUNC) sig_print_starting);
+		signal_remove__print_starting(sig_print_starting);
                 split_tag = -1;
 	}
 	return 1;
@@ -300,7 +300,7 @@ static void sig_netsplit_servers(void)
 		split_tag = g_timeout_add(1000,
 					  (GSourceFunc) sig_check_splits,
 					  NULL);
-		signal_add("print starting", (SIGNAL_FUNC) sig_print_starting);
+		signal_add__print_starting(sig_print_starting);
 	}
 }
 
@@ -372,8 +372,8 @@ void fe_netsplit_init(void)
 	printing_splits = FALSE;
 
 	read_settings();
-	signal_add("netsplit new", (SIGNAL_FUNC) sig_netsplit_servers);
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add__netsplit_new(sig_netsplit_servers);
+	signal_add__setup_changed(read_settings);
 	command_bind_irc("netsplit", NULL, (SIGNAL_FUNC) cmd_netsplit);
 }
 
@@ -381,10 +381,10 @@ void fe_netsplit_deinit(void)
 {
 	if (split_tag != -1) {
 		g_source_remove(split_tag);
-		signal_remove("print starting", (SIGNAL_FUNC) sig_print_starting);
+		signal_remove__print_starting(sig_print_starting);
 	}
 
-	signal_remove("netsplit new", (SIGNAL_FUNC) sig_netsplit_servers);
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__netsplit_new(sig_netsplit_servers);
+	signal_remove__setup_changed(read_settings);
 	command_unbind("netsplit", (SIGNAL_FUNC) cmd_netsplit);
 }

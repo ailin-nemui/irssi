@@ -280,20 +280,20 @@ void massjoin_init(void)
 	massjoin_tag = g_timeout_add(1000, (GSourceFunc) sig_massjoin_timeout, NULL);
 
 	read_settings();
-	signal_add_first("event join", (SIGNAL_FUNC) event_join);
-	signal_add("event part", (SIGNAL_FUNC) event_part);
-	signal_add("event kick", (SIGNAL_FUNC) event_kick);
-	signal_add("event quit", (SIGNAL_FUNC) event_quit);
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add_first__event_join(event_join);
+	signal_add__event_("part", event_part);
+	signal_add__event_("kick", event_kick);
+	signal_add__event_("quit", event_quit);
+	signal_add__setup_changed(read_settings);
 }
 
 void massjoin_deinit(void)
 {
 	g_source_remove(massjoin_tag);
 
-	signal_remove("event join", (SIGNAL_FUNC) event_join);
-	signal_remove("event part", (SIGNAL_FUNC) event_part);
-	signal_remove("event kick", (SIGNAL_FUNC) event_kick);
-	signal_remove("event quit", (SIGNAL_FUNC) event_quit);
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__event_("join", event_join);
+	signal_remove__event_("part", event_part);
+	signal_remove__event_("kick", event_kick);
+	signal_remove__event_("quit", event_quit);
+	signal_remove__setup_changed(read_settings);
 }

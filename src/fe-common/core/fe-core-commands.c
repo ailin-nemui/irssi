@@ -228,18 +228,18 @@ static void event_command(const char *data)
 	if (cmdchar != NULL && (data[1] == '^' ||
 				(data[1] == *cmdchar && data[2] == '^'))
 			    && !command_hide_output++) {
-		signal_add_first("print starting", (SIGNAL_FUNC) sig_stop);
-		signal_add_first("print format", (SIGNAL_FUNC) sig_stop);
-		signal_add_first("print text", (SIGNAL_FUNC) sig_stop);
+		signal_add_first__print_starting(sig_stop);
+		signal_add_first__print_format(sig_stop);
+		signal_add_first__print_text(sig_stop);
 	}
 }
 
 static void event_command_last(const char *data)
 {
 	if (command_hide_output && !--command_hide_output) {
-		signal_remove("print starting", (SIGNAL_FUNC) sig_stop);
-		signal_remove("print format", (SIGNAL_FUNC) sig_stop);
-		signal_remove("print text", (SIGNAL_FUNC) sig_stop);
+		signal_remove__print_starting(sig_stop);
+		signal_remove__print_format(sig_stop);
+		signal_remove__print_text(sig_stop);
 	}
 }
 
@@ -339,11 +339,11 @@ void fe_core_commands_init(void)
 	command_bind("uptime", NULL, (SIGNAL_FUNC) cmd_uptime);
 	command_bind_first("nick", NULL, (SIGNAL_FUNC) cmd_nick);
 
-	signal_add("send command", (SIGNAL_FUNC) event_command);
-	signal_add_last("send command", (SIGNAL_FUNC) event_command_last);
-	signal_add_last("default command", (SIGNAL_FUNC) event_default_command);
-	signal_add("error command", (SIGNAL_FUNC) event_cmderror);
-	signal_add("list subcommands", (SIGNAL_FUNC) event_list_subcommands);
+	signal_add__send_command(event_command);
+	signal_add_last__send_command(event_command_last);
+	signal_add_last__default_command(event_default_command);
+	signal_add__error_command(event_cmderror);
+	signal_add__list_subcommands(event_list_subcommands);
 
 	command_set_options("echo", "current +level +window");
 }
@@ -357,9 +357,9 @@ void fe_core_commands_deinit(void)
 	command_unbind("uptime", (SIGNAL_FUNC) cmd_uptime);
 	command_unbind("nick", (SIGNAL_FUNC) cmd_nick);
 
-	signal_remove("send command", (SIGNAL_FUNC) event_command);
-	signal_remove("send command", (SIGNAL_FUNC) event_command_last);
-	signal_remove("default command", (SIGNAL_FUNC) event_default_command);
-	signal_remove("error command", (SIGNAL_FUNC) event_cmderror);
-	signal_remove("list subcommands", (SIGNAL_FUNC) event_list_subcommands);
+	signal_remove__send_command(event_command);
+	signal_remove__send_command(event_command_last);
+	signal_remove__default_command(event_default_command);
+	signal_remove__error_command(event_cmderror);
+	signal_remove__list_subcommands(event_list_subcommands);
 }

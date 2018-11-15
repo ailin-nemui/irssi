@@ -157,8 +157,8 @@ static void textui_init(void)
 	fe_common_irc_init();
 
 	theme_register(gui_text_formats);
-	signal_add("settings userinfo changed", (SIGNAL_FUNC) sig_settings_userinfo_changed);
-	signal_add_last("gui exit", (SIGNAL_FUNC) sig_exit);
+	signal_add__settings_userinfo_changed(sig_settings_userinfo_changed);
+	signal_add_last__gui_exit(sig_exit);
 }
 
 static void textui_finish_init(void)
@@ -241,8 +241,8 @@ static void textui_deinit(void)
 #endif
 
 	dirty_check(); /* one last time to print any quit messages */
-	signal_remove("settings userinfo changed", (SIGNAL_FUNC) sig_settings_userinfo_changed);
-	signal_remove("gui exit", (SIGNAL_FUNC) sig_exit);
+	signal_remove__settings_userinfo_changed(sig_settings_userinfo_changed);
+	signal_remove__gui_exit(sig_exit);
 
 	lastlog_deinit();
 	statusbar_deinit();

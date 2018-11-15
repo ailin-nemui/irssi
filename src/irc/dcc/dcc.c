@@ -546,15 +546,15 @@ void irc_dcc_init(void)
 	settings_add_time("dcc", "dcc_timeout", "5min");
 	settings_add_str("dcc", "dcc_own_ip", "");
 
-	signal_add("event connected", (SIGNAL_FUNC) sig_connected);
-	signal_add("server disconnected", (SIGNAL_FUNC) sig_server_disconnected);
-	signal_add("server nick changed", (SIGNAL_FUNC) sig_server_nick_changed);
-	signal_add("ctcp msg", (SIGNAL_FUNC) ctcp_msg);
-	signal_add("ctcp reply", (SIGNAL_FUNC) ctcp_reply);
-	signal_add("ctcp msg dcc", (SIGNAL_FUNC) ctcp_msg_dcc);
-	signal_add("ctcp reply dcc", (SIGNAL_FUNC) ctcp_reply_dcc);
-	signal_add("ctcp reply dcc reject", (SIGNAL_FUNC) ctcp_reply_dcc_reject);
-	signal_add("event 401", (SIGNAL_FUNC) event_no_such_nick);
+	signal_add__event_("connected", sig_connected);
+	signal_add__server_disconnected(sig_server_disconnected);
+	signal_add__server_nick_changed(sig_server_nick_changed);
+	signal_add__ctcp_msg(ctcp_msg);
+	signal_add__ctcp_reply(ctcp_reply);
+	signal_add__ctcp_msg_dcc(ctcp_msg_dcc);
+	signal_add__ctcp_reply_dcc(ctcp_reply_dcc);
+	signal_add__ctcp_reply_dcc_reject(ctcp_reply_dcc_reject);
+	signal_add__event_("401", event_no_such_nick);
 	command_bind("dcc", NULL, (SIGNAL_FUNC) cmd_dcc);
 	command_bind("dcc close", NULL, (SIGNAL_FUNC) cmd_dcc_close);
 
@@ -581,15 +581,15 @@ void irc_dcc_deinit(void)
 	dcc_autoget_deinit();
 	dcc_server_deinit();
 
-	signal_remove("event connected", (SIGNAL_FUNC) sig_connected);
-	signal_remove("server disconnected", (SIGNAL_FUNC) sig_server_disconnected);
-	signal_remove("server nick changed", (SIGNAL_FUNC) sig_server_nick_changed);
-	signal_remove("ctcp msg", (SIGNAL_FUNC) ctcp_msg);
-	signal_remove("ctcp reply", (SIGNAL_FUNC) ctcp_reply);
-	signal_remove("ctcp msg dcc", (SIGNAL_FUNC) ctcp_msg_dcc);
-	signal_remove("ctcp reply dcc", (SIGNAL_FUNC) ctcp_reply_dcc);
-	signal_remove("ctcp reply dcc reject", (SIGNAL_FUNC) ctcp_reply_dcc_reject);
-	signal_remove("event 401", (SIGNAL_FUNC) event_no_such_nick);
+	signal_remove__event_("connected", sig_connected);
+	signal_remove__server_disconnected(sig_server_disconnected);
+	signal_remove__server_nick_changed(sig_server_nick_changed);
+	signal_remove__ctcp_msg(ctcp_msg);
+	signal_remove__ctcp_reply(ctcp_reply);
+	signal_remove__ctcp_msg_dcc(ctcp_msg_dcc);
+	signal_remove__ctcp_reply_dcc(ctcp_reply_dcc);
+	signal_remove__ctcp_reply_dcc_reject(ctcp_reply_dcc_reject);
+	signal_remove__event_("401", event_no_such_nick);
 	command_unbind("dcc", (SIGNAL_FUNC) cmd_dcc);
 	command_unbind("dcc close", (SIGNAL_FUNC) cmd_dcc_close);
 

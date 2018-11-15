@@ -1883,7 +1883,7 @@ void mainwindows_init(void)
 	command_bind("window rsize", NULL, (SIGNAL_FUNC) cmd_window_rsize);
 	command_bind("window rbalance", NULL, (SIGNAL_FUNC) cmd_window_rbalance);
 	command_bind("window rshow", NULL, (SIGNAL_FUNC) cmd_window_rshow);
-	signal_add("window print info", (SIGNAL_FUNC) sig_window_print_info);
+	signal_add__window_print_info(sig_window_print_info);
 }
 
 void mainwindows_deinit(void)
@@ -1918,5 +1918,5 @@ void mainwindows_deinit(void)
 	command_unbind("window rsize", (SIGNAL_FUNC) cmd_window_rsize);
 	command_unbind("window rbalance", (SIGNAL_FUNC) cmd_window_rbalance);
 	command_unbind("window rshow", (SIGNAL_FUNC) cmd_window_rshow);
-	signal_remove("window print info", (SIGNAL_FUNC) sig_window_print_info);
+	signal_remove__window_print_info(sig_window_print_info);
 }

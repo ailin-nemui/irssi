@@ -160,12 +160,10 @@ static void cmd_join(const char *data, SERVER_REC *server)
 			pdata = server->last_invite;
 		}
 		if (samewindow)
-			signal_add("channel created",
-				   (SIGNAL_FUNC) signal_channel_created_curwin);
+			signal_add__channel_created(signal_channel_created_curwin);
 		server->channels_join(server, pdata, FALSE);
 		if (samewindow)
-			signal_remove("channel created",
-				      (SIGNAL_FUNC) signal_channel_created_curwin);
+			signal_remove__channel_created(signal_channel_created_curwin);
 	}
 	cmd_params_free(free_arg);
 }
@@ -629,11 +627,11 @@ void fe_channels_init(void)
 	settings_add_int("lookandfeel", "names_max_columns", 6);
 	settings_add_int("lookandfeel", "names_max_width", 0);
 
-	signal_add("channel created", (SIGNAL_FUNC) signal_channel_created);
-	signal_add("channel destroyed", (SIGNAL_FUNC) signal_channel_destroyed);
-	signal_add_last("window item changed", (SIGNAL_FUNC) signal_window_item_changed);
-	signal_add_last("server disconnected", (SIGNAL_FUNC) sig_disconnected);
-	signal_add_last("channel joined", (SIGNAL_FUNC) sig_channel_joined);
+	signal_add__channel_created(signal_channel_created);
+	signal_add__channel_destroyed(signal_channel_destroyed);
+	signal_add_last__window_item_changed(signal_window_item_changed);
+	signal_add_last__server_disconnected(sig_disconnected);
+	signal_add_last__channel_joined(sig_channel_joined);
 
 	command_bind("join", NULL, (SIGNAL_FUNC) cmd_join);
 	command_bind("channel", NULL, (SIGNAL_FUNC) cmd_channel);
@@ -652,11 +650,11 @@ void fe_channels_init(void)
 
 void fe_channels_deinit(void)
 {
-	signal_remove("channel created", (SIGNAL_FUNC) signal_channel_created);
-	signal_remove("channel destroyed", (SIGNAL_FUNC) signal_channel_destroyed);
-	signal_remove("window item changed", (SIGNAL_FUNC) signal_window_item_changed);
-	signal_remove("server disconnected", (SIGNAL_FUNC) sig_disconnected);
-	signal_remove("channel joined", (SIGNAL_FUNC) sig_channel_joined);
+	signal_remove__channel_created(signal_channel_created);
+	signal_remove__channel_destroyed(signal_channel_destroyed);
+	signal_remove__window_item_changed(signal_window_item_changed);
+	signal_remove__server_disconnected(sig_disconnected);
+	signal_remove__channel_joined(sig_channel_joined);
 
 	command_unbind("join", (SIGNAL_FUNC) cmd_join);
 	command_unbind("channel", (SIGNAL_FUNC) cmd_channel);

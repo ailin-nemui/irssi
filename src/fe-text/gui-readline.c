@@ -1327,10 +1327,10 @@ void gui_readline_init(void)
 
         key_configure_thaw();
 
-	signal_add("window changed automatic", (SIGNAL_FUNC) sig_window_auto_changed);
-	signal_add("gui entry redirect", (SIGNAL_FUNC) sig_gui_entry_redirect);
-	signal_add("gui key pressed", (SIGNAL_FUNC) sig_gui_key_pressed);
-	signal_add("setup changed", (SIGNAL_FUNC) setup_changed);
+	signal_add__window_changed_automatic(sig_window_auto_changed);
+	signal_add__gui_entry_redirect(sig_gui_entry_redirect);
+	signal_add__gui_key_pressed(sig_gui_key_pressed);
+	signal_add__setup_changed(setup_changed);
 }
 
 void gui_readline_deinit(void)
@@ -1407,8 +1407,8 @@ void gui_readline_deinit(void)
 
         key_configure_thaw();
 
-	signal_remove("window changed automatic", (SIGNAL_FUNC) sig_window_auto_changed);
-	signal_remove("gui entry redirect", (SIGNAL_FUNC) sig_gui_entry_redirect);
-	signal_remove("gui key pressed", (SIGNAL_FUNC) sig_gui_key_pressed);
-	signal_remove("setup changed", (SIGNAL_FUNC) setup_changed);
+	signal_remove__window_changed_automatic(sig_window_auto_changed);
+	signal_remove__gui_entry_redirect(sig_gui_entry_redirect);
+	signal_remove__gui_key_pressed(sig_gui_key_pressed);
+	signal_remove__setup_changed(setup_changed);
 }

@@ -518,14 +518,14 @@ void printtext_init(void)
 	signal_print_format = signal_get_uniq_id("print format");
 
 	read_settings();
-	signal_add("print text", (SIGNAL_FUNC) sig_print_text);
-	signal_add("gui dialog", (SIGNAL_FUNC) sig_gui_dialog);
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add__print_text(sig_print_text);
+	signal_add__gui_dialog(sig_gui_dialog);
+	signal_add__setup_changed(read_settings);
 }
 
 void printtext_deinit(void)
 {
-	signal_remove("print text", (SIGNAL_FUNC) sig_print_text);
-	signal_remove("gui dialog", (SIGNAL_FUNC) sig_gui_dialog);
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__print_text(sig_print_text);
+	signal_remove__gui_dialog(sig_gui_dialog);
+	signal_remove__setup_changed(read_settings);
 }

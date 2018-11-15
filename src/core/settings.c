@@ -884,9 +884,9 @@ void settings_init(void)
 	settings_add_bool("misc", "settings_autosave", TRUE);
 	timeout_tag = g_timeout_add(SETTINGS_AUTOSAVE_TIMEOUT,
 				    (GSourceFunc) sig_autosave, NULL);
-	signal_add("irssi init finished", (SIGNAL_FUNC) sig_init_finished);
-	signal_add("irssi init userinfo changed", (SIGNAL_FUNC) sig_init_userinfo_changed);
-	signal_add("gui exit", (SIGNAL_FUNC) sig_autosave);
+	signal_add__irssi_init_finished(sig_init_finished);
+	signal_add__irssi_init_userinfo_changed(sig_init_userinfo_changed);
+	signal_add__gui_exit(sig_autosave);
 }
 
 static void settings_hash_free(const char *key, SETTINGS_REC *rec)
@@ -897,9 +897,9 @@ static void settings_hash_free(const char *key, SETTINGS_REC *rec)
 void settings_deinit(void)
 {
         g_source_remove(timeout_tag);
-	signal_remove("irssi init finished", (SIGNAL_FUNC) sig_init_finished);
-	signal_remove("irssi init userinfo changed", (SIGNAL_FUNC) sig_init_userinfo_changed);
-	signal_remove("gui exit", (SIGNAL_FUNC) sig_autosave);
+	signal_remove__irssi_init_finished(sig_init_finished);
+	signal_remove__irssi_init_userinfo_changed(sig_init_userinfo_changed);
+	signal_remove__gui_exit(sig_autosave);
 
 	g_slist_foreach(last_invalid_modules, (GFunc) g_free, NULL);
 	g_slist_free(last_invalid_modules);

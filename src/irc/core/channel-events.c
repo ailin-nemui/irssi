@@ -368,30 +368,30 @@ void channel_events_init(void)
 {
 	settings_add_bool("misc", "join_auto_chans_on_invite", TRUE);
 
-	signal_add_last("server event", (SIGNAL_FUNC) irc_server_event);
-	signal_add_first("event 403", (SIGNAL_FUNC) event_no_such_channel); /* no such channel */
-	signal_add_first("event 407", (SIGNAL_FUNC) event_duplicate_channel); /* duplicate channel */
+	signal_add_last__server_event(irc_server_event);
+	signal_add_first__event_403(event_no_such_channel); /* no such channel */
+	signal_add_first__event_407(event_duplicate_channel); /* duplicate channel */
 
-	signal_add("event topic", (SIGNAL_FUNC) event_topic);
-	signal_add_first("event join", (SIGNAL_FUNC) event_join);
-	signal_add("event part", (SIGNAL_FUNC) event_part);
-	signal_add("event kick", (SIGNAL_FUNC) event_kick);
-	signal_add("event invite", (SIGNAL_FUNC) event_invite);
-	signal_add("event 332", (SIGNAL_FUNC) event_topic_get);
-	signal_add("event 333", (SIGNAL_FUNC) event_topic_info);
+	signal_add__event_("topic", event_topic);
+	signal_add_first__event_join(event_join);
+	signal_add__event_("part", event_part);
+	signal_add__event_("kick", event_kick);
+	signal_add__event_("invite", event_invite);
+	signal_add__event_("332", event_topic_get);
+	signal_add__event_("333", event_topic_info);
 }
 
 void channel_events_deinit(void)
 {
-	signal_remove("server event", (SIGNAL_FUNC) irc_server_event);
-	signal_remove("event 403", (SIGNAL_FUNC) event_no_such_channel); /* no such channel */
-	signal_remove("event 407", (SIGNAL_FUNC) event_duplicate_channel); /* duplicate channel */
+	signal_remove__server_event(irc_server_event);
+	signal_remove__event_("403", event_no_such_channel); /* no such channel */
+	signal_remove__event_("407", event_duplicate_channel); /* duplicate channel */
 
-	signal_remove("event topic", (SIGNAL_FUNC) event_topic);
-	signal_remove("event join", (SIGNAL_FUNC) event_join);
-	signal_remove("event part", (SIGNAL_FUNC) event_part);
-	signal_remove("event kick", (SIGNAL_FUNC) event_kick);
-	signal_remove("event invite", (SIGNAL_FUNC) event_invite);
-	signal_remove("event 332", (SIGNAL_FUNC) event_topic_get);
-	signal_remove("event 333", (SIGNAL_FUNC) event_topic_info);
+	signal_remove__event_("topic", event_topic);
+	signal_remove__event_("join", event_join);
+	signal_remove__event_("part", event_part);
+	signal_remove__event_("kick", event_kick);
+	signal_remove__event_("invite", event_invite);
+	signal_remove__event_("332", event_topic_get);
+	signal_remove__event_("333", event_topic_info);
 }

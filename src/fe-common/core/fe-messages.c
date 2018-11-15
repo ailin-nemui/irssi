@@ -694,24 +694,24 @@ void fe_messages_init(void)
 	settings_add_bool("lookandfeel", "show_quit_once", FALSE);
 	settings_add_bool("lookandfeel", "show_own_nickchange_once", FALSE);
 
-	signal_add_last("message public", (SIGNAL_FUNC) sig_message_public);
-	signal_add_last("message private", (SIGNAL_FUNC) sig_message_private);
-	signal_add_last("message own_public", (SIGNAL_FUNC) sig_message_own_public);
-	signal_add_last("message own_private", (SIGNAL_FUNC) sig_message_own_private);
-	signal_add_last("message join", (SIGNAL_FUNC) sig_message_join);
-	signal_add_last("message part", (SIGNAL_FUNC) sig_message_part);
-	signal_add_last("message quit", (SIGNAL_FUNC) sig_message_quit);
-	signal_add_last("message kick", (SIGNAL_FUNC) sig_message_kick);
-	signal_add_last("message nick", (SIGNAL_FUNC) sig_message_nick);
-	signal_add_last("message own_nick", (SIGNAL_FUNC) sig_message_own_nick);
-	signal_add_last("message invite", (SIGNAL_FUNC) sig_message_invite);
-	signal_add_last("message topic", (SIGNAL_FUNC) sig_message_topic);
+	signal_add_last__message_public(sig_message_public);
+	signal_add_last__message_private(sig_message_private);
+	signal_add_last__message_own__public(sig_message_own_public);
+	signal_add_last__message_own__private(sig_message_own_private);
+	signal_add_last__message_join(sig_message_join);
+	signal_add_last__message_part(sig_message_part);
+	signal_add_last__message_quit(sig_message_quit);
+	signal_add_last__message_kick(sig_message_kick);
+	signal_add_last__message_nick(sig_message_nick);
+	signal_add_last__message_own__nick(sig_message_own_nick);
+	signal_add_last__message_invite(sig_message_invite);
+	signal_add_last__message_topic(sig_message_topic);
 
-	signal_add("nicklist new", (SIGNAL_FUNC) sig_nicklist_new);
-	signal_add("nicklist remove", (SIGNAL_FUNC) sig_nicklist_remove);
-	signal_add("nicklist changed", (SIGNAL_FUNC) sig_nicklist_changed);
-	signal_add("nicklist host changed", (SIGNAL_FUNC) sig_nicklist_new);
-	signal_add("channel joined", (SIGNAL_FUNC) sig_channel_joined);
+	signal_add__nicklist_new(sig_nicklist_new);
+	signal_add__nicklist_remove(sig_nicklist_remove);
+	signal_add__nicklist_changed(sig_nicklist_changed);
+	signal_add__nicklist_host_changed(sig_nicklist_new);
+	signal_add__channel_joined(sig_channel_joined);
 }
 
 void fe_messages_deinit(void)
@@ -719,22 +719,22 @@ void fe_messages_deinit(void)
         g_hash_table_foreach(printnicks, (GHFunc) g_hash_free_value, NULL);
 	g_hash_table_destroy(printnicks);
 
-	signal_remove("message public", (SIGNAL_FUNC) sig_message_public);
-	signal_remove("message private", (SIGNAL_FUNC) sig_message_private);
-	signal_remove("message own_public", (SIGNAL_FUNC) sig_message_own_public);
-	signal_remove("message own_private", (SIGNAL_FUNC) sig_message_own_private);
-	signal_remove("message join", (SIGNAL_FUNC) sig_message_join);
-	signal_remove("message part", (SIGNAL_FUNC) sig_message_part);
-	signal_remove("message quit", (SIGNAL_FUNC) sig_message_quit);
-	signal_remove("message kick", (SIGNAL_FUNC) sig_message_kick);
-	signal_remove("message nick", (SIGNAL_FUNC) sig_message_nick);
-	signal_remove("message own_nick", (SIGNAL_FUNC) sig_message_own_nick);
-	signal_remove("message invite", (SIGNAL_FUNC) sig_message_invite);
-	signal_remove("message topic", (SIGNAL_FUNC) sig_message_topic);
+	signal_remove__message_public(sig_message_public);
+	signal_remove__message_private(sig_message_private);
+	signal_remove__message_own__public(sig_message_own_public);
+	signal_remove__message_own__private(sig_message_own_private);
+	signal_remove__message_join(sig_message_join);
+	signal_remove__message_part(sig_message_part);
+	signal_remove__message_quit(sig_message_quit);
+	signal_remove__message_kick(sig_message_kick);
+	signal_remove__message_nick(sig_message_nick);
+	signal_remove__message_own__nick(sig_message_own_nick);
+	signal_remove__message_invite(sig_message_invite);
+	signal_remove__message_topic(sig_message_topic);
 
-	signal_remove("nicklist new", (SIGNAL_FUNC) sig_nicklist_new);
-	signal_remove("nicklist remove", (SIGNAL_FUNC) sig_nicklist_remove);
-	signal_remove("nicklist changed", (SIGNAL_FUNC) sig_nicklist_changed);
-	signal_remove("nicklist host changed", (SIGNAL_FUNC) sig_nicklist_new);
-	signal_remove("channel joined", (SIGNAL_FUNC) sig_channel_joined);
+	signal_remove__nicklist_new(sig_nicklist_new);
+	signal_remove__nicklist_remove(sig_nicklist_remove);
+	signal_remove__nicklist_changed(sig_nicklist_changed);
+	signal_remove__nicklist_host_changed(sig_nicklist_new);
+	signal_remove__channel_joined(sig_channel_joined);
 }

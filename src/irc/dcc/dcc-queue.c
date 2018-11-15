@@ -63,7 +63,6 @@ int dcc_queue_old(const char *nick, const char *servertag)
 	return -1;
 }
 
-
 int dcc_queue_new(void)
 {
 	int i;
@@ -211,7 +210,7 @@ void dcc_queue_init(void)
 {
 	queuelist = g_ptr_array_new();
 
-	signal_add("dcc destroyed", (SIGNAL_FUNC) sig_dcc_destroyed);
+	signal_add__dcc_destroyed(sig_dcc_destroyed);
 }
 
 void dcc_queue_deinit(void)
@@ -223,5 +222,5 @@ void dcc_queue_deinit(void)
 
 	g_ptr_array_free(queuelist, TRUE);
 
-	signal_remove("dcc destroyed", (SIGNAL_FUNC) sig_dcc_destroyed);
+	signal_remove__dcc_destroyed(sig_dcc_destroyed);
 }

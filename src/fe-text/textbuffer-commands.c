@@ -417,9 +417,9 @@ void textbuffer_commands_init(void)
 	command_set_options("scrollback levelclear", "all -level");
 
 	read_settings();
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
-	signal_add("away mode changed", (SIGNAL_FUNC) sig_away_changed);
-	signal_add("window hilight check", (SIGNAL_FUNC) sig_window_hilight_check);
+	signal_add__setup_changed(read_settings);
+	signal_add__away_mode_changed(sig_away_changed);
+	signal_add__window_hilight_check(sig_window_hilight_check);
 }
 
 void textbuffer_commands_deinit(void)
@@ -435,7 +435,7 @@ void textbuffer_commands_deinit(void)
 	command_unbind("scrollback end", (SIGNAL_FUNC) cmd_scrollback_end);
 	command_unbind("scrollback status", (SIGNAL_FUNC) cmd_scrollback_status);
 
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
-	signal_remove("away mode changed", (SIGNAL_FUNC) sig_away_changed);
-	signal_remove("window hilight check", (SIGNAL_FUNC) sig_window_hilight_check);
+	signal_remove__setup_changed(read_settings);
+	signal_remove__away_mode_changed(sig_away_changed);
+	signal_remove__window_hilight_check(sig_window_hilight_check);
 }

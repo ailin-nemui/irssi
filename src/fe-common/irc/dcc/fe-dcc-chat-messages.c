@@ -145,20 +145,20 @@ static void sig_message_dcc_ctcp(CHAT_DCC_REC *dcc, const char *cmd,
 
 void fe_dcc_chat_messages_init(void)
 {
-        signal_add("message dcc own", (SIGNAL_FUNC) sig_message_dcc_own);
-        signal_add("message dcc own_action", (SIGNAL_FUNC) sig_message_dcc_own_action);
-        signal_add("message dcc own_ctcp", (SIGNAL_FUNC) sig_message_dcc_own_ctcp);
-        signal_add("message dcc", (SIGNAL_FUNC) sig_message_dcc);
-        signal_add("message dcc action", (SIGNAL_FUNC) sig_message_dcc_action);
-        signal_add("message dcc ctcp", (SIGNAL_FUNC) sig_message_dcc_ctcp);
+        signal_add__message_dcc_own(sig_message_dcc_own);
+        signal_add__message_dcc_own__action(sig_message_dcc_own_action);
+        signal_add__message_dcc_own__ctcp(sig_message_dcc_own_ctcp);
+        signal_add__message_dcc(sig_message_dcc);
+        signal_add__message_dcc_action(sig_message_dcc_action);
+        signal_add__message_dcc_ctcp(sig_message_dcc_ctcp);
 }
 
 void fe_dcc_chat_messages_deinit(void)
 {
-        signal_remove("message dcc own", (SIGNAL_FUNC) sig_message_dcc_own);
-        signal_remove("message dcc own_action", (SIGNAL_FUNC) sig_message_dcc_own_action);
-        signal_remove("message dcc own_ctcp", (SIGNAL_FUNC) sig_message_dcc_own_ctcp);
-        signal_remove("message dcc", (SIGNAL_FUNC) sig_message_dcc);
-        signal_remove("message dcc action", (SIGNAL_FUNC) sig_message_dcc_action);
-        signal_remove("message dcc ctcp", (SIGNAL_FUNC) sig_message_dcc_ctcp);
+        signal_remove__message_dcc_own(sig_message_dcc_own);
+        signal_remove__message_dcc_own__action(sig_message_dcc_own_action);
+        signal_remove__message_dcc_own__ctcp(sig_message_dcc_own_ctcp);
+        signal_remove__message_dcc(sig_message_dcc);
+        signal_remove__message_dcc_action(sig_message_dcc_action);
+        signal_remove__message_dcc_ctcp(sig_message_dcc_ctcp);
 }

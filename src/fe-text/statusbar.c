@@ -494,9 +494,9 @@ STATUSBAR_REC *statusbar_create(STATUSBAR_GROUP_REC *group,
 	bar->dirty = TRUE;
         bar->dirty_xpos = 0;
 
-        signal_remove("terminal resized", (SIGNAL_FUNC) sig_terminal_resized);
-	signal_remove("mainwindow resized", (SIGNAL_FUNC) sig_mainwindow_resized);
-	signal_remove("mainwindow moved", (SIGNAL_FUNC) sig_mainwindow_resized);
+        signal_remove__terminal_resized(sig_terminal_resized);
+	signal_remove__mainwindow_resized(sig_mainwindow_resized);
+	signal_remove__mainwindow_moved(sig_mainwindow_resized);
 
 	if (config->type == STATUSBAR_TYPE_ROOT) {
 		/* top/bottom of the screen */
@@ -515,9 +515,9 @@ STATUSBAR_REC *statusbar_create(STATUSBAR_GROUP_REC *group,
 			parent_window->active->theme : current_theme;
 	}
 
-        signal_add("terminal resized", (SIGNAL_FUNC) sig_terminal_resized);
-	signal_add("mainwindow resized", (SIGNAL_FUNC) sig_mainwindow_resized);
-	signal_add("mainwindow moved", (SIGNAL_FUNC) sig_mainwindow_resized);
+        signal_add__terminal_resized(sig_terminal_resized);
+	signal_add__mainwindow_resized(sig_mainwindow_resized);
+	signal_add__mainwindow_moved(sig_mainwindow_resized);
 
         /* get background color from sb_background abstract */
         name = g_strdup_printf("{sb_%s_bg}", config->name);
@@ -1154,12 +1154,12 @@ void statusbar_init(void)
 	named_sbar_items = g_hash_table_new((GHashFunc) g_str_hash,
 					    (GCompareFunc) g_str_equal);
 
-        signal_add("terminal resized", (SIGNAL_FUNC) sig_terminal_resized);
-	signal_add("mainwindow resized", (SIGNAL_FUNC) sig_mainwindow_resized);
-	signal_add("mainwindow moved", (SIGNAL_FUNC) sig_mainwindow_resized);
-	signal_add("gui window created", (SIGNAL_FUNC) sig_gui_window_created);
-	signal_add("window changed", (SIGNAL_FUNC) sig_window_changed);
-	signal_add("mainwindow destroyed", (SIGNAL_FUNC) sig_mainwindow_destroyed);
+        signal_add__terminal_resized(sig_terminal_resized);
+	signal_add__mainwindow_resized(sig_mainwindow_resized);
+	signal_add__mainwindow_moved(sig_mainwindow_resized);
+	signal_add__gui_window_created(sig_gui_window_created);
+	signal_add__window_changed(sig_window_changed);
+	signal_add__mainwindow_destroyed(sig_mainwindow_destroyed);
 
 	statusbar_items_init();
 	statusbar_config_init(); /* signals need to be before this call */
@@ -1185,12 +1185,12 @@ void statusbar_deinit(void)
 	g_hash_table_destroy(sbar_item_signals);
 	g_hash_table_destroy(named_sbar_items);
 
-        signal_remove("terminal resized", (SIGNAL_FUNC) sig_terminal_resized);
-	signal_remove("mainwindow resized", (SIGNAL_FUNC) sig_mainwindow_resized);
-	signal_remove("mainwindow moved", (SIGNAL_FUNC) sig_mainwindow_resized);
-	signal_remove("gui window created", (SIGNAL_FUNC) sig_gui_window_created);
-	signal_remove("window changed", (SIGNAL_FUNC) sig_window_changed);
-	signal_remove("mainwindow destroyed", (SIGNAL_FUNC) sig_mainwindow_destroyed);
+        signal_remove__terminal_resized(sig_terminal_resized);
+	signal_remove__mainwindow_resized(sig_mainwindow_resized);
+	signal_remove__mainwindow_moved(sig_mainwindow_resized);
+	signal_remove__gui_window_created(sig_gui_window_created);
+	signal_remove__window_changed(sig_window_changed);
+	signal_remove__mainwindow_destroyed(sig_mainwindow_destroyed);
 
 	statusbar_items_deinit();
 	statusbar_config_deinit();

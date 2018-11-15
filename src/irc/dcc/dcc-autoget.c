@@ -90,10 +90,10 @@ void dcc_autoget_init(void)
 	settings_add_size("dcc", "dcc_autoget_max_size", "0k");
 	settings_add_str("dcc", "dcc_autoget_masks", "");
 
-	signal_add_last("dcc request", (SIGNAL_FUNC) sig_dcc_request);
+	signal_add_last__dcc_request(sig_dcc_request);
 }
 
 void dcc_autoget_deinit(void)
 {
-	signal_remove("dcc request", (SIGNAL_FUNC) sig_dcc_request);
+	signal_remove__dcc_request(sig_dcc_request);
 }

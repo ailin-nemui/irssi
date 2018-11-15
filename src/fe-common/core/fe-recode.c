@@ -196,7 +196,7 @@ void fe_recode_init (void)
 	command_bind("recode", NULL, (SIGNAL_FUNC) fe_recode_cmd);
 	command_bind("recode add", NULL, (SIGNAL_FUNC) fe_recode_add_cmd);
 	command_bind("recode remove", NULL, (SIGNAL_FUNC) fe_recode_remove_cmd);
-	signal_add_first("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add_first__setup_changed(read_settings);
 	read_settings();
 }
 
@@ -205,5 +205,5 @@ void fe_recode_deinit (void)
 	command_unbind("recode", (SIGNAL_FUNC) fe_recode_cmd);
 	command_unbind("recode add", (SIGNAL_FUNC) fe_recode_add_cmd);
 	command_unbind("recode remove", (SIGNAL_FUNC) fe_recode_remove_cmd);
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__setup_changed(read_settings);
 }

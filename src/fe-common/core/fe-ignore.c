@@ -286,9 +286,9 @@ void fe_ignore_init(void)
 	command_bind("ignore", NULL, (SIGNAL_FUNC) cmd_ignore);
 	command_bind("unignore", NULL, (SIGNAL_FUNC) cmd_unignore);
 
-	signal_add("ignore destroyed", (SIGNAL_FUNC) sig_ignore_destroyed);
-	signal_add("ignore created", (SIGNAL_FUNC) sig_ignore_created);
-	signal_add("ignore changed", (SIGNAL_FUNC) sig_ignore_created);
+	signal_add__ignore_destroyed(sig_ignore_destroyed);
+	signal_add__ignore_created(sig_ignore_created);
+	signal_add__ignore_changed(sig_ignore_created);
 
 	command_set_options("ignore", "regexp full except replies -network -ircnet -time -pattern -channels");
 }
@@ -298,7 +298,7 @@ void fe_ignore_deinit(void)
 	command_unbind("ignore", (SIGNAL_FUNC) cmd_ignore);
 	command_unbind("unignore", (SIGNAL_FUNC) cmd_unignore);
 
-	signal_remove("ignore destroyed", (SIGNAL_FUNC) sig_ignore_destroyed);
-	signal_remove("ignore created", (SIGNAL_FUNC) sig_ignore_created);
-	signal_remove("ignore changed", (SIGNAL_FUNC) sig_ignore_created);
+	signal_remove__ignore_destroyed(sig_ignore_destroyed);
+	signal_remove__ignore_created(sig_ignore_created);
+	signal_remove__ignore_changed(sig_ignore_created);
 }

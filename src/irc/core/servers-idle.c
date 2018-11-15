@@ -254,11 +254,11 @@ void servers_idle_init(void)
 	idlepos = 0;
 	idle_tag = g_timeout_add(1000, (GSourceFunc) sig_idle_timeout, NULL);
 
-	signal_add("server disconnected", (SIGNAL_FUNC) sig_disconnected);
+	signal_add__server_disconnected(sig_disconnected);
 }
 
 void servers_idle_deinit(void)
 {
 	g_source_remove(idle_tag);
-	signal_remove("server disconnected", (SIGNAL_FUNC) sig_disconnected);
+	signal_remove__server_disconnected(sig_disconnected);
 }

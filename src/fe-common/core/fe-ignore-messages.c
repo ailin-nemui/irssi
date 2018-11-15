@@ -109,28 +109,28 @@ static void sig_message_topic(SERVER_REC *server, const char *channel,
 
 void fe_ignore_messages_init(void)
 {
-	signal_add_first("message public", (SIGNAL_FUNC) sig_message_public);
-	signal_add_first("message private", (SIGNAL_FUNC) sig_message_private);
-	signal_add_first("message join", (SIGNAL_FUNC) sig_message_join);
-	signal_add_first("message part", (SIGNAL_FUNC) sig_message_part);
-	signal_add_first("message quit", (SIGNAL_FUNC) sig_message_quit);
-	signal_add_first("message kick", (SIGNAL_FUNC) sig_message_kick);
-	signal_add_first("message nick", (SIGNAL_FUNC) sig_message_nick);
-	signal_add_first("message own_nick", (SIGNAL_FUNC) sig_message_own_nick);
-	signal_add_first("message invite", (SIGNAL_FUNC) sig_message_invite);
-	signal_add_first("message topic", (SIGNAL_FUNC) sig_message_topic);
+	signal_add_first__message_public(sig_message_public);
+	signal_add_first__message_private(sig_message_private);
+	signal_add_first__message_join(sig_message_join);
+	signal_add_first__message_part(sig_message_part);
+	signal_add_first__message_quit(sig_message_quit);
+	signal_add_first__message_kick(sig_message_kick);
+	signal_add_first__message_nick(sig_message_nick);
+	signal_add_first__message_own__nick(sig_message_own_nick);
+	signal_add_first__message_invite(sig_message_invite);
+	signal_add_first__message_topic(sig_message_topic);
 }
 
 void fe_ignore_messages_deinit(void)
 {
-	signal_remove("message public", (SIGNAL_FUNC) sig_message_public);
-	signal_remove("message private", (SIGNAL_FUNC) sig_message_private);
-	signal_remove("message join", (SIGNAL_FUNC) sig_message_join);
-	signal_remove("message part", (SIGNAL_FUNC) sig_message_part);
-	signal_remove("message quit", (SIGNAL_FUNC) sig_message_quit);
-	signal_remove("message kick", (SIGNAL_FUNC) sig_message_kick);
-	signal_remove("message nick", (SIGNAL_FUNC) sig_message_nick);
-	signal_remove("message own_nick", (SIGNAL_FUNC) sig_message_own_nick);
-	signal_remove("message invite", (SIGNAL_FUNC) sig_message_invite);
-	signal_remove("message topic", (SIGNAL_FUNC) sig_message_topic);
+	signal_remove__message_public(sig_message_public);
+	signal_remove__message_private(sig_message_private);
+	signal_remove__message_join(sig_message_join);
+	signal_remove__message_part(sig_message_part);
+	signal_remove__message_quit(sig_message_quit);
+	signal_remove__message_kick(sig_message_kick);
+	signal_remove__message_nick(sig_message_nick);
+	signal_remove__message_own__nick(sig_message_own_nick);
+	signal_remove__message_invite(sig_message_invite);
+	signal_remove__message_topic(sig_message_topic);
 }

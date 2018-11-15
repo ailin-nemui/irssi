@@ -50,14 +50,14 @@ static void capability_mode_failed(gchar *msg)
 void fe_capsicum_init(void)
 {
 
-	signal_add("capability mode enabled", (SIGNAL_FUNC) capability_mode_enabled);
-	signal_add("capability mode disabled", (SIGNAL_FUNC) capability_mode_disabled);
-	signal_add("capability mode failed", (SIGNAL_FUNC) capability_mode_failed);
+	signal_add__capability_mode_enabled(capability_mode_enabled);
+	signal_add__capability_mode_disabled(capability_mode_disabled);
+	signal_add__capability_mode_failed(capability_mode_failed);
 }
 
 void fe_capsicum_deinit(void)
 {
-	signal_remove("capability mode enabled", (SIGNAL_FUNC) capability_mode_enabled);
-	signal_remove("capability mode disabled", (SIGNAL_FUNC) capability_mode_disabled);
-	signal_remove("capability mode failed", (SIGNAL_FUNC) capability_mode_failed);
+	signal_remove__capability_mode_enabled(capability_mode_enabled);
+	signal_remove__capability_mode_disabled(capability_mode_disabled);
+	signal_remove__capability_mode_failed(capability_mode_failed);
 }

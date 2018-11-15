@@ -484,23 +484,23 @@ void statusbar_items_init(void)
 
         /* activity */
 	activity_list = NULL;
-	signal_add("window activity", (SIGNAL_FUNC) sig_statusbar_activity_hilight);
-	signal_add("window destroyed", (SIGNAL_FUNC) sig_statusbar_activity_window_destroyed);
-	signal_add("window refnum changed", (SIGNAL_FUNC) sig_statusbar_activity_updated);
+	signal_add__window_activity(sig_statusbar_activity_hilight);
+	signal_add__window_destroyed(sig_statusbar_activity_window_destroyed);
+	signal_add__window_refnum_changed(sig_statusbar_activity_updated);
 
         /* more */
         more_visible = NULL;
-	signal_add("gui page scrolled", (SIGNAL_FUNC) sig_statusbar_more_updated);
-	signal_add("window changed", (SIGNAL_FUNC) sig_statusbar_more_updated);
-	signal_add_last("gui print text finished", (SIGNAL_FUNC) sig_statusbar_more_updated);
-	signal_add_last("command clear", (SIGNAL_FUNC) sig_statusbar_more_updated);
-	signal_add_last("command scrollback", (SIGNAL_FUNC) sig_statusbar_more_updated);
+	signal_add__gui_page_scrolled(sig_statusbar_more_updated);
+	signal_add__window_changed(sig_statusbar_more_updated);
+	signal_add_last__gui_print_text_finished(sig_statusbar_more_updated);
+	signal_add_last__command_clear(sig_statusbar_more_updated);
+	signal_add_last__command_scrollback(sig_statusbar_more_updated);
 
         /* lag */
 	last_lag = 0; last_lag_unknown = FALSE;
-	signal_add("server lag", (SIGNAL_FUNC) sig_server_lag_updated);
-	signal_add("window changed", (SIGNAL_FUNC) lag_check_update);
-	signal_add("window server changed", (SIGNAL_FUNC) lag_check_update);
+	signal_add__server_lag(sig_server_lag_updated);
+	signal_add__window_changed(lag_check_update);
+	signal_add__window_server_changed(lag_check_update);
         lag_timeout_tag = g_timeout_add(5000, (GSourceFunc) sig_lag_timeout, NULL);
 
         /* input */
@@ -508,35 +508,35 @@ void statusbar_items_init(void)
 					 (GCompareFunc) g_str_equal);
 
 	read_settings();
-        signal_add_last("setup changed", (SIGNAL_FUNC) read_settings);
+        signal_add_last__setup_changed(read_settings);
 }
 
 void statusbar_items_deinit(void)
 {
         /* activity */
-	signal_remove("window activity", (SIGNAL_FUNC) sig_statusbar_activity_hilight);
-	signal_remove("window destroyed", (SIGNAL_FUNC) sig_statusbar_activity_window_destroyed);
-	signal_remove("window refnum changed", (SIGNAL_FUNC) sig_statusbar_activity_updated);
+	signal_remove__window_activity(sig_statusbar_activity_hilight);
+	signal_remove__window_destroyed(sig_statusbar_activity_window_destroyed);
+	signal_remove__window_refnum_changed(sig_statusbar_activity_updated);
 	g_list_free(activity_list);
         activity_list = NULL;
 
         /* more */
         g_slist_free(more_visible);
-	signal_remove("gui page scrolled", (SIGNAL_FUNC) sig_statusbar_more_updated);
-	signal_remove("window changed", (SIGNAL_FUNC) sig_statusbar_more_updated);
-	signal_remove("gui print text finished", (SIGNAL_FUNC) sig_statusbar_more_updated);
-	signal_remove("command clear", (SIGNAL_FUNC) sig_statusbar_more_updated);
-	signal_remove("command scrollback", (SIGNAL_FUNC) sig_statusbar_more_updated);
+	signal_remove__gui_page_scrolled(sig_statusbar_more_updated);
+	signal_remove__window_changed(sig_statusbar_more_updated);
+	signal_remove__gui_print_text_finished(sig_statusbar_more_updated);
+	signal_remove__command_clear(sig_statusbar_more_updated);
+	signal_remove__command_scrollback(sig_statusbar_more_updated);
 
         /* lag */
-	signal_remove("server lag", (SIGNAL_FUNC) sig_server_lag_updated);
-	signal_remove("window changed", (SIGNAL_FUNC) lag_check_update);
-	signal_remove("window server changed", (SIGNAL_FUNC) lag_check_update);
+	signal_remove__server_lag(sig_server_lag_updated);
+	signal_remove__window_changed(lag_check_update);
+	signal_remove__window_server_changed(lag_check_update);
         g_source_remove(lag_timeout_tag);
 
         /* input */
         g_hash_table_foreach(input_entries, (GHFunc) g_free, NULL);
 	g_hash_table_destroy(input_entries);
 
-        signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+        signal_remove__setup_changed(read_settings);
 }

@@ -242,7 +242,7 @@ void rawlog_init(void)
 	settings_add_int("history", "rawlog_lines", 200);
 	read_settings();
 
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add__setup_changed(read_settings);
 
 	command_bind("rawlog", NULL, (SIGNAL_FUNC) cmd_rawlog);
 	command_bind("rawlog save", NULL, (SIGNAL_FUNC) cmd_rawlog_save);
@@ -252,7 +252,7 @@ void rawlog_init(void)
 
 void rawlog_deinit(void)
 {
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__setup_changed(read_settings);
 
 	command_unbind("rawlog", (SIGNAL_FUNC) cmd_rawlog);
 	command_unbind("rawlog save", (SIGNAL_FUNC) cmd_rawlog_save);

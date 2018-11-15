@@ -344,44 +344,44 @@ void fe_dcc_chat_init(void)
 {
 	fe_dcc_chat_messages_init();
 
-	signal_add("dcc request", (SIGNAL_FUNC) dcc_request);
-	signal_add("dcc connected", (SIGNAL_FUNC) dcc_connected);
-	signal_add("dcc closed", (SIGNAL_FUNC) dcc_closed);
-	signal_add("dcc chat message", (SIGNAL_FUNC) dcc_chat_msg);
-	signal_add("dcc ctcp action", (SIGNAL_FUNC) dcc_chat_action);
-	signal_add("default dcc ctcp", (SIGNAL_FUNC) dcc_chat_ctcp);
-	signal_add("dcc error ctcp", (SIGNAL_FUNC) dcc_error_ctcp);
-	signal_add("default ctcp msg dcc", (SIGNAL_FUNC) dcc_unknown_ctcp);
-	signal_add("default ctcp reply dcc", (SIGNAL_FUNC) dcc_unknown_reply);
-	signal_add("dcc destroyed", (SIGNAL_FUNC) sig_dcc_destroyed);
-	signal_add("query destroyed", (SIGNAL_FUNC) sig_query_destroyed);
-        signal_add("dcc list print", (SIGNAL_FUNC) sig_dcc_list_print);
+	signal_add__dcc_request(dcc_request);
+	signal_add__dcc_connected(dcc_connected);
+	signal_add__dcc_closed(dcc_closed);
+	signal_add__dcc_chat_message(dcc_chat_msg);
+	signal_add__dcc_ctcp_action(dcc_chat_action);
+	signal_add__default_dcc_ctcp(dcc_chat_ctcp);
+	signal_add__dcc_error_ctcp(dcc_error_ctcp);
+	signal_add__default_ctcp_msg_dcc(dcc_unknown_ctcp);
+	signal_add__default_ctcp_reply_dcc(dcc_unknown_reply);
+	signal_add__dcc_destroyed(sig_dcc_destroyed);
+	signal_add__query_destroyed(sig_query_destroyed);
+        signal_add__dcc_list_print(sig_dcc_list_print);
 	command_bind("msg", NULL, (SIGNAL_FUNC) cmd_msg);
 	command_bind("me", NULL, (SIGNAL_FUNC) cmd_me);
 	command_bind("action", NULL, (SIGNAL_FUNC) cmd_action);
 	command_bind("ctcp", NULL, (SIGNAL_FUNC) cmd_ctcp);
-	signal_add("dcc error close not found", (SIGNAL_FUNC) dcc_error_close_not_found);
+	signal_add__dcc_error_close_not_found(dcc_error_close_not_found);
 }
 
 void fe_dcc_chat_deinit(void)
 {
 	fe_dcc_chat_messages_deinit();
 
-	signal_remove("dcc request", (SIGNAL_FUNC) dcc_request);
-	signal_remove("dcc connected", (SIGNAL_FUNC) dcc_connected);
-	signal_remove("dcc closed", (SIGNAL_FUNC) dcc_closed);
-	signal_remove("dcc chat message", (SIGNAL_FUNC) dcc_chat_msg);
-	signal_remove("dcc ctcp action", (SIGNAL_FUNC) dcc_chat_action);
-	signal_remove("default dcc ctcp", (SIGNAL_FUNC) dcc_chat_ctcp);
-	signal_remove("dcc error ctcp", (SIGNAL_FUNC) dcc_error_ctcp);
-	signal_remove("default ctcp msg dcc", (SIGNAL_FUNC) dcc_unknown_ctcp);
-	signal_remove("default ctcp reply dcc", (SIGNAL_FUNC) dcc_unknown_reply);
-	signal_remove("dcc destroyed", (SIGNAL_FUNC) sig_dcc_destroyed);
-	signal_remove("query destroyed", (SIGNAL_FUNC) sig_query_destroyed);
-        signal_remove("dcc list print", (SIGNAL_FUNC) sig_dcc_list_print);
+	signal_remove__dcc_request(dcc_request);
+	signal_remove__dcc_connected(dcc_connected);
+	signal_remove__dcc_closed(dcc_closed);
+	signal_remove__dcc_chat_message(dcc_chat_msg);
+	signal_remove__dcc_ctcp_action(dcc_chat_action);
+	signal_remove__default_dcc_ctcp(dcc_chat_ctcp);
+	signal_remove__dcc_error_ctcp(dcc_error_ctcp);
+	signal_remove__default_ctcp_msg_dcc(dcc_unknown_ctcp);
+	signal_remove__default_ctcp_reply_dcc(dcc_unknown_reply);
+	signal_remove__dcc_destroyed(sig_dcc_destroyed);
+	signal_remove__query_destroyed(sig_query_destroyed);
+        signal_remove__dcc_list_print(sig_dcc_list_print);
 	command_unbind("msg", (SIGNAL_FUNC) cmd_msg);
 	command_unbind("me", (SIGNAL_FUNC) cmd_me);
 	command_unbind("action", (SIGNAL_FUNC) cmd_action);
 	command_unbind("ctcp", (SIGNAL_FUNC) cmd_ctcp);
-	signal_remove("dcc error close not found", (SIGNAL_FUNC) dcc_error_close_not_found);
+	signal_remove__dcc_error_close_not_found(dcc_error_close_not_found);
 }

@@ -180,16 +180,16 @@ void chatnets_init(void)
 {
 	chatnets = NULL;
 
-	signal_add_first("event connected", (SIGNAL_FUNC) sig_connected);
-	signal_add("setup reread", (SIGNAL_FUNC) read_chatnets);
-        signal_add_first("irssi init read settings", (SIGNAL_FUNC) read_chatnets);
+	signal_add_first__event_connected(sig_connected);
+	signal_add__setup_reread(read_chatnets);
+        signal_add_first__irssi_init_read_settings(read_chatnets);
 }
 
 void chatnets_deinit(void)
 {
 	module_uniq_destroy("CHATNET");
 
-	signal_remove("event connected", (SIGNAL_FUNC) sig_connected);
-	signal_remove("setup reread", (SIGNAL_FUNC) read_chatnets);
-        signal_remove("irssi init read settings", (SIGNAL_FUNC) read_chatnets);
+	signal_remove__event_("connected", sig_connected);
+	signal_remove__setup_reread(read_chatnets);
+        signal_remove__irssi_init_read_settings(read_chatnets);
 }

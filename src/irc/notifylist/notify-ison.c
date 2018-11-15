@@ -333,14 +333,14 @@ void notifylist_ison_init(void)
 	notify_tag = -1;
 	read_settings();
 
-	signal_add("notifylist event", (SIGNAL_FUNC) event_ison);
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_add__notifylist_event(event_ison);
+	signal_add__setup_changed(read_settings);
 }
 
 void notifylist_ison_deinit(void)
 {
 	g_source_remove(notify_tag);
 
-	signal_remove("notifylist event", (SIGNAL_FUNC) event_ison);
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
+	signal_remove__notifylist_event(event_ison);
+	signal_remove__setup_changed(read_settings);
 }

@@ -443,7 +443,7 @@ static void sig_script_error(PERL_SCRIPT_REC *script, const char *error)
 
 static void sig_autorun(void)
 {
-	signal_remove("irssi init finished", (SIGNAL_FUNC) sig_autorun);
+	signal_remove__irssi_init_finished(sig_autorun);
 
         perl_scripts_autorun();
 }
@@ -459,14 +459,14 @@ void perl_core_init(void)
 
 	/*PL_perl_destruct_level = 1; - this crashes with some people.. */
 	perl_signals_init();
-        signal_add_last("script error", (SIGNAL_FUNC) sig_script_error);
+        signal_add_last__script_error(sig_script_error);
 
 	perl_scripts_init();
 
 	if (irssi_init_finished)
 		perl_scripts_autorun();
 	else {
-		signal_add("irssi init finished", (SIGNAL_FUNC) sig_autorun);
+		signal_add__irssi_init_finished(sig_autorun);
 		settings_check();
 	}
 
@@ -478,7 +478,7 @@ void perl_core_deinit(void)
         perl_scripts_deinit();
 	perl_signals_deinit();
 
-	signal_remove("script error", (SIGNAL_FUNC) sig_script_error);
+	signal_remove__script_error(sig_script_error);
 	PERL_SYS_TERM();
 }
 

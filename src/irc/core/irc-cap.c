@@ -290,12 +290,12 @@ static void event_invalid_cap (IRC_SERVER_REC *server, const char *data, const c
 
 void cap_init (void)
 {
-	signal_add_first("event cap", (SIGNAL_FUNC) event_cap);
-	signal_add_first("event 410", (SIGNAL_FUNC) event_invalid_cap);
+	signal_add_first__event_cap(event_cap);
+	signal_add_first__event_410(event_invalid_cap);
 }
 
 void cap_deinit (void)
 {
-	signal_remove("event cap", (SIGNAL_FUNC) event_cap);
-	signal_remove("event 410", (SIGNAL_FUNC) event_invalid_cap);
+	signal_remove__event_("cap", event_cap);
+	signal_remove__event_("410", event_invalid_cap);
 }

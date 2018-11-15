@@ -302,17 +302,17 @@ static void read_settings(void)
 		if (flood_tag == -1) {
 			flood_tag = g_timeout_add(5000, (GSourceFunc) flood_timeout, NULL);
 
-			signal_add("event privmsg", (SIGNAL_FUNC) flood_privmsg);
-			signal_add("event notice", (SIGNAL_FUNC) flood_notice);
-			signal_add("ctcp msg", (SIGNAL_FUNC) flood_ctcp);
+			signal_add__event_("privmsg", flood_privmsg);
+			signal_add__event_("notice", flood_notice);
+			signal_add__ctcp_msg(flood_ctcp);
 		}
 	} else if (flood_tag != -1) {
 		g_source_remove(flood_tag);
 		flood_tag = -1;
 
-		signal_remove("event privmsg", (SIGNAL_FUNC) flood_privmsg);
-		signal_remove("event notice", (SIGNAL_FUNC) flood_notice);
-		signal_remove("ctcp msg", (SIGNAL_FUNC) flood_ctcp);
+		signal_remove__event_("privmsg", flood_privmsg);
+		signal_remove__event_("notice", flood_notice);
+		signal_remove__ctcp_msg(flood_ctcp);
 	}
 }
 
@@ -323,9 +323,9 @@ void irc_flood_init(void)
 
 	flood_tag = -1;
 	read_settings();
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
-	signal_add_first("server connected", (SIGNAL_FUNC) flood_init_server);
-	signal_add("server destroyed", (SIGNAL_FUNC) flood_deinit_server);
+	signal_add__setup_changed(read_settings);
+	signal_add_first__server_connected(flood_init_server);
+	signal_add__server_destroyed(flood_deinit_server);
 
 	autoignore_init();
 	settings_check();
@@ -338,12 +338,12 @@ void irc_flood_deinit(void)
 
 	if (flood_tag != -1) {
 		g_source_remove(flood_tag);
-		signal_remove("event privmsg", (SIGNAL_FUNC) flood_privmsg);
-		signal_remove("event notice", (SIGNAL_FUNC) flood_notice);
-		signal_remove("ctcp msg", (SIGNAL_FUNC) flood_ctcp);
+		signal_remove__event_("privmsg", flood_privmsg);
+		signal_remove__event_("notice", flood_notice);
+		signal_remove__ctcp_msg(flood_ctcp);
 	}
 
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
-	signal_remove("server connected", (SIGNAL_FUNC) flood_init_server);
-	signal_remove("server destroyed", (SIGNAL_FUNC) flood_deinit_server);
+	signal_remove__setup_changed(read_settings);
+	signal_remove__server_connected(flood_init_server);
+	signal_remove__server_destroyed(flood_deinit_server);
 }

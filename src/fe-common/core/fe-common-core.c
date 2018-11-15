@@ -204,10 +204,10 @@ void fe_common_core_init(void)
 
 	settings_check();
 
-        signal_add_first("server connected", (SIGNAL_FUNC) sig_connected);
-        signal_add_last("server destroyed", (SIGNAL_FUNC) sig_destroyed);
-        signal_add_first("channel created", (SIGNAL_FUNC) sig_channel_created);
-        signal_add_last("channel destroyed", (SIGNAL_FUNC) sig_channel_destroyed);
+        signal_add_first__server_connected(sig_connected);
+        signal_add_last__server_destroyed(sig_destroyed);
+        signal_add_first__channel_created(sig_channel_created);
+        signal_add_last__channel_destroyed(sig_channel_destroyed);
 
 	module_register("core", "fe");
 }
@@ -249,11 +249,11 @@ void fe_common_core_deinit(void)
         theme_unregister();
 	themes_deinit();
 
-        signal_remove("setup changed", (SIGNAL_FUNC) sig_setup_changed);
-        signal_remove("server connected", (SIGNAL_FUNC) sig_connected);
-        signal_remove("server destroyed", (SIGNAL_FUNC) sig_destroyed);
-        signal_remove("channel created", (SIGNAL_FUNC) sig_channel_created);
-        signal_remove("channel destroyed", (SIGNAL_FUNC) sig_channel_destroyed);
+        signal_remove__setup_changed(sig_setup_changed);
+        signal_remove__server_connected(sig_connected);
+        signal_remove__server_destroyed(sig_destroyed);
+        signal_remove__channel_created(sig_channel_created);
+        signal_remove__channel_destroyed(sig_channel_destroyed);
 }
 
 void glog_func(const char *log_domain, GLogLevelFlags log_level,
@@ -458,7 +458,7 @@ void fe_common_core_finish_init(void)
 	}
 
 	sig_setup_changed();
-	signal_add_first("setup changed", (SIGNAL_FUNC) sig_setup_changed);
+	signal_add_first__setup_changed(sig_setup_changed);
 
         /* _after_ windows are created.. */
 	g_log_set_default_handler((GLogFunc) glog_func, NULL);

@@ -306,7 +306,7 @@ static int sig_check_netjoins(void)
 
 	if (joinservers == NULL) {
 		g_source_remove(join_tag);
-		signal_remove("print starting", (SIGNAL_FUNC) sig_print_starting);
+		signal_remove__print_starting(sig_print_starting);
                 join_tag = -1;
 	}
 	return 1;
@@ -361,7 +361,7 @@ static void msg_join(IRC_SERVER_REC *server, const char *channel,
 	if (join_tag == -1) {
 		join_tag = g_timeout_add(1000, (GSourceFunc)
 					 sig_check_netjoins, NULL);
-		signal_add("print starting", (SIGNAL_FUNC) sig_print_starting);
+		signal_add__print_starting(sig_print_starting);
 	}
 
 	if (netjoin == NULL)
@@ -462,13 +462,13 @@ static void read_settings(void)
 	netjoin_max_nicks = settings_get_int("netjoin_max_nicks");
 
 	if (old_hide && !hide_netsplit_quits) {
-		signal_remove("message quit", (SIGNAL_FUNC) msg_quit);
-		signal_remove("message join", (SIGNAL_FUNC) msg_join);
-		signal_remove("message irc mode", (SIGNAL_FUNC) msg_mode);
+		signal_remove__message_quit(msg_quit);
+		signal_remove__message_join(msg_join);
+		signal_remove__message_irc_mode(msg_mode);
 	} else if (!old_hide && hide_netsplit_quits) {
-		signal_add("message quit", (SIGNAL_FUNC) msg_quit);
-		signal_add("message join", (SIGNAL_FUNC) msg_join);
-		signal_add("message irc mode", (SIGNAL_FUNC) msg_mode);
+		signal_add__message_quit(msg_quit);
+		signal_add__message_join(msg_join);
+		signal_add__message_irc_mode(msg_mode);
 	}
 }
 
@@ -495,8 +495,8 @@ void fe_netjoin_init(void)
 	printing_joins = FALSE;
 
 	read_settings();
-	signal_add("setup changed", (SIGNAL_FUNC) read_settings);
-	signal_add("server disconnected", (SIGNAL_FUNC) sig_server_disconnected);
+	signal_add__setup_changed(read_settings);
+	signal_add__server_disconnected(sig_server_disconnected);
 }
 
 void fe_netjoin_deinit(void)
@@ -505,13 +505,13 @@ void fe_netjoin_deinit(void)
 		netjoin_server_remove(joinservers->data);
 	if (join_tag != -1) {
 		g_source_remove(join_tag);
-		signal_remove("print starting", (SIGNAL_FUNC) sig_print_starting);
+		signal_remove__print_starting(sig_print_starting);
 	}
 
-	signal_remove("setup changed", (SIGNAL_FUNC) read_settings);
-	signal_remove("server disconnected", (SIGNAL_FUNC) sig_server_disconnected);
+	signal_remove__setup_changed(read_settings);
+	signal_remove__server_disconnected(sig_server_disconnected);
 
-	signal_remove("message quit", (SIGNAL_FUNC) msg_quit);
-	signal_remove("message join", (SIGNAL_FUNC) msg_join);
-	signal_remove("message irc mode", (SIGNAL_FUNC) msg_mode);
+	signal_remove__message_quit(msg_quit);
+	signal_remove__message_join(msg_join);
+	signal_remove__message_irc_mode(msg_mode);
 }

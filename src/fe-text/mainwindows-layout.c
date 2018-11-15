@@ -314,18 +314,18 @@ static void sig_layout_reset(void)
 
 void mainwindows_layout_init(void)
 {
-	signal_add("layout save window", (SIGNAL_FUNC) sig_layout_window_save);
-	signal_add("layout restore window", (SIGNAL_FUNC) sig_layout_window_restore);
-	signal_add("layout save", (SIGNAL_FUNC) sig_layout_save);
-	signal_add_first("layout restore", (SIGNAL_FUNC) sig_layout_restore);
-	signal_add("layout reset", (SIGNAL_FUNC) sig_layout_reset);
+	signal_add__layout_save_window(sig_layout_window_save);
+	signal_add__layout_restore_window(sig_layout_window_restore);
+	signal_add__layout_save(sig_layout_save);
+	signal_add_first__layout_restore(sig_layout_restore);
+	signal_add__layout_reset(sig_layout_reset);
 }
 
 void mainwindows_layout_deinit(void)
 {
-	signal_remove("layout save window", (SIGNAL_FUNC) sig_layout_window_save);
-	signal_remove("layout restore window", (SIGNAL_FUNC) sig_layout_window_restore);
-	signal_remove("layout save", (SIGNAL_FUNC) sig_layout_save);
-	signal_remove("layout restore", (SIGNAL_FUNC) sig_layout_restore);
-	signal_remove("layout reset", (SIGNAL_FUNC) sig_layout_reset);
+	signal_remove__layout_save_window(sig_layout_window_save);
+	signal_remove__layout_restore_window(sig_layout_window_restore);
+	signal_remove__layout_save(sig_layout_save);
+	signal_remove__layout_restore(sig_layout_restore);
+	signal_remove__layout_reset(sig_layout_reset);
 }

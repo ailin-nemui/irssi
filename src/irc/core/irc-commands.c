@@ -1049,12 +1049,12 @@ void irc_commands_init(void)
 	command_bind_irc("knockout", NULL, (SIGNAL_FUNC) cmd_knockout);
 	command_bind_irc("server purge", NULL, (SIGNAL_FUNC) cmd_server_purge);
 
-	signal_add("channel destroyed", (SIGNAL_FUNC) sig_channel_destroyed);
-	signal_add("server disconnected", (SIGNAL_FUNC) sig_server_disconnected);
-	signal_add("whois try whowas", (SIGNAL_FUNC) sig_whois_try_whowas);
-	signal_add("whois event", (SIGNAL_FUNC) event_whois);
-	signal_add("whois end", (SIGNAL_FUNC) event_end_of_whois);
-	signal_add("whowas event", (SIGNAL_FUNC) event_whowas);
+	signal_add__channel_destroyed(sig_channel_destroyed);
+	signal_add__server_disconnected(sig_server_disconnected);
+	signal_add__whois_try_whowas(sig_whois_try_whowas);
+	signal_add__whois_event(event_whois);
+	signal_add__whois_end(event_end_of_whois);
+	signal_add__whowas_event(event_whowas);
 
 	command_set_options("connect", "+ircnet");
 	command_set_options("topic", "delete");
@@ -1116,12 +1116,12 @@ void irc_commands_deinit(void)
 	command_unbind("knockout", (SIGNAL_FUNC) cmd_knockout);
 	command_unbind("server purge", (SIGNAL_FUNC) cmd_server_purge);
 
-	signal_remove("channel destroyed", (SIGNAL_FUNC) sig_channel_destroyed);
-	signal_remove("server disconnected", (SIGNAL_FUNC) sig_server_disconnected);
-	signal_remove("whois try whowas", (SIGNAL_FUNC) sig_whois_try_whowas);
-	signal_remove("whois event", (SIGNAL_FUNC) event_whois);
-	signal_remove("whois end", (SIGNAL_FUNC) event_end_of_whois);
-	signal_remove("whowas event", (SIGNAL_FUNC) event_whowas);
+	signal_remove__channel_destroyed(sig_channel_destroyed);
+	signal_remove__server_disconnected(sig_server_disconnected);
+	signal_remove__whois_try_whowas(sig_whois_try_whowas);
+	signal_remove__whois_event(event_whois);
+	signal_remove__whois_end(event_end_of_whois);
+	signal_remove__whowas_event(event_whowas);
 
 	g_string_free(tmpstr, TRUE);
 }

@@ -412,7 +412,7 @@ void fe_settings_init(void)
 	command_bind("save", NULL, (SIGNAL_FUNC) cmd_save);
 	command_set_options("set", "clear default");
 
-        signal_add("settings errors", (SIGNAL_FUNC) sig_settings_errors);
+        signal_add__settings_errors(sig_settings_errors);
 }
 
 void fe_settings_deinit(void)
@@ -424,5 +424,5 @@ void fe_settings_deinit(void)
 	command_unbind("reload", (SIGNAL_FUNC) cmd_reload);
 	command_unbind("save", (SIGNAL_FUNC) cmd_save);
 
-	signal_remove("settings errors", (SIGNAL_FUNC) sig_settings_errors);
+	signal_remove__settings_errors(sig_settings_errors);
 }

@@ -163,24 +163,24 @@ static void sig_dcc_list_print(SEND_DCC_REC *dcc)
 
 void fe_dcc_send_init(void)
 {
-	signal_add("dcc connected", (SIGNAL_FUNC) dcc_connected);
-	signal_add("dcc closed", (SIGNAL_FUNC) dcc_closed);
-	signal_add("dcc error file open", (SIGNAL_FUNC) dcc_error_file_open);
-	signal_add("dcc error send exists", (SIGNAL_FUNC) dcc_error_send_exists);
-	signal_add("dcc error send no route", (SIGNAL_FUNC) dcc_error_send_no_route);
-	signal_add("dcc error close not found", (SIGNAL_FUNC) dcc_error_close_not_found);
-	signal_add("complete command dcc send", (SIGNAL_FUNC) sig_dcc_send_complete);
-        signal_add("dcc list print", (SIGNAL_FUNC) sig_dcc_list_print);
+	signal_add__dcc_connected(dcc_connected);
+	signal_add__dcc_closed(dcc_closed);
+	signal_add__dcc_error_file_open(dcc_error_file_open);
+	signal_add__dcc_error_send_exists(dcc_error_send_exists);
+	signal_add__dcc_error_send_no_route(dcc_error_send_no_route);
+	signal_add__dcc_error_close_not_found(dcc_error_close_not_found);
+	signal_add__complete_command_("dcc send", sig_dcc_send_complete);
+        signal_add__dcc_list_print(sig_dcc_list_print);
 }
 
 void fe_dcc_send_deinit(void)
 {
-	signal_remove("dcc connected", (SIGNAL_FUNC) dcc_connected);
-	signal_remove("dcc closed", (SIGNAL_FUNC) dcc_closed);
-	signal_remove("dcc error file open", (SIGNAL_FUNC) dcc_error_file_open);
-	signal_remove("dcc error send exists", (SIGNAL_FUNC) dcc_error_send_exists);
-	signal_remove("dcc error send no route", (SIGNAL_FUNC) dcc_error_send_no_route);
-	signal_remove("dcc error close not found", (SIGNAL_FUNC) dcc_error_close_not_found);
-	signal_remove("complete command dcc send", (SIGNAL_FUNC) sig_dcc_send_complete);
-        signal_remove("dcc list print", (SIGNAL_FUNC) sig_dcc_list_print);
+	signal_remove__dcc_connected(dcc_connected);
+	signal_remove__dcc_closed(dcc_closed);
+	signal_remove__dcc_error_file_open(dcc_error_file_open);
+	signal_remove__dcc_error_send_exists(dcc_error_send_exists);
+	signal_remove__dcc_error_send_no_route(dcc_error_send_no_route);
+	signal_remove__dcc_error_close_not_found(dcc_error_close_not_found);
+	signal_remove__complete_command_("dcc send", sig_dcc_send_complete);
+        signal_remove__dcc_list_print(sig_dcc_list_print);
 }

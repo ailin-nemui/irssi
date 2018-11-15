@@ -107,18 +107,18 @@ static void event_kill(IRC_SERVER_REC *server, const char *data,
 
 void irc_servers_reconnect_init(void)
 {
-	signal_add("server connect copy", (SIGNAL_FUNC) sig_server_connect_copy);
-	signal_add("server reconnect save status", (SIGNAL_FUNC) sig_server_reconnect_save_status);
-	signal_add("event connected", (SIGNAL_FUNC) sig_connected);
-	signal_add("event 436", (SIGNAL_FUNC) event_nick_collision);
-	signal_add("event kill", (SIGNAL_FUNC) event_kill);
+	signal_add__server_connect_copy(sig_server_connect_copy);
+	signal_add__server_reconnect_save_status(sig_server_reconnect_save_status);
+	signal_add__event_("connected", sig_connected);
+	signal_add__event_("436", event_nick_collision);
+	signal_add__event_("kill", event_kill);
 }
 
 void irc_servers_reconnect_deinit(void)
 {
-	signal_remove("server connect copy", (SIGNAL_FUNC) sig_server_connect_copy);
-	signal_remove("server reconnect save status", (SIGNAL_FUNC) sig_server_reconnect_save_status);
-	signal_remove("event connected", (SIGNAL_FUNC) sig_connected);
-	signal_remove("event 436", (SIGNAL_FUNC) event_nick_collision);
-	signal_remove("event kill", (SIGNAL_FUNC) event_kill);
+	signal_remove__server_connect_copy(sig_server_connect_copy);
+	signal_remove__server_reconnect_save_status(sig_server_reconnect_save_status);
+	signal_remove__event_("connected", sig_connected);
+	signal_remove__event_("436", event_nick_collision);
+	signal_remove__event_("kill", event_kill);
 }
