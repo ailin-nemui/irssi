@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "channels.h"
 
 void irc_channels_setup_init(void)

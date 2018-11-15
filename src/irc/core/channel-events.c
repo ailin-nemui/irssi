@@ -53,9 +53,13 @@ static void check_join_failure(IRC_SERVER_REC *server, const char *channel)
 	}
 }
 
-static void irc_server_event(IRC_SERVER_REC *server, const char *line)
+static void irc_server_event(SERVER_REC *server, const char *line, const char *u0, const char *u1)
 {
+	IRC_SERVER_REC *irc_server;
 	char *params, *numeric, *channel;
+
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
 
 	/* We'll be checking "4xx <your nick> <channel>" for channels
 	   which we haven't joined yet. 4xx are error codes and should
@@ -63,16 +67,20 @@ static void irc_server_event(IRC_SERVER_REC *server, const char *line)
 	params = event_get_params(line, 3, &numeric, NULL, &channel);
 
 	if (numeric[0] == '4')
-		check_join_failure(server, channel);
+		check_join_failure(irc_server, channel);
 
 	g_free(params);
 }
 
-static void event_no_such_channel(IRC_SERVER_REC *server, const char *data)
+static void event_no_such_channel(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
+	IRC_SERVER_REC *irc_server;
 	CHANNEL_REC *chanrec;
 	CHANNEL_SETUP_REC *setup;
 	char *params, *channel;
+
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
 
 	params = event_get_params(data, 2, NULL, &channel);
 	chanrec = *channel == '!' && channel[1] != '\0' ?
@@ -84,22 +92,26 @@ static void event_no_such_channel(IRC_SERVER_REC *server, const char *data)
 					   chanrec->server->connrec->chatnet);
 		if (setup != NULL && setup->autojoin) {
 			/* it's autojoin channel though, so create it */
-			irc_send_cmdv(server, "JOIN !%s", chanrec->name);
+			irc_send_cmdv(irc_server, "JOIN !%s", chanrec->name);
 			g_free(params);
                         return;
 		}
 	}
 
-	check_join_failure(server, channel);
+	check_join_failure(irc_server, channel);
 	g_free(params);
 }
 
-static void event_duplicate_channel(IRC_SERVER_REC *server, const char *data)
+static void event_duplicate_channel(SERVER_REC *server, const char *data,  const char *u0, const char *u1)
 {
+	IRC_SERVER_REC *irc_server;
 	CHANNEL_REC *chanrec;
 	char *params, *channel, *p;
 
 	g_return_if_fail(data != NULL);
+
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
 
 	/* this new addition to ircd breaks completely with older
 	   "standards", "nick Duplicate ::!!channel ...." */
@@ -151,44 +163,56 @@ static void channel_change_topic(IRC_SERVER_REC *server, const char *channel,
 	signal_emit__channel_topic_changed(chanrec);
 }
 
-static void event_topic_get(IRC_SERVER_REC *server, const char *data)
+static void event_topic_get(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
+	IRC_SERVER_REC *irc_server;
 	char *params, *channel, *topic;
 
 	g_return_if_fail(data != NULL);
 
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+
 	params = event_get_params(data, 3, NULL, &channel, &topic);
-	channel_change_topic(server, channel, topic, NULL, 0);
+	channel_change_topic(irc_server, channel, topic, NULL, 0);
 	g_free(params);
 }
 
-static void event_topic(IRC_SERVER_REC *server, const char *data,
+static void event_topic(SERVER_REC *server, const char *data,
 			const char *nick, const char *addr)
 {
+	IRC_SERVER_REC *irc_server;
 	char *params, *channel, *topic, *mask;
 
 	g_return_if_fail(data != NULL);
 
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+
 	params = event_get_params(data, 2, &channel, &topic);
 	mask = addr == NULL ? g_strdup(nick) :
 		g_strconcat(nick, "!", addr, NULL);
-	channel_change_topic(server, channel, topic, mask, time(NULL));
+	channel_change_topic(irc_server, channel, topic, mask, time(NULL));
 	g_free(mask);
 	g_free(params);
 }
 
-static void event_topic_info(IRC_SERVER_REC *server, const char *data)
+static void event_topic_info(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
+	IRC_SERVER_REC *irc_server;
 	char *params, *channel, *topicby, *topictime;
 	time_t t;
 
 	g_return_if_fail(data != NULL);
 
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+
 	params = event_get_params(data, 4, NULL, &channel,
 				  &topicby, &topictime);
 
 	t = (time_t) atol(topictime);
-	channel_change_topic(server, channel, NULL, topicby, t);
+	channel_change_topic(irc_server, channel, NULL, topicby, t);
 	g_free(params);
 }
 
@@ -215,20 +239,24 @@ static IRC_CHANNEL_REC *channel_find_unjoined(IRC_SERVER_REC *server,
 	return NULL;
 }
 
-static void event_join(IRC_SERVER_REC *server, const char *data, const char *nick, const char *address)
+static void event_join(SERVER_REC *server, const char *data, const char *nick, const char *address)
 {
+	IRC_SERVER_REC *irc_server;
 	char *params, *channel, *tmp, *shortchan;
 	IRC_CHANNEL_REC *chanrec;
 
 	g_return_if_fail(data != NULL);
 
-	if (g_ascii_strcasecmp(nick, server->nick) != 0) {
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+
+	if (g_ascii_strcasecmp(nick, irc_server->nick) != 0) {
 		/* someone else joined channel, no need to do anything */
 		return;
 	}
 
-	if (server->userhost == NULL)
-		server->userhost = g_strdup(address);
+	if (irc_server->userhost == NULL)
+		irc_server->userhost = g_strdup(address);
 
 	params = event_get_params(data, 1, &channel);
 	tmp = strchr(channel, 7); /* ^G does something weird.. */
@@ -241,7 +269,7 @@ static void event_join(IRC_SERVER_REC *server, const char *data, const char *nic
 		   it's name, it's not known when /join is called so rename
 		   !channel here to !ABCDEchannel */
 		shortchan = g_strdup_printf("!%s", channel+6);
-		chanrec = channel_find_unjoined(server, shortchan);
+		chanrec = channel_find_unjoined(irc_server, shortchan);
 		if (chanrec != NULL) {
 			channel_change_name(CHANNEL(chanrec), channel);
 			g_free(chanrec->name);
@@ -249,16 +277,16 @@ static void event_join(IRC_SERVER_REC *server, const char *data, const char *nic
 		} else {
 			/* well, did we join it with full name? if so, and if
 			   this was the first short one, change it's name. */
-			chanrec = channel_find_unjoined(server, channel);
+			chanrec = channel_find_unjoined(irc_server, channel);
 			if (chanrec != NULL &&
-			    irc_channel_find(server, shortchan) == NULL) {
+			    irc_channel_find(irc_server, shortchan) == NULL) {
 				channel_change_visible_name(CHANNEL(chanrec),
 							    shortchan);
 			}
 		}
 	}
 
-	chanrec = irc_channel_find(server, channel);
+	chanrec = irc_channel_find(irc_server, channel);
 	if (chanrec != NULL && chanrec->joined) {
 		/* already joined this channel - probably a broken proxy that
 		   forgot to send PART between */
@@ -269,12 +297,12 @@ static void event_join(IRC_SERVER_REC *server, const char *data, const char *nic
 
 	if (chanrec == NULL) {
 		/* look again, because of the channel name cut issues. */
-		chanrec = channel_find_unjoined(server, channel);
+		chanrec = channel_find_unjoined(irc_server, channel);
 	}
 
 	if (chanrec == NULL) {
 		/* didn't get here with /join command.. */
-		chanrec = irc_channel_create(server, channel, shortchan, TRUE);
+		chanrec = irc_channel_create(irc_server, channel, shortchan, TRUE);
 	}
 
 	chanrec->joined = TRUE;
@@ -287,14 +315,18 @@ static void event_join(IRC_SERVER_REC *server, const char *data, const char *nic
 	g_free(params);
 }
 
-static void event_part(IRC_SERVER_REC *server, const char *data, const char *nick)
+static void event_part(SERVER_REC *server, const char *data, const char *nick, const char *u0)
 {
+	IRC_SERVER_REC *irc_server;
 	char *params, *channel, *reason;
 	CHANNEL_REC *chanrec;
 
 	g_return_if_fail(data != NULL);
 
-	if (g_ascii_strcasecmp(nick, server->nick) != 0) {
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+
+	if (g_ascii_strcasecmp(nick, irc_server->nick) != 0) {
 		/* someone else part, no need to do anything here */
 		return;
 	}
@@ -310,16 +342,20 @@ static void event_part(IRC_SERVER_REC *server, const char *data, const char *nic
 	g_free(params);
 }
 
-static void event_kick(IRC_SERVER_REC *server, const char *data)
+static void event_kick(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
+	IRC_SERVER_REC *irc_server;
 	CHANNEL_REC *chanrec;
 	char *params, *channel, *nick, *reason;
 
 	g_return_if_fail(data != NULL);
 
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+
 	params = event_get_params(data, 3, &channel, &nick, &reason);
 
-	if (g_ascii_strcasecmp(nick, server->nick) != 0) {
+	if (g_ascii_strcasecmp(nick, irc_server->nick) != 0) {
 		/* someone else was kicked, no need to do anything */
 		g_free(params);
 		return;
@@ -327,7 +363,7 @@ static void event_kick(IRC_SERVER_REC *server, const char *data)
 
 	chanrec = channel_find(SERVER(server), channel);
 	if (chanrec != NULL) {
-		irc_server_purge_output(server, channel);
+		irc_server_purge_output(irc_server, channel);
 		chanrec->kicked = TRUE;
 		channel_destroy(chanrec);
 	}
@@ -335,32 +371,36 @@ static void event_kick(IRC_SERVER_REC *server, const char *data)
 	g_free(params);
 }
 
-static void event_invite(IRC_SERVER_REC *server, const char *data)
+static void event_invite(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
+	IRC_SERVER_REC *irc_server;
 	char *params, *channel, *shortchan;
 
 	g_return_if_fail(data != NULL);
 
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+
 	params = event_get_params(data, 2, NULL, &channel);
 
-	if (irc_channel_find(server, channel) == NULL) {
+	if (irc_channel_find(irc_server, channel) == NULL) {
                 /* check if we're supposed to autojoin this channel */
 		CHANNEL_SETUP_REC *setup;
 
-		setup = channel_setup_find(channel, server->connrec->chatnet);
+		setup = channel_setup_find(channel, irc_server->connrec->chatnet);
 		if (setup == NULL && channel[0] == '!' &&
 		    strlen(channel) > 6) {
 			shortchan = g_strdup_printf("!%s", channel+6);
 			setup = channel_setup_find(shortchan,
-						   server->connrec->chatnet);
+						   irc_server->connrec->chatnet);
 			g_free(shortchan);
 		}
 		if (setup != NULL && setup->autojoin && settings_get_bool("join_auto_chans_on_invite"))
-			server->channels_join(SERVER(server), channel, TRUE);
+			irc_server->channels_join(SERVER(server), channel, TRUE);
 	}
 
-	g_free_not_null(server->last_invite);
-	server->last_invite = g_strdup(channel);
+	g_free_not_null(irc_server->last_invite);
+	irc_server->last_invite = g_strdup(channel);
 	g_free(params);
 }
 
@@ -369,11 +409,11 @@ void channel_events_init(void)
 	settings_add_bool("misc", "join_auto_chans_on_invite", TRUE);
 
 	signal_add_last__server_event(irc_server_event);
-	signal_add_first__event_403(event_no_such_channel); /* no such channel */
-	signal_add_first__event_407(event_duplicate_channel); /* duplicate channel */
+	signal_add_first__event_("403", event_no_such_channel); /* no such channel */
+	signal_add_first__event_("407", event_duplicate_channel); /* duplicate channel */
 
 	signal_add__event_("topic", event_topic);
-	signal_add_first__event_join(event_join);
+	signal_add_first__event_("join", event_join);
 	signal_add__event_("part", event_part);
 	signal_add__event_("kick", event_kick);
 	signal_add__event_("invite", event_invite);

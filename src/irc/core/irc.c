@@ -24,6 +24,7 @@
 #include "net-sendbuffer.h"
 #include "rawlog.h"
 #include "misc.h"
+#include "core/signal-registry.h"
 #include "signal-registry.h"
 
 #include "irc-servers.h"
@@ -312,14 +313,18 @@ static void strip_params_colon(char *const params)
 	}
 }
 
-static void irc_server_event(IRC_SERVER_REC *server, const char *line,
+static void irc_server_event(SERVER_REC *server, const char *line,
 			     const char *nick, const char *address)
 {
+	IRC_SERVER_REC *irc_server;
 	int emitted;
         const char *signal;
 	char *event, *args;
 
 	g_return_if_fail(line != NULL);
+
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
 
 	/* split event / args */
 	event = g_strconcat("event ", line, NULL);
@@ -329,17 +334,17 @@ static void irc_server_event(IRC_SERVER_REC *server, const char *line,
 	ascii_strdown(event);
 
         /* check if event needs to be redirected */
-	signal = server_redirect_get_signal(server, nick, event, args);
+	signal = server_redirect_get_signal(irc_server, nick, event, args);
 	if (signal != NULL)
-		rawlog_redirect(server->rawlog, signal);
+		rawlog_redirect(irc_server->rawlog, signal);
 
         /* emit it */
 	current_server_event = event+6;
 	emitted = signal == NULL ?
-		signal_emit__event_(line, (SERVER_REC *)server, args, nick, address) :
-		signal_emit_raw(signal, 4, server, args, nick, address);
+		signal_emit__event_(line, server, args, nick, address) :
+		signal_emit_raw(signal, 4, irc_server, args, nick, address);
 	if (!emitted)
-		signal_emit__default_event((SERVER_REC *)server, line, nick, address);
+		signal_emit__default_event(server, line, nick, address);
 	current_server_event = NULL;
 
 	g_free(event);
@@ -383,16 +388,20 @@ static char *irc_parse_prefix(char *line, char **nick, char **address)
 }
 
 /* Parse command line sent by server */
-static void irc_parse_incoming_line(IRC_SERVER_REC *server, char *line)
+static void irc_parse_incoming_line(SERVER_REC *server, char *line)
 {
+	IRC_SERVER_REC *irc_server;
 	char *nick, *address;
 
 	g_return_if_fail(server != NULL);
 	g_return_if_fail(line != NULL);
 
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+	
 	line = irc_parse_prefix(line, &nick, &address);
 	if (*line != '\0')
-		signal_emit__server_event((SERVER_REC *)server, line, nick, address);
+		signal_emit__server_event(server, line, nick, address);
 }
 
 /* input function: handle incoming server messages */
@@ -428,17 +437,18 @@ static void irc_parse_incoming(SERVER_REC *server)
 	server_unref(server);
 }
 
-static void irc_init_server(IRC_SERVER_REC *server)
+static void irc_init_server(SERVER_REC *server)
 {
+	IRC_SERVER_REC *irc_server;
 	g_return_if_fail(server != NULL);
 
-	if (!IS_IRC_SERVER(server))
+	if ((irc_server = IRC_SERVER(server)) == NULL)
 		return;
 
-	server->readtag =
-		g_input_add(net_sendbuffer_handle(server->handle),
+	irc_server->readtag =
+		g_input_add(net_sendbuffer_handle(irc_server->handle),
 			    G_INPUT_READ,
-			    (GInputFunction) irc_parse_incoming, server);
+			    (GInputFunction) irc_parse_incoming, irc_server);
 }
 
 void irc_irc_init(void)

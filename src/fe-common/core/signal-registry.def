@@ -8,13 +8,15 @@ SIGNAL_REGISTER(gui_print_text_finished, 1, (WINDOW_REC *window),
 	 window)
 
 // completion.c:
-SIGNAL_REGISTER_F(complete_command, 5, (const char *cmd, GList **completions/*<char*>*/, WINDOW_REC *window, const char *word, char *linestart, int *want_space),
+SIGNAL_REGISTER_(complete_command, 5, (const char *cmd, GList **completions/*<char*>*/, WINDOW_REC *window, const char *word, char *linestart, int *want_space),
+	(GList **completions/*<char*>*/, WINDOW_REC *window, const char *word, char *linestart, int *want_space),
 	 cmd, completions, window, word, linestart, want_space)
 SIGNAL_REGISTER(complete_word, 5, (GList **completions/*<char*>*/, WINDOW_REC *window, const char *word, char *linestart, int *want_space),
 	 completions, window, word, linestart, want_space)
 SIGNAL_REGISTER(complete_erase, 3, (WINDOW_REC *window, const char *word, const char *linestart),
 	 window, word, linestart)
-SIGNAL_REGISTER_F(complete_erase_command, 3, (const char *cmd, WINDOW_REC *window, const char *word, const char *linestart),
+SIGNAL_REGISTER_(complete_erase_command, 3, (const char *cmd, WINDOW_REC *window, const char *word, const char *linestart),
+	(WINDOW_REC *window, const char *word, const char *linestart),
 	 cmd, window, word, linestart)
 SIGNAL_REGISTER(completion_removed, 1, (const char *word),
 	 word)
@@ -88,7 +90,8 @@ SIGNAL_REGISTER(key_created, 1, (KEY_REC *key),
 	 key)
 SIGNAL_REGISTER(key_destroyed, 1, (KEY_REC *key),
 	 key)
-SIGNAL_REGISTER_F(key, 3, (const char *key, const char *data, void *gui_data, KEYINFO_REC *keyinfo),
+SIGNAL_REGISTER_(key, 3, (const char *key, const char *data, void *gui_data, KEYINFO_REC *keyinfo),
+	(const char *data, void *gui_data, KEYINFO_REC *keyinfo),
 	 key, data, gui_data, keyinfo)
 SIGNAL_REGISTER(gui_entry_redirect, 4, (SIGNAL_FUNC func, const char *entry, int_in_ptr flags, void *data),
 	 func, entry, flags, data)

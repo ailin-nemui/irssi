@@ -6,22 +6,23 @@
    " " -> "_"
    "_" -> "__"
 */
-inline static void signal_register_fix_name(char *var) {
-		char *i, *o ;
-		for (i = o = var; *i; i++, o++) {
-			if (*i == '_') {
-				if (i[1] == '_') {
-					i++;
-					*o = '_';
-				} else {
-					*o = ' ';
-				}
+inline static void signal_register_fix_name(char *var)
+{
+	char *i, *o ;
+	for (i = o = var; *i; i++, o++) {
+		if (*i == '_') {
+			if (i[1] == '_') {
+				i++;
+				*o = '_';
 			} else {
-				*o = *i;
+				*o = ' ';
 			}
+		} else {
+			*o = *i;
 		}
-		*o = '\0';
 	}
+	*o = '\0';
+}
 
 #define SIGNAL_REGISTER(SIGNAL, NUM, PROTO, ...)			\
 	inline static int signal_emit__ ## SIGNAL  PROTO  {		\
@@ -79,7 +80,7 @@ inline static void signal_register_fix_name(char *var) {
 		signal_remove_full__ ## SIGNAL (func, data); \
 	}								\
 
-#define SIGNAL_REGISTER_F(SIGNAL, NUM, PROTO, ARG, ...)			\
+#define SIGNAL_REGISTER_(SIGNAL, NUM, PROTO, PROTO_, ARG, ...)	\
 	inline static int signal_emit__ ## SIGNAL ## _ PROTO  {	\
 		int ret;						\
 		char *signal_name, base_signal_name[] = #SIGNAL;	\
@@ -90,7 +91,7 @@ inline static void signal_register_fix_name(char *var) {
 		return ret;						\
 	}								\
 									\
-	typedef void (*signal_func_ ## SIGNAL ## __t) PROTO ;		\
+	typedef void (*signal_func_ ## SIGNAL ## __t) PROTO_ ;		\
 									\
 	inline static void signal_add_full__ ## SIGNAL ## _		\
 	(const char *module, int priority,				\

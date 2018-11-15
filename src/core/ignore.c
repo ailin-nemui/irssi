@@ -526,7 +526,7 @@ void ignore_init(void)
 	time_tag = g_timeout_add(1000, (GSourceFunc) unignore_timeout, NULL);
 
         read_ignores();
-        signal_add__setup_reread(read_ignores);
+        signal_add__setup_reread((signal_func_setup_reread_t) read_ignores);
 }
 
 void ignore_deinit(void)
@@ -536,5 +536,5 @@ void ignore_deinit(void)
                 ignore_destroy(ignores->data, TRUE);
         nickmatch_deinit(nickmatch);
 
-	signal_remove__setup_reread(read_ignores);
+	signal_remove__setup_reread((signal_func_setup_reread_t) read_ignores);
 }

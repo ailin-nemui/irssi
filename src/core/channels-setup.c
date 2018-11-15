@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "fe-common/core/signal-registry.h"
 #include "signal-registry.h"
 #include "lib-config/iconfig.h"
 #include "settings.h"
@@ -215,7 +216,7 @@ void channels_setup_init(void)
         setupchannels = NULL;
 	source_host_ok = FALSE;
 
-        signal_add__setup_reread(channels_read_config);
+        signal_add__setup_reread((signal_func_setup_reread_t) channels_read_config);
         signal_add__irssi_init_read_settings(channels_read_config);
 }
 
@@ -224,6 +225,6 @@ void channels_setup_deinit(void)
 	while (setupchannels != NULL)
 		channel_setup_destroy(setupchannels->data);
 
-        signal_remove__setup_reread(channels_read_config);
+        signal_remove__setup_reread((signal_func_setup_reread_t) channels_read_config);
         signal_remove__irssi_init_read_settings(channels_read_config);
 }

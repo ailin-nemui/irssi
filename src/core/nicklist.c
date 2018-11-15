@@ -444,7 +444,7 @@ void nicklist_set_own(CHANNEL_REC *channel, NICK_REC *nick)
         g_hash_table_insert(channel->nicks, nick->nick, nick);
 }
 
-static void sig_channel_created(CHANNEL_REC *channel)
+static void sig_channel_created(CHANNEL_REC *channel, void *u0)
 {
 	g_return_if_fail(IS_CHANNEL(channel));
 

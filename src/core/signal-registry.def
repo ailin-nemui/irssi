@@ -1,6 +1,6 @@
 // core
 SIGNAL_REGISTER(gui_exit, 0, (void))
-SIGNAL_REGISTER(gui_dialog, 2, (char *type, const char *text),
+SIGNAL_REGISTER(gui_dialog, 2, (const char *type, const char *text),
 	 type, text)
 
 // chat-protocols.c:
@@ -49,11 +49,12 @@ SIGNAL_REGISTER(list_subcommands, 1, (const char *command),
 SIGNAL_REGISTER(error_command, 2, (int_in_ptr err, const char *cmd),
 	 err, cmd)
 
-SIGNAL_REGISTER(send_command, 3, (char *args, SERVER_REC *server, WI_ITEM_REC *wi_item),
+SIGNAL_REGISTER(send_command, 3, (const char *args, SERVER_REC *server, WI_ITEM_REC *wi_item),
 	 args, server, wi_item)
 SIGNAL_REGISTER(send_text, 3, (const char *line, SERVER_REC *server, WI_ITEM_REC *wi_item),
 	 line, server, wi_item)
-SIGNAL_REGISTER_F(command, 3, (const char *cmd, const char *args, SERVER_REC *server, WI_ITEM_REC *wi_item),
+SIGNAL_REGISTER_(command, 3, (const char *cmd, const char *args, SERVER_REC *server, WI_ITEM_REC *wi_item),
+	(const char *args, SERVER_REC *server, WI_ITEM_REC *wi_item),
 	 cmd, args, server, wi_item)
 SIGNAL_REGISTER(default_command, 3, (const char *args, SERVER_REC *server, WI_ITEM_REC *wi_item),
 	 args, server, wi_item)
@@ -61,9 +62,9 @@ SIGNAL_REGISTER(default_command, 3, (const char *args, SERVER_REC *server, WI_IT
 // chat-commands.c:
 SIGNAL_REGISTER(chat_protocol_unknown, 1, (const char *protocol),
 	 protocol)
-SIGNAL_REGISTER(message_own__public, 3, (SERVER_REC *server, char *msg, char *target),
+SIGNAL_REGISTER(message_own__public, 3, (SERVER_REC *server, const char *msg, const char *target),
 	 server, msg, target)
-SIGNAL_REGISTER(message_own__private, 4, (SERVER_REC *server, char *msg, char *target, char *orig_target),
+SIGNAL_REGISTER(message_own__private, 4, (SERVER_REC *server, const char *msg, const char *target, const char *orig_target),
 	 server, msg, target, orig_target)
 
 // ignore.c:
@@ -163,7 +164,7 @@ SIGNAL_REGISTER(server_disconnected, 1, (SERVER_REC *server),
 	 server)
 SIGNAL_REGISTER(server_quit, 2, (SERVER_REC *server, char *msg),
 	 server, msg)
-SIGNAL_REGISTER(server_sendmsg, 4, (SERVER_REC *server, char *target, char *msg, int_in_ptr target_type),
+SIGNAL_REGISTER(server_sendmsg, 4, (SERVER_REC *server, const char *target, const char *msg, int_in_ptr target_type),
 	 server, target, msg, target_type)
 SIGNAL_REGISTER(server_destroyed, 1, (SERVER_REC *server),
 	 server)

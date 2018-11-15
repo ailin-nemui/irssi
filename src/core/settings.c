@@ -21,6 +21,7 @@
 #include "module.h"
 #include "signals.h"
 #include "signal-registry.h"
+#include "fe-common/core/signal-registry.h"
 #include "commands.h"
 #include "levels.h"
 #include "misc.h"
@@ -886,7 +887,7 @@ void settings_init(void)
 				    (GSourceFunc) sig_autosave, NULL);
 	signal_add__irssi_init_finished(sig_init_finished);
 	signal_add__irssi_init_userinfo_changed(sig_init_userinfo_changed);
-	signal_add__gui_exit(sig_autosave);
+	signal_add__gui_exit((signal_func_gui_exit_t) sig_autosave);
 }
 
 static void settings_hash_free(const char *key, SETTINGS_REC *rec)
@@ -899,7 +900,7 @@ void settings_deinit(void)
         g_source_remove(timeout_tag);
 	signal_remove__irssi_init_finished(sig_init_finished);
 	signal_remove__irssi_init_userinfo_changed(sig_init_userinfo_changed);
-	signal_remove__gui_exit(sig_autosave);
+	signal_remove__gui_exit((signal_func_gui_exit_t) sig_autosave);
 
 	g_slist_foreach(last_invalid_modules, (GFunc) g_free, NULL);
 	g_slist_free(last_invalid_modules);

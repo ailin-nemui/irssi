@@ -861,17 +861,18 @@ static void cmd_server_purge(const char *data, IRC_SERVER_REC *server)
 }
 
 /* destroy all knockouts in server */
-static void sig_server_disconnected(IRC_SERVER_REC *server)
+static void sig_server_disconnected(SERVER_REC *server)
 {
+	IRC_SERVER_REC *irc_server;
 	g_return_if_fail(server != NULL);
 
-	if (!IS_IRC_SERVER(server))
+	if ((irc_server = IRC_SERVER(server)) == NULL)
 		return;
 
-	g_free(server->last_nick);
+	g_free(irc_server->last_nick);
 
-	while (server->knockoutlist != NULL)
-		knockout_destroy(server, server->knockoutlist->data);
+	while (irc_server->knockoutlist != NULL)
+		knockout_destroy(irc_server, irc_server->knockoutlist->data);
 }
 
 /* destroy all knockouts in channel */

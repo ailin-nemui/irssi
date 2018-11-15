@@ -1,6 +1,6 @@
 // core
  "gui exit"
- "gui dialog", char *type, const char *text
+ "gui dialog", const char *type, const char *text
 
 // chat-protocols.c:
  "chat protocol created", CHAT_PROTOCOL_REC
@@ -30,15 +30,15 @@
  "list subcommands", const char *command
  "error command", int err, const char *cmd
 
- "send command", char *args, SERVER_REC, WI_ITEM_REC
+ "send command", const char *args, SERVER_REC, WI_ITEM_REC
  "send text", const char *line, SERVER_REC, WI_ITEM_REC
  "command "<cmd>, const char *args, SERVER_REC, WI_ITEM_REC
  "default command", const char *args, SERVER_REC, WI_ITEM_REC
 
 // chat-commands.c:
  "chat protocol unknown", const char *protocol
- "message own_public", SERVER_REC, char *msg, char *target
- "message own_private", SERVER_REC, char *msg, char *target, char *orig_target
+ "message own_public", SERVER_REC, const char *msg, const char *target
+ "message own_private", SERVER_REC, const char *msg, const char *target, const char *orig_target
 
 // ignore.c:
  "ignore created", IGNORE_REC
@@ -98,7 +98,7 @@
  "server connect failed", SERVER_REC, const char *msg
  "server disconnected", SERVER_REC
  "server quit", SERVER_REC, char *msg
- "server sendmsg", SERVER_REC, char *target, char *msg, int target_type
+ "server sendmsg", SERVER_REC, const char *target, const char *msg, int target_type
  "server destroyed", SERVER_REC
 
 // servers-setup.c

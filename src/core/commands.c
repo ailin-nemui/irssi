@@ -917,7 +917,7 @@ static void parse_command(const char *command, int expand_aliases,
 	g_free(orig);
 }
 
-static void event_command(const char *line, SERVER_REC *server, void *item)
+static void event_command(const char *line, SERVER_REC *server, WI_ITEM_REC *item)
 {
 	char *cmdchar;
 	int expand_aliases = TRUE;

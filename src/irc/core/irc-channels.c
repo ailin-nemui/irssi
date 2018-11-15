@@ -224,18 +224,20 @@ static char *irc_get_join_data(CHANNEL_REC *channel)
                 g_strconcat(irc_channel->name, " ", irc_channel->key, NULL);
 }
 
-static void sig_channel_created(IRC_CHANNEL_REC *channel)
+static void sig_channel_created(CHANNEL_REC *channel, void *u0)
 {
-	if (IS_IRC_CHANNEL(channel))
-                channel->get_join_data = irc_get_join_data;
+	IRC_CHANNEL_REC *irc_channel;
+	if ((irc_channel = IRC_CHANNEL(channel)) != NULL)
+                irc_channel->get_join_data = irc_get_join_data;
 }
 
-static void sig_channel_destroyed(IRC_CHANNEL_REC *channel)
+static void sig_channel_destroyed(CHANNEL_REC *channel)
 {
-	if (!IS_IRC_CHANNEL(channel))
+	IRC_CHANNEL_REC *irc_channel;
+	if ((irc_channel = IRC_CHANNEL(channel)) == NULL)
                 return;
 
-	if (!channel->server->disconnected && !channel->left && !channel->kicked) {
+	if (!irc_channel->server->disconnected && !irc_channel->left && !irc_channel->kicked) {
 		/* destroying channel record without actually
 		   having left the channel yet */
 		signal_emit__command_("part", "", (SERVER_REC *)channel->server, (WI_ITEM_REC *)channel);

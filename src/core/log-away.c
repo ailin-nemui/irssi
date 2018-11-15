@@ -21,6 +21,7 @@
 #include "module.h"
 #include "signals.h"
 #include "signal-registry.h"
+#include "irc/core/signal-registry.h"
 #include "levels.h"
 #include "log.h"
 #include "servers.h"
@@ -31,7 +32,7 @@ static LOG_REC *awaylog;
 static int away_filepos;
 static int away_msgs;
 
-static void sig_log_written(LOG_REC *log)
+static void sig_log_written(LOG_REC *log, const char *u0)
 {
 	if (log != awaylog) return;
 

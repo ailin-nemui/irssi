@@ -23,6 +23,7 @@
 #include "modules.h"
 #include "signals.h"
 #include "signal-registry.h"
+#include "fe-common/core/signal-registry.h"
 #include "expandos.h"
 #include "settings.h"
 #include "commands.h"
@@ -523,7 +524,7 @@ static void sig_message_public(SERVER_REC *server, const char *msg,
 }
 
 static void sig_message_private(SERVER_REC *server, const char *msg,
-				const char *nick, const char *address)
+				const char *nick, const char *address, const char *target)
 {
 	g_free_not_null(last_privmsg_from);
 	last_privmsg_from = g_strdup(nick);

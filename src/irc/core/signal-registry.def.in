@@ -13,6 +13,14 @@
  "channel rejoin remove", SERVER_REC, REJOIN_REC
  "channel rejoin new", SERVER_REC, REJOIN_REC
 
+// channels-query.c:
+ "chanquery mode", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
+ "chanquery who end", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
+ "chanquery abort", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
+ "silent event who", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
+ "chanquery ban", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
+ "chanquery ban end", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
+
 // ctcp.c:
 
  "ctcp msg", IRC_SERVER_REC, const char *args, const char *nick, const char *addr, const char *target
@@ -40,7 +48,7 @@
 
 // irc.c:
 
- "server event", SERVER_REC, char *data, char *sender_nick, char *sender_address
+ "server event", SERVER_REC, const char *data, const char *sender_nick, const char *sender_address
  "event "<cmd>, SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
  "default event", SERVER_REC, const char *data, const char *sender_nick, const char *sender_address
  "whois default event", SERVER_REC, char *args, char *sender_nick, char *sender_address

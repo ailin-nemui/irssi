@@ -21,6 +21,7 @@
 #include "module.h"
 #include "signals.h"
 #include "signal-registry.h"
+#include "fe-common/core/signal-registry.h"
 #include "network.h"
 #include "lib-config/iconfig.h"
 #include "settings.h"
@@ -659,7 +660,7 @@ void servers_setup_init(void)
 	read_settings();
 
 	signal_add__setup_changed(read_settings);
-	signal_add__setup_reread(read_servers);
+	signal_add__setup_reread((signal_func_setup_reread_t) read_servers);
         signal_add__irssi_init_read_settings(read_servers);
 }
 
@@ -673,7 +674,7 @@ void servers_setup_deinit(void)
 		server_setup_destroy(setupservers->data);
 
 	signal_remove__setup_changed(read_settings);
-	signal_remove__setup_reread(read_servers);
+	signal_remove__setup_reread((signal_func_setup_reread_t) read_servers);
         signal_remove__irssi_init_read_settings(read_servers);
 
 	module_uniq_destroy("SERVER SETUP");

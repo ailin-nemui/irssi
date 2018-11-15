@@ -22,6 +22,8 @@
 #include "network.h"
 #include "signals.h"
 #include "signal-registry.h"
+#include "fe-common/core/signal-registry.h"
+#include "irc/core/signal-registry.h"
 #include "special-vars.h"
 #include "lib-config/iconfig.h"
 #include "settings.h"
@@ -181,7 +183,7 @@ void chatnets_init(void)
 	chatnets = NULL;
 
 	signal_add_first__event_connected(sig_connected);
-	signal_add__setup_reread(read_chatnets);
+	signal_add__setup_reread((signal_func_setup_reread_t) read_chatnets);
         signal_add_first__irssi_init_read_settings(read_chatnets);
 }
 
@@ -189,7 +191,7 @@ void chatnets_deinit(void)
 {
 	module_uniq_destroy("CHATNET");
 
-	signal_remove__event_("connected", sig_connected);
-	signal_remove__setup_reread(read_chatnets);
+	signal_remove__event_connected(sig_connected);
+	signal_remove__setup_reread((signal_func_setup_reread_t) read_chatnets);
         signal_remove__irssi_init_read_settings(read_chatnets);
 }

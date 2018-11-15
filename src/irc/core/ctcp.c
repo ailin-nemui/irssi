@@ -118,7 +118,7 @@ void ctcp_send_reply(IRC_SERVER_REC *server, const char *data)
 
 /* CTCP ping */
 static void ctcp_ping(IRC_SERVER_REC *server, const char *data,
-		      const char *nick)
+		      const char *nick, const char *u0, const char *u1)
 {
 	char *str;
 
@@ -166,7 +166,7 @@ static void ctcp_send_parsed_reply(IRC_SERVER_REC *server, const char *nick,
 
 /* CTCP version */
 static void ctcp_version(IRC_SERVER_REC *server, const char *data,
-			 const char *nick)
+			 const char *nick, const char *u0, const char *u1)
 {
 	ctcp_send_parsed_reply(server, nick, "VERSION",
 			       settings_get_str("ctcp_version_reply"));
@@ -174,7 +174,7 @@ static void ctcp_version(IRC_SERVER_REC *server, const char *data,
 
 /* CTCP time */
 static void ctcp_time(IRC_SERVER_REC *server, const char *data,
-		      const char *nick)
+		      const char *nick, const char *u0, const char *u1)
 {
 	char *str, *reply;
 
@@ -190,7 +190,7 @@ static void ctcp_time(IRC_SERVER_REC *server, const char *data,
 
 /* CTCP userinfo */
 static void ctcp_userinfo(IRC_SERVER_REC *server, const char *data,
-			  const char *nick)
+			  const char *nick, const char *u0, const char *u1)
 {
 	ctcp_send_parsed_reply(server, nick, "USERINFO",
 			       settings_get_str("ctcp_userinfo_reply"));
@@ -198,7 +198,7 @@ static void ctcp_userinfo(IRC_SERVER_REC *server, const char *data,
 
 /* CTCP clientinfo */
 static void ctcp_clientinfo(IRC_SERVER_REC *server, const char *data,
-			    const char *nick)
+			    const char *nick, const char *u0, const char *u1)
 {
 	GString *str;
         GSList *tmp;
@@ -265,13 +265,16 @@ static void ctcp_reply(IRC_SERVER_REC *server, const char *data,
 	g_free(str);
 }
 
-static void event_privmsg(IRC_SERVER_REC *server, const char *data,
+static void event_privmsg(SERVER_REC *server, const char *data,
 			  const char *nick, const char *addr)
 {
 	char *params, *target, *msg;
 	int len;
 
 	g_return_if_fail(data != NULL);
+
+	if (!IS_IRC_SERVER(server))
+		return;
 
 	params = event_get_params(data, 2, &target, &msg);
 
@@ -283,19 +286,22 @@ static void event_privmsg(IRC_SERVER_REC *server, const char *data,
 		if (msg[len-1] == '\001')
 			msg[len-1] = '\0';
 
-		signal_emit__ctcp_msg(server, msg, nick, addr, target);
+		signal_emit__ctcp_msg((IRC_SERVER_REC *) server, msg, nick, addr, target);
 		signal_stop();
 	}
 
 	g_free(params);
 }
 
-static void event_notice(IRC_SERVER_REC *server, const char *data,
+static void event_notice(SERVER_REC *server, const char *data,
 			 const char *nick, const char *addr)
 {
 	char *params, *target, *ptr, *msg;
 
 	g_return_if_fail(data != NULL);
+
+	if (!IS_IRC_SERVER(server))
+		return;
 
 	params = event_get_params(data, 2, &target, &msg);
 
@@ -304,22 +310,24 @@ static void event_notice(IRC_SERVER_REC *server, const char *data,
 		ptr = strrchr(++msg, 1);
 		if (ptr != NULL) *ptr = '\0';
 
-		signal_emit__ctcp_reply(server, msg, nick, addr, target);
+		signal_emit__ctcp_reply((IRC_SERVER_REC *) server, msg, nick, addr, target);
 		signal_stop();
 	}
 
 	g_free(params);
 }
 
-static void sig_disconnected(IRC_SERVER_REC *server)
+static void sig_disconnected(SERVER_REC *server)
 {
+	IRC_SERVER_REC *irc_server;
 	g_return_if_fail(server != NULL);
 
-	if (!IS_IRC_SERVER(server))
+	irc_server = IRC_SERVER(server);
+	if (irc_server == NULL)
 		return;
 
-	g_slist_free(server->ctcpqueue);
-        server->ctcpqueue = NULL;
+	g_slist_free(irc_server->ctcpqueue);
+        irc_server->ctcpqueue = NULL;
 }
 
 void ctcp_init(void)
@@ -332,15 +340,15 @@ void ctcp_init(void)
 	settings_add_int("flood", "max_ctcp_queue", 5);
 
 	signal_add__server_disconnected(sig_disconnected);
-	signal_add_first__event_privmsg(event_privmsg);
-	signal_add_first__event_notice(event_notice);
+	signal_add_first__event_("privmsg", event_privmsg);
+	signal_add_first__event_("notice", event_notice);
 	signal_add__ctcp_msg(ctcp_msg);
 	signal_add__ctcp_reply(ctcp_reply);
-	signal_add__ctcp_msg_ping(ctcp_ping);
-	signal_add__ctcp_msg_version(ctcp_version);
-	signal_add__ctcp_msg_time(ctcp_time);
-	signal_add__ctcp_msg_userinfo(ctcp_userinfo);
-	signal_add__ctcp_msg_clientinfo(ctcp_clientinfo);
+	signal_add__ctcp_msg_("ping", ctcp_ping);
+	signal_add__ctcp_msg_("version", ctcp_version);
+	signal_add__ctcp_msg_("time", ctcp_time);
+	signal_add__ctcp_msg_("userinfo", ctcp_userinfo);
+	signal_add__ctcp_msg_("clientinfo", ctcp_clientinfo);
 
         ctcp_register("ping");
         ctcp_register("version");
@@ -359,9 +367,9 @@ void ctcp_deinit(void)
 	signal_remove__event_("notice", event_notice);
 	signal_remove__ctcp_msg(ctcp_msg);
 	signal_remove__ctcp_reply(ctcp_reply);
-	signal_remove__ctcp_msg_ping(ctcp_ping);
-	signal_remove__ctcp_msg_version(ctcp_version);
-	signal_remove__ctcp_msg_time(ctcp_time);
-	signal_remove__ctcp_msg_userinfo(ctcp_userinfo);
-	signal_remove__ctcp_msg_clientinfo(ctcp_clientinfo);
+	signal_remove__ctcp_msg_("ping", ctcp_ping);
+	signal_remove__ctcp_msg_("version", ctcp_version);
+	signal_remove__ctcp_msg_("time", ctcp_time);
+	signal_remove__ctcp_msg_("userinfo", ctcp_userinfo);
+	signal_remove__ctcp_msg_("clientinfo", ctcp_clientinfo);
 }

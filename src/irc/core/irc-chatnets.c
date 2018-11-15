@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "core/signal-registry.h"
 #include "lib-config/iconfig.h"
 #include "settings.h"
 
@@ -33,77 +34,81 @@ void ircnet_create(IRC_CHATNET_REC *rec)
         chatnet_create((CHATNET_REC *) rec);
 }
 
-static void sig_chatnet_read(IRC_CHATNET_REC *rec, CONFIG_NODE *node)
+static void sig_chatnet_read(CHATNET_REC *rec, CONFIG_NODE *node)
 {
+	IRC_CHATNET_REC *irc_rec;
 	char *value;
 
-	if (!IS_IRC_CHATNET(rec))
+	if ((irc_rec = IRC_CHATNET(rec)) == NULL)
 		return;
 
 	value = config_node_get_str(node, "usermode", NULL);
-	rec->usermode = (value != NULL && *value != '\0') ? g_strdup(value) : NULL;
+	irc_rec->usermode = (value != NULL && *value != '\0') ? g_strdup(value) : NULL;
 
 	value = config_node_get_str(node, "alternate_nick", NULL);
-	rec->alternate_nick = (value != NULL && *value != '\0') ? g_strdup(value) : NULL;
+	irc_rec->alternate_nick = (value != NULL && *value != '\0') ? g_strdup(value) : NULL;
 
-	rec->max_cmds_at_once = config_node_get_int(node, "cmdmax", 0);
-	rec->cmd_queue_speed = config_node_get_int(node, "cmdspeed", 0);
-	rec->max_query_chans = config_node_get_int(node, "max_query_chans", 0);
+	irc_rec->max_cmds_at_once = config_node_get_int(node, "cmdmax", 0);
+	irc_rec->cmd_queue_speed = config_node_get_int(node, "cmdspeed", 0);
+	irc_rec->max_query_chans = config_node_get_int(node, "max_query_chans", 0);
 
-	rec->max_kicks = config_node_get_int(node, "max_kicks", 0);
-	rec->max_msgs = config_node_get_int(node, "max_msgs", 0);
-	rec->max_modes = config_node_get_int(node, "max_modes", 0);
-	rec->max_whois = config_node_get_int(node, "max_whois", 0);
+	irc_rec->max_kicks = config_node_get_int(node, "max_kicks", 0);
+	irc_rec->max_msgs = config_node_get_int(node, "max_msgs", 0);
+	irc_rec->max_modes = config_node_get_int(node, "max_modes", 0);
+	irc_rec->max_whois = config_node_get_int(node, "max_whois", 0);
 
-	rec->sasl_mechanism = g_strdup(config_node_get_str(node, "sasl_mechanism", NULL));
-	rec->sasl_username = g_strdup(config_node_get_str(node, "sasl_username", NULL));
-	rec->sasl_password = g_strdup(config_node_get_str(node, "sasl_password", NULL));
+	irc_rec->sasl_mechanism = g_strdup(config_node_get_str(node, "sasl_mechanism", NULL));
+	irc_rec->sasl_username = g_strdup(config_node_get_str(node, "sasl_username", NULL));
+	irc_rec->sasl_password = g_strdup(config_node_get_str(node, "sasl_password", NULL));
 }
 
-static void sig_chatnet_saved(IRC_CHATNET_REC *rec, CONFIG_NODE *node)
+static void sig_chatnet_saved(CHATNET_REC *rec, CONFIG_NODE *node)
 {
-	if (!IS_IRC_CHATNET(rec))
+	IRC_CHATNET_REC *irc_rec;
+	if ((irc_rec = IRC_CHATNET(rec)) == NULL)
 		return;
 
-	if (rec->usermode != NULL)
-		iconfig_node_set_str(node, "usermode", rec->usermode);
+	if (irc_rec->usermode != NULL)
+		iconfig_node_set_str(node, "usermode", irc_rec->usermode);
 
-	if (rec->alternate_nick != NULL)
-		iconfig_node_set_str(node, "alternate_nick", rec->alternate_nick);
+	if (irc_rec->alternate_nick != NULL)
+		iconfig_node_set_str(node, "alternate_nick", irc_rec->alternate_nick);
 
-	if (rec->max_cmds_at_once > 0)
-		iconfig_node_set_int(node, "cmdmax", rec->max_cmds_at_once);
-	if (rec->cmd_queue_speed > 0)
-		iconfig_node_set_int(node, "cmdspeed", rec->cmd_queue_speed);
-	if (rec->max_query_chans > 0)
-		iconfig_node_set_int(node, "max_query_chans", rec->max_query_chans);
+	if (irc_rec->max_cmds_at_once > 0)
+		iconfig_node_set_int(node, "cmdmax", irc_rec->max_cmds_at_once);
+	if (irc_rec->cmd_queue_speed > 0)
+		iconfig_node_set_int(node, "cmdspeed", irc_rec->cmd_queue_speed);
+	if (irc_rec->max_query_chans > 0)
+		iconfig_node_set_int(node, "max_query_chans", irc_rec->max_query_chans);
 
-	if (rec->max_kicks > 0)
-		iconfig_node_set_int(node, "max_kicks", rec->max_kicks);
-	if (rec->max_msgs > 0)
-		iconfig_node_set_int(node, "max_msgs", rec->max_msgs);
-	if (rec->max_modes > 0)
-		iconfig_node_set_int(node, "max_modes", rec->max_modes);
-	if (rec->max_whois > 0)
-		iconfig_node_set_int(node, "max_whois", rec->max_whois);
+	if (irc_rec->max_kicks > 0)
+		iconfig_node_set_int(node, "max_kicks", irc_rec->max_kicks);
+	if (irc_rec->max_msgs > 0)
+		iconfig_node_set_int(node, "max_msgs", irc_rec->max_msgs);
+	if (irc_rec->max_modes > 0)
+		iconfig_node_set_int(node, "max_modes", irc_rec->max_modes);
+	if (irc_rec->max_whois > 0)
+		iconfig_node_set_int(node, "max_whois", irc_rec->max_whois);
 
-	if (rec->sasl_mechanism != NULL)
-		iconfig_node_set_str(node, "sasl_mechanism", rec->sasl_mechanism);
-	if (rec->sasl_username != NULL)
-		iconfig_node_set_str(node, "sasl_username", rec->sasl_username);
-	if (rec->sasl_password != NULL)
-		iconfig_node_set_str(node, "sasl_password", rec->sasl_password);
+	if (irc_rec->sasl_mechanism != NULL)
+		iconfig_node_set_str(node, "sasl_mechanism", irc_rec->sasl_mechanism);
+	if (irc_rec->sasl_username != NULL)
+		iconfig_node_set_str(node, "sasl_username", irc_rec->sasl_username);
+	if (irc_rec->sasl_password != NULL)
+		iconfig_node_set_str(node, "sasl_password", irc_rec->sasl_password);
 }
 
-static void sig_chatnet_destroyed(IRC_CHATNET_REC *rec)
+static void sig_chatnet_destroyed(CHATNET_REC *rec)
 {
-	if (IS_IRC_CHATNET(rec)) {
-		g_free(rec->usermode);
-		g_free(rec->alternate_nick);
-		g_free(rec->sasl_mechanism);
-		g_free(rec->sasl_username);
-		g_free(rec->sasl_password);
-	}
+	IRC_CHATNET_REC *irc_rec;
+	if ((irc_rec = IRC_CHATNET(rec)) == NULL)
+		return;
+
+	g_free(irc_rec->usermode);
+	g_free(irc_rec->alternate_nick);
+	g_free(irc_rec->sasl_mechanism);
+	g_free(irc_rec->sasl_username);
+	g_free(irc_rec->sasl_password);
 }
 
 void irc_chatnets_init(void)

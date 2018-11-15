@@ -28,6 +28,7 @@
 #include "net-disconnect.h"
 #include "signals.h"
 #include "signal-registry.h"
+#include "fe-common/core/signal-registry.h"
 #include "settings.h"
 #include "session.h"
 #ifdef HAVE_CAPSICUM

@@ -113,12 +113,16 @@ static int channel_rejoin(IRC_SERVER_REC *server, const char *channel)
 	return 1;
 }
 
-static void event_duplicate_channel(IRC_SERVER_REC *server, const char *data)
+static void event_duplicate_channel(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
+	IRC_SERVER_REC *irc_server;
 	CHANNEL_REC *chanrec;
 	char *params, *channel, *p;
 
 	g_return_if_fail(data != NULL);
+
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
 
 	params = event_get_params(data, 3, NULL, NULL, &channel);
 	p = strchr(channel, ' ');
@@ -134,7 +138,7 @@ static void event_duplicate_channel(IRC_SERVER_REC *server, const char *data)
 			   note that this same 407 is sent when trying to
 			   create !!channel that already exists so we don't
 			   want to try rejoining then. */
-			if (channel_rejoin(server, channel)) {
+			if (channel_rejoin(irc_server, channel)) {
 				signal_stop();
 			}
 		}
@@ -143,23 +147,27 @@ static void event_duplicate_channel(IRC_SERVER_REC *server, const char *data)
 	g_free(params);
 }
 
-static void event_target_unavailable(IRC_SERVER_REC *server, const char *data)
+static void event_target_unavailable(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
+	IRC_SERVER_REC *irc_server;
 	char *params, *channel;
 	IRC_CHANNEL_REC *chanrec;
 
 	g_return_if_fail(data != NULL);
 
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+
 	params = event_get_params(data, 2, NULL, &channel);
 	if (server_ischannel(SERVER(server), channel)) {
-		chanrec = irc_channel_find(server, channel);
+		chanrec = irc_channel_find(irc_server, channel);
 		if (chanrec != NULL && chanrec->joined) {
 			/* dalnet event - can't change nick while
 			   banned in channel */
 		} else {
 			/* channel is unavailable - try to join again
 			   a bit later */
-			if (channel_rejoin(server, channel)) {
+			if (channel_rejoin(irc_server, channel)) {
 				signal_stop();
 			}
 		}
@@ -170,27 +178,29 @@ static void event_target_unavailable(IRC_SERVER_REC *server, const char *data)
 
 /* join ok/failed - remove from rejoins list. this happens always after join
    except if the "target unavailable" error happens again */
-static void sig_remove_rejoin(IRC_CHANNEL_REC *channel)
+static void sig_remove_rejoin(CHANNEL_REC *channel)
 {
+	IRC_CHANNEL_REC *irc_channel;
 	REJOIN_REC *rec;
 
-	if (!IS_IRC_CHANNEL(channel))
+	if ((irc_channel = IRC_CHANNEL(channel)) == NULL)
 		return;
 
-	rec = rejoin_find(channel->server, channel->name);
+	rec = rejoin_find(irc_channel->server, irc_channel->name);
 	if (rec != NULL && rec->joining) {
 		/* join failed, remove the rejoin */
-		rejoin_destroy(channel->server, rec);
+		rejoin_destroy(irc_channel->server, rec);
 	}
 }
 
-static void sig_disconnected(IRC_SERVER_REC *server)
+static void sig_disconnected(SERVER_REC *server)
 {
-	if (!IS_IRC_SERVER(server))
+	IRC_SERVER_REC *irc_server;
+	if ((irc_server = IRC_SERVER(server)) == NULL)
 		return;
 
-	while (server->rejoin_channels != NULL)
-		rejoin_destroy(server, server->rejoin_channels->data);
+	while (irc_server->rejoin_channels != NULL)
+		rejoin_destroy(irc_server, irc_server->rejoin_channels->data);
 }
 
 static void server_rejoin_channels(IRC_SERVER_REC *server)
@@ -268,8 +278,8 @@ void channel_rejoin_init(void)
 				   (GSourceFunc) sig_rejoin, NULL);
 
 	command_bind_irc("rmrejoins", NULL, (SIGNAL_FUNC) cmd_rmrejoins);
-	signal_add_first__event_407(event_duplicate_channel);
-	signal_add_first__event_437(event_target_unavailable);
+	signal_add_first__event_("407", event_duplicate_channel);
+	signal_add_first__event_("437", event_target_unavailable);
 	signal_add_first__channel_joined(sig_remove_rejoin);
 	signal_add_first__channel_destroyed(sig_remove_rejoin);
 	signal_add__server_disconnected(sig_disconnected);

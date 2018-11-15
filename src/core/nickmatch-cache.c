@@ -104,7 +104,7 @@ void nickmatch_cache_init(void)
 {
 	lists = NULL;
         signal_add__nicklist_new(sig_nick_new);
-        signal_add__nicklist_changed(sig_nick_new);
+        signal_add__nicklist_changed((signal_func_nicklist_changed_t) sig_nick_new);
         signal_add__nicklist_host_changed(sig_nick_new);
         signal_add__nicklist_remove(sig_nick_remove);
 }
@@ -115,7 +115,7 @@ void nickmatch_cache_deinit(void)
         g_slist_free(lists);
 
 	signal_remove__nicklist_new(sig_nick_new);
-        signal_remove__nicklist_changed(sig_nick_new);
+        signal_remove__nicklist_changed((signal_func_nicklist_changed_t) sig_nick_new);
         signal_remove__nicklist_host_changed(sig_nick_new);
         signal_remove__nicklist_remove(sig_nick_remove);
 }

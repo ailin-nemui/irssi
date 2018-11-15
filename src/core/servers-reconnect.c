@@ -23,6 +23,7 @@
 #include "network.h"
 #include "signals.h"
 #include "signal-registry.h"
+#include "irc/core/signal-registry.h"
 
 #include "chat-protocols.h"
 #include "servers.h"
@@ -504,9 +505,9 @@ void servers_reconnect_init(void)
 	reconnect_timeout_tag = g_timeout_add(1000, (GSourceFunc) server_reconnect_timeout, NULL);
 	read_settings();
 
-	signal_add__server_connect_failed(sig_reconnect);
+	signal_add__server_connect_failed((signal_func_server_connect_failed_t) sig_reconnect);
 	signal_add__server_disconnected(sig_reconnect);
-	signal_add__event_("connected", sig_connected);
+	signal_add__event_connected(sig_connected);
 	signal_add__chat_protocol_deinit(sig_chat_protocol_deinit);
 	signal_add__setup_changed(read_settings);
 
@@ -519,9 +520,9 @@ void servers_reconnect_deinit(void)
 {
 	g_source_remove(reconnect_timeout_tag);
 
-	signal_remove__server_connect_failed(sig_reconnect);
+	signal_remove__server_connect_failed((signal_func_server_connect_failed_t) sig_reconnect);
 	signal_remove__server_disconnected(sig_reconnect);
-	signal_remove__event_("connected", sig_connected);
+	signal_remove__event_connected(sig_connected);
 	signal_remove__chat_protocol_deinit(sig_chat_protocol_deinit);
 	signal_remove__setup_changed(read_settings);
 

@@ -21,6 +21,7 @@
 #include "module.h"
 #include "signals.h"
 #include "signal-registry.h"
+#include "fe-common/core/signal-registry.h"
 #include "commands.h"
 #include "levels.h"
 #include "misc.h"
@@ -599,7 +600,7 @@ void log_init(void)
 
 	read_settings();
         signal_add__setup_changed(read_settings);
-        signal_add__setup_reread(log_read_config);
+        signal_add__setup_reread((signal_func_setup_reread_t) log_read_config);
         signal_add__irssi_init_finished(log_read_config);
 }
 
@@ -613,6 +614,6 @@ void log_deinit(void)
 	g_free_not_null(log_timestamp);
 
 	signal_remove__setup_changed(read_settings);
-	signal_remove__setup_reread(log_read_config);
+	signal_remove__setup_reread((signal_func_setup_reread_t) log_read_config);
 	signal_remove__irssi_init_finished(log_read_config);
 }
