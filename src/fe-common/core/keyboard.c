@@ -614,7 +614,7 @@ static int key_emit_signal(KEYBOARD_REC *keyboard, KEY_REC *key)
         char *str;
 
 	str = g_strconcat("key ", key->info->id, NULL);
-	consumed = signal_emit__key_(str, key->data, keyboard->gui_data, key->info);
+	consumed = signal_emit__key_(key->info->id, key->data, keyboard->gui_data, key->info);
 	g_free(str);
 
         return consumed;
