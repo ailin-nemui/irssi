@@ -18,6 +18,7 @@
  "chanquery who end", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
  "chanquery abort", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
  "silent event who", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
+ "silent event whois", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
  "chanquery ban", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
  "chanquery ban end", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
 
@@ -33,6 +34,16 @@
 
 // irc-servers.c:
  "event connected", SERVER_REC
+
+// irc-commands.c:
+ "whois end", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
+ "whois away", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
+ "whois oper", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
+ "whois try whowas", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
+ "whois event not found", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
+ "whois event", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
+ "whowas event", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
+ "whowas event end", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
 
 // irc-cap.c
  "server cap ack "<cmd>, IRC_SERVER_REC
@@ -51,7 +62,7 @@
  "server event", SERVER_REC, const char *data, const char *sender_nick, const char *sender_address
  "event "<cmd>, SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
  "default event", SERVER_REC, const char *data, const char *sender_nick, const char *sender_address
- "whois default event", SERVER_REC, char *args, char *sender_nick, char *sender_address
+ "whois default event", SERVER_REC, const char *args, const char *sender_nick, const char *sender_address
 
  "server incoming", SERVER_REC, char *data
 
@@ -72,7 +83,7 @@
 // modes.c:
  "channel mode changed", CHANNEL_REC, const char *setby
  "nick mode changed", CHANNEL_REC, NICK_REC, const char *setby, const char *mode, const char *type
- "user mode changed", SERVER_REC, char *old
+ "user mode changed", SERVER_REC, const char *old
  "away mode changed", SERVER_REC
 
 // netsplit.c:

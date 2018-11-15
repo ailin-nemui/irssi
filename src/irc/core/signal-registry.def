@@ -29,6 +29,8 @@ SIGNAL_REGISTER(chanquery_abort, 4, (SERVER_REC *server, const char *args, const
 	 server, args, sender_nick, sender_address)
 SIGNAL_REGISTER(silent_event_who, 4, (SERVER_REC *server, const char *args, const char *sender_nick, const char *sender_address),
 	 server, args, sender_nick, sender_address)
+SIGNAL_REGISTER(silent_event_whois, 4, (SERVER_REC *server, const char *args, const char *sender_nick, const char *sender_address),
+	 server, args, sender_nick, sender_address)
 SIGNAL_REGISTER(chanquery_ban, 4, (SERVER_REC *server, const char *args, const char *sender_nick, const char *sender_address),
 	 server, args, sender_nick, sender_address)
 SIGNAL_REGISTER(chanquery_ban_end, 4, (SERVER_REC *server, const char *args, const char *sender_nick, const char *sender_address),
@@ -56,6 +58,24 @@ SIGNAL_REGISTER(ctcp_action, 5, (IRC_SERVER_REC *irc_server, const char *args, c
 // irc-servers.c:
 SIGNAL_REGISTER(event_connected, 1, (SERVER_REC *server),
 	 server)
+
+// irc-commands.c:
+SIGNAL_REGISTER(whois_end, 4, (SERVER_REC *server, const char *args, const char *sender_nick, const char *sender_address),
+	 server, args, sender_nick, sender_address)
+SIGNAL_REGISTER(whois_away, 4, (SERVER_REC *server, const char *args, const char *sender_nick, const char *sender_address),
+	 server, args, sender_nick, sender_address)
+SIGNAL_REGISTER(whois_oper, 4, (SERVER_REC *server, const char *args, const char *sender_nick, const char *sender_address),
+	 server, args, sender_nick, sender_address)
+SIGNAL_REGISTER(whois_try_whowas, 4, (SERVER_REC *server, const char *args, const char *sender_nick, const char *sender_address),
+	 server, args, sender_nick, sender_address)
+SIGNAL_REGISTER(whois_event_not_found, 4, (SERVER_REC *server, const char *args, const char *sender_nick, const char *sender_address),
+	 server, args, sender_nick, sender_address)
+SIGNAL_REGISTER(whois_event, 4, (SERVER_REC *server, const char *args, const char *sender_nick, const char *sender_address),
+	 server, args, sender_nick, sender_address)
+SIGNAL_REGISTER(whowas_event, 4, (SERVER_REC *server, const char *args, const char *sender_nick, const char *sender_address),
+	 server, args, sender_nick, sender_address)
+SIGNAL_REGISTER(whowas_event_end, 4, (SERVER_REC *server, const char *args, const char *sender_nick, const char *sender_address),
+	 server, args, sender_nick, sender_address)
 
 // irc-cap.c
 SIGNAL_REGISTER_(server_cap_ack, 1, (const char *cmd, IRC_SERVER_REC *irc_server),
@@ -90,7 +110,7 @@ SIGNAL_REGISTER_(event, 4, (const char *cmd, SERVER_REC *server, const char *arg
 	 cmd, server, args, sender_nick, sender_address)
 SIGNAL_REGISTER(default_event, 4, (SERVER_REC *server, const char *data, const char *sender_nick, const char *sender_address),
 	 server, data, sender_nick, sender_address)
-SIGNAL_REGISTER(whois_default_event, 4, (SERVER_REC *server, char *args, char *sender_nick, char *sender_address),
+SIGNAL_REGISTER(whois_default_event, 4, (SERVER_REC *server, const char *args, const char *sender_nick, const char *sender_address),
 	 server, args, sender_nick, sender_address)
 
 SIGNAL_REGISTER(server_incoming, 2, (SERVER_REC *server, char *data),
@@ -122,7 +142,7 @@ SIGNAL_REGISTER(channel_mode_changed, 2, (CHANNEL_REC *channel, const char *setb
 	 channel, setby)
 SIGNAL_REGISTER(nick_mode_changed, 5, (CHANNEL_REC *channel, NICK_REC *nick, const char *setby, const char *mode, const char *type),
 	 channel, nick, setby, mode, type)
-SIGNAL_REGISTER(user_mode_changed, 2, (SERVER_REC *server, char *old),
+SIGNAL_REGISTER(user_mode_changed, 2, (SERVER_REC *server, const char *old),
 	 server, old)
 SIGNAL_REGISTER(away_mode_changed, 1, (SERVER_REC *server),
 	 server)

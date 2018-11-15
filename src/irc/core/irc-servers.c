@@ -22,6 +22,7 @@
 
 #include "net-sendbuffer.h"
 #include "signals.h"
+#include "core/signal-registry.h"
 #include "signal-registry.h"
 #include "rawlog.h"
 #include "misc.h"
@@ -400,24 +401,25 @@ void irc_server_purge_output(IRC_SERVER_REC *server, const char *target)
 	}
 }
 
-static void sig_connected(IRC_SERVER_REC *server)
+static void sig_connected(SERVER_REC *server)
 {
-	if (!IS_IRC_SERVER(server))
+	IRC_SERVER_REC *irc_server;
+	if ((irc_server = IRC_SERVER(server)) == NULL)
 		return;
 
-	server->isnickflag = isnickflag_func;
-	server->ischannel = ischannel_func;
-	server->split_message = split_message;
-	server->send_message = send_message;
-	server->query_find_func =
+	irc_server->isnickflag = isnickflag_func;
+	irc_server->ischannel = ischannel_func;
+	irc_server->split_message = split_message;
+	irc_server->send_message = send_message;
+	irc_server->query_find_func =
 		(QUERY_REC *(*)(SERVER_REC *, const char *)) irc_query_find;
-	server->nick_comp_func = irc_nickcmp_rfc1459;
+	irc_server->nick_comp_func = irc_nickcmp_rfc1459;
 
-	server->splits = g_hash_table_new((GHashFunc) g_istr_hash,
+	irc_server->splits = g_hash_table_new((GHashFunc) g_istr_hash,
 					  (GCompareFunc) g_istr_equal);
 
-        if (!server->session_reconnect)
-		server_init(server);
+        if (!irc_server->session_reconnect)
+		server_init(irc_server);
 }
 
 static void isupport_destroy_hash(void *key, void *value)
@@ -426,58 +428,60 @@ static void isupport_destroy_hash(void *key, void *value)
 	g_free(value);
 }
 
-static void sig_destroyed(IRC_SERVER_REC *server)
+static void sig_destroyed(SERVER_REC *server)
 {
+	IRC_SERVER_REC *irc_server;
 	GSList *tmp;
 
-	if (!IS_IRC_SERVER(server))
+	if ((irc_server = IRC_SERVER(server)) == NULL)
 		return;
 
-	for (tmp = server->cmdqueue; tmp != NULL; tmp = tmp->next->next) {
+	for (tmp = irc_server->cmdqueue; tmp != NULL; tmp = tmp->next->next) {
 		g_free(tmp->data);
 		if (tmp->next->data != NULL)
                         server_redirect_destroy(tmp->next->data);
 	}
-	g_slist_free(server->cmdqueue);
-	server->cmdqueue = NULL;
+	g_slist_free(irc_server->cmdqueue);
+	irc_server->cmdqueue = NULL;
 
-	gslist_free_full(server->cap_active, (GDestroyNotify) g_free);
-	server->cap_active = NULL;
+	gslist_free_full(irc_server->cap_active, (GDestroyNotify) g_free);
+	irc_server->cap_active = NULL;
 
-	if (server->cap_supported) {
-		g_hash_table_destroy(server->cap_supported);
-		server->cap_supported = NULL;
+	if (irc_server->cap_supported) {
+		g_hash_table_destroy(irc_server->cap_supported);
+		irc_server->cap_supported = NULL;
 	}
 
-	gslist_free_full(server->cap_queue, (GDestroyNotify) g_free);
-	server->cap_queue = NULL;
+	gslist_free_full(irc_server->cap_queue, (GDestroyNotify) g_free);
+	irc_server->cap_queue = NULL;
 
-	g_free_and_null(server->sasl_buffer);
+	g_free_and_null(irc_server->sasl_buffer);
 
 	/* these are dynamically allocated only if isupport was sent */
-	g_hash_table_foreach(server->isupport,
-			     (GHFunc) isupport_destroy_hash, server);
-	g_hash_table_destroy(server->isupport);
-	server->isupport = NULL;
+	g_hash_table_foreach(irc_server->isupport,
+			     (GHFunc) isupport_destroy_hash, irc_server);
+	g_hash_table_destroy(irc_server->isupport);
+	irc_server->isupport = NULL;
 
-	g_free_and_null(server->wanted_usermode);
-	g_free_and_null(server->real_address);
-	g_free_and_null(server->usermode);
-	g_free_and_null(server->userhost);
-	g_free_and_null(server->last_invite);
+	g_free_and_null(irc_server->wanted_usermode);
+	g_free_and_null(irc_server->real_address);
+	g_free_and_null(irc_server->usermode);
+	g_free_and_null(irc_server->userhost);
+	g_free_and_null(irc_server->last_invite);
 }
 
-static void sig_server_quit(IRC_SERVER_REC *server, const char *msg)
+static void sig_server_quit(SERVER_REC *server, const char *msg)
 {
+	IRC_SERVER_REC *irc_server;
 	char *str;
 	char *recoded;
 
-	if (!IS_IRC_SERVER(server) || !server->connected)
+	if ((irc_server = IRC_SERVER(server)) == NULL || !server->connected)
 		return;
 
 	recoded = recode_out(SERVER(server), msg, NULL);
 	str = g_strdup_printf("QUIT :%s", recoded);
-	irc_send_cmd_now(server, str);
+	irc_send_cmd_now(irc_server, str);
 	g_free(str);
 	g_free(recoded);
 }
@@ -684,43 +688,47 @@ char *irc_server_get_channels(IRC_SERVER_REC *server)
 	return ret;
 }
 
-static void event_connected(IRC_SERVER_REC *server, const char *data, const char *from)
+static void event_connected(SERVER_REC *server, const char *data, const char *from, const char *u0)
 {
+	IRC_SERVER_REC *irc_server;
 	char *params, *nick;
 
 	g_return_if_fail(server != NULL);
 
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+	
 	params = event_get_params(data, 1, &nick);
 
-	if (g_strcmp0(server->nick, nick) != 0) {
+	if (g_strcmp0(irc_server->nick, nick) != 0) {
 		/* nick changed unexpectedly .. connected via proxy, etc. */
-		g_free(server->nick);
-		server->nick = g_strdup(nick);
+		g_free(irc_server->nick);
+		irc_server->nick = g_strdup(nick);
 	}
 
 	/* set the server address */
-	g_free(server->real_address);
-	server->real_address = from == NULL ?
-		g_strdup(server->connrec->address) : /* shouldn't happen.. */
+	g_free(irc_server->real_address);
+	irc_server->real_address = from == NULL ?
+		g_strdup(irc_server->connrec->address) : /* shouldn't happen.. */
 		g_strdup(from);
 
 	/* last welcome message found - commands can be sent to server now. */
-	server->connected = 1;
-	server->real_connect_time = time(NULL);
+	irc_server->connected = 1;
+	irc_server->real_connect_time = time(NULL);
 
 	/* let the queue send now that we are identified */
-	g_get_current_time(&server->wait_cmd);
+	g_get_current_time(&irc_server->wait_cmd);
 
-	if (server->connrec->usermode != NULL) {
+	if (irc_server->connrec->usermode != NULL) {
 		/* Send the user mode, before the autosendcmd.
 		 * Do not pass this through cmd_mode because it
 		 * is not known whether the resulting MODE message
 		 * (if any) is the initial umode or a reply to this.
 		 */
-		irc_send_cmdv(server, "MODE %s %s", server->nick,
-				server->connrec->usermode);
-		g_free_not_null(server->wanted_usermode);
-		server->wanted_usermode = g_strdup(server->connrec->usermode);
+		irc_send_cmdv(irc_server, "MODE %s %s", irc_server->nick,
+				irc_server->connrec->usermode);
+		g_free_not_null(irc_server->wanted_usermode);
+		irc_server->wanted_usermode = g_strdup(irc_server->connrec->usermode);
 	}
 
 	signal_emit__event_connected((SERVER_REC *)server);
@@ -848,9 +856,13 @@ static void event_isupport(IRC_SERVER_REC *server, const char *data)
 
 }
 
-static void event_motd(IRC_SERVER_REC *server, const char *data, const char *from)
+static void event_motd(SERVER_REC *server, const char *data, const char *from, const char *u0)
 {
-	if (server->connected)
+	IRC_SERVER_REC *irc_server;
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+
+	if (irc_server->connected)
 		return;
 
 	/* Stupid broken piece of shit ircd didn't send us 001,
@@ -861,8 +873,8 @@ static void event_motd(IRC_SERVER_REC *server, const char *data, const char *fro
 
 	   Oh, and looks like it also doesn't answer anything to PINGs,
 	   disable lag checking. */
-        server->disable_lag = TRUE;
-	event_connected(server, data, from);
+        irc_server->disable_lag = TRUE;
+	event_connected(server, data, from, NULL);
 }
 
 static void event_end_of_motd(IRC_SERVER_REC *server, const char *data)

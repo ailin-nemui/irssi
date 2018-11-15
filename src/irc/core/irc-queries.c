@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "signal-registry.h"
 #include "misc.h"
 
 #include "irc-nicklist.h"
@@ -89,7 +90,7 @@ static void ctcp_action(IRC_SERVER_REC *server, const char *msg,
 }
 
 static void event_nick(SERVER_REC *server, const char *data,
-		       const char *orignick)
+		       const char *orignick, const char *u0)
 {
         QUERY_REC *query;
 	char *params, *nick;

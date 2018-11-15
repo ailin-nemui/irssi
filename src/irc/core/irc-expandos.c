@@ -22,6 +22,7 @@
 #include "misc.h"
 #include "expandos.h"
 #include "settings.h"
+#include "signal-registry.h"
 
 #include "irc-servers.h"
 #include "irc-channels.h"
@@ -141,12 +142,16 @@ static char *expando_cumode_space(SERVER_REC *server, void *item, int *free_ret)
 	return *ret == '\0' ? " " : ret;
 }
 
-static void event_join(IRC_SERVER_REC *server, const char *data,
+static void event_join(SERVER_REC *server, const char *data,
 		       const char *nick, const char *address)
 {
+	IRC_SERVER_REC *irc_server;
 	g_return_if_fail(nick != NULL);
 
-	if (g_ascii_strcasecmp(nick, server->nick) != 0) {
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+
+	if (g_ascii_strcasecmp(nick, irc_server->nick) != 0) {
 		g_free_not_null(last_join);
 		last_join = g_strdup(nick);
 	}

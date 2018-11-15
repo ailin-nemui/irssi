@@ -20,6 +20,7 @@
 
 #include "module.h"
 #include "signals.h"
+#include "core/signal-registry.h"
 #include "signal-registry.h"
 #include "misc.h"
 
@@ -76,8 +77,9 @@ int irc_nickcmp_ascii(const char *m, const char *n)
 	return *m == *n ? 0 : 1;
 }
 
-static void event_names_list(IRC_SERVER_REC *server, const char *data)
+static void event_names_list(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
+	IRC_SERVER_REC *irc_server;
 	IRC_CHANNEL_REC *chanrec;
 	NICK_REC *rec;
 	char *params, *type, *channel, *names, *ptr, *host;
@@ -87,15 +89,18 @@ static void event_names_list(IRC_SERVER_REC *server, const char *data)
 
 	g_return_if_fail(data != NULL);
 
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+
 	params = event_get_params(data, 4, NULL, &type, &channel, &names);
 
-	chanrec = irc_channel_find(server, channel);
+	chanrec = irc_channel_find(irc_server, channel);
 	if (chanrec == NULL || chanrec->names_got) {
 		/* unknown channel / names list already read */
 		g_free(params);
 		return;
 	}
-	nick_flags = server->get_nick_flags(SERVER(server));
+	nick_flags = irc_server->get_nick_flags(SERVER(server));
 	nick_flag_op = strchr(nick_flags, '@');
 
 	/* type = '=' = public, '*' = private, '@' = secret.
@@ -126,7 +131,7 @@ static void event_names_list(IRC_SERVER_REC *server, const char *data)
 		   found. */
 		op = halfop = voice = FALSE;
 		prefixes[0] = '\0';
-		while (isnickflag(server, *ptr)) {
+		while (isnickflag(irc_server, *ptr)) {
 			prefix_add(prefixes, *ptr, (SERVER_REC *) server);
 			switch (*ptr) {
 			case '@':
@@ -166,8 +171,9 @@ static void event_names_list(IRC_SERVER_REC *server, const char *data)
 	g_free(params);
 }
 
-static void event_end_of_names(IRC_SERVER_REC *server, const char *data)
+static void event_end_of_names(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
+	IRC_SERVER_REC *irc_server;
 	char *params, *channel;
 	IRC_CHANNEL_REC *chanrec;
 	NICK_REC *ownnick;
@@ -175,16 +181,19 @@ static void event_end_of_names(IRC_SERVER_REC *server, const char *data)
 
 	g_return_if_fail(server != NULL);
 
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+
 	params = event_get_params(data, 2, NULL, &channel);
 
-	chanrec = irc_channel_find(server, channel);
+	chanrec = irc_channel_find(irc_server, channel);
 	if (chanrec != NULL && !chanrec->names_got) {
-		ownnick = nicklist_find(CHANNEL(chanrec), server->nick);
+		ownnick = nicklist_find(CHANNEL(chanrec), irc_server->nick);
 		if (ownnick == NULL) {
 			/* stupid server - assume we have ops
 			   if channel is empty */
 			nicks = g_hash_table_size(chanrec->nicks);
-			ownnick = irc_nicklist_insert(chanrec, server->nick,
+			ownnick = irc_nicklist_insert(chanrec, irc_server->nick,
 						      nicks == 0, FALSE,
 						      FALSE, FALSE, NULL);
 		}
@@ -197,7 +206,7 @@ static void event_end_of_names(IRC_SERVER_REC *server, const char *data)
 	g_free(params);
 }
 
-static void event_who(SERVER_REC *server, const char *data)
+static void event_who(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
 	char *params, *nick, *channel, *user, *host, *stat, *realname, *hops;
 	CHANNEL_REC *chanrec;
@@ -236,13 +245,17 @@ static void event_who(SERVER_REC *server, const char *data)
 	g_free(params);
 }
 
-static void event_whois(IRC_SERVER_REC *server, const char *data)
+static void event_whois(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
+	IRC_SERVER_REC *irc_server;
 	char *params, *nick, *realname;
 	GSList *nicks, *tmp;
 	NICK_REC *rec;
 
 	g_return_if_fail(data != NULL);
+
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
 
 	/* first remove the gone-flag, if user is gone
 	   it will be set later.. */
@@ -264,7 +277,7 @@ static void event_whois(IRC_SERVER_REC *server, const char *data)
 	g_free(params);
 }
 
-static void event_whois_away(SERVER_REC *server, const char *data)
+static void event_whois_away(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
 	char *params, *nick, *awaymsg;
 
@@ -276,7 +289,7 @@ static void event_whois_away(SERVER_REC *server, const char *data)
 	g_free(params);
 }
 
-static void event_own_away(SERVER_REC *server, const char *data)
+static void event_own_away(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
 	char *params, *nick;
 
@@ -288,7 +301,7 @@ static void event_own_away(SERVER_REC *server, const char *data)
 	g_free(params);
 }
 
-static void event_own_unaway(SERVER_REC *server, const char *data)
+static void event_own_unaway(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
 	char *params, *nick;
 
@@ -300,7 +313,7 @@ static void event_own_unaway(SERVER_REC *server, const char *data)
 	g_free(params);
 }
 
-static void event_whois_ircop(SERVER_REC *server, const char *data)
+static void event_whois_ircop(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
 	char *params, *nick, *awaymsg;
 
@@ -312,7 +325,7 @@ static void event_whois_ircop(SERVER_REC *server, const char *data)
 	g_free(params);
 }
 
-static void event_nick_invalid(IRC_SERVER_REC *server, const char *data)
+static void event_nick_invalid(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
 	if (!server->connected)
 		/* we used to call server_disconnect but that crashes
@@ -322,95 +335,107 @@ static void event_nick_invalid(IRC_SERVER_REC *server, const char *data)
 		server->connection_lost = server->no_reconnect = TRUE;
 }
 
-static void event_nick_in_use(IRC_SERVER_REC *server, const char *data)
+static void event_nick_in_use(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
+	IRC_SERVER_REC *irc_server;
 	char *str, *cmd, *params, *nick;
 	int n;
 	gboolean try_alternate_nick;
 
 	g_return_if_fail(data != NULL);
 
-	if (server->connected) {
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+
+	if (irc_server->connected) {
 		/* Already connected, no need to handle this anymore. */
 		return;
 	}
 	
-	try_alternate_nick = g_ascii_strcasecmp(server->nick, server->connrec->nick) == 0 &&
-	    server->connrec->alternate_nick != NULL &&
-	    g_ascii_strcasecmp(server->connrec->alternate_nick, server->nick) != 0;
+	try_alternate_nick = g_ascii_strcasecmp(irc_server->nick, irc_server->connrec->nick) == 0 &&
+	    irc_server->connrec->alternate_nick != NULL &&
+	    g_ascii_strcasecmp(irc_server->connrec->alternate_nick, irc_server->nick) != 0;
 
 	params = event_get_params(data, 2, NULL, &nick);
-	if (g_ascii_strcasecmp(server->nick, nick) != 0) {
+	if (g_ascii_strcasecmp(irc_server->nick, nick) != 0) {
 		/* the server uses a nick different from the one we send */
-		g_free(server->nick);
-		server->nick = g_strdup(nick);
+		g_free(irc_server->nick);
+		irc_server->nick = g_strdup(nick);
 	}
 	g_free(params);
 
 	/* nick already in use - need to change it .. */
 	if (try_alternate_nick) {
 		/* first try, so try the alternative nick.. */
-		g_free(server->nick);
-		server->nick = g_strdup(server->connrec->alternate_nick);
+		g_free(irc_server->nick);
+		irc_server->nick = g_strdup(irc_server->connrec->alternate_nick);
 	}
-	else if (strlen(server->nick) < 9) {
+	else if (strlen(irc_server->nick) < 9) {
 		/* keep adding '_' to end of nick.. */
-		str = g_strdup_printf("%s_", server->nick);
-		g_free(server->nick);
-		server->nick = str;
+		str = g_strdup_printf("%s_", irc_server->nick);
+		g_free(irc_server->nick);
+		irc_server->nick = str;
 	} else {
 		/* nick full, keep adding number at the end */
 		for (n = 8; n > 0; n--) {
-			if (server->nick[n] < '0' || server->nick[n] > '9') {
-				server->nick[n] = '1';
+			if (irc_server->nick[n] < '0' || irc_server->nick[n] > '9') {
+				irc_server->nick[n] = '1';
 				break;
 			}
 
-			if (server->nick[n] < '9') {
-				server->nick[n]++;
+			if (irc_server->nick[n] < '9') {
+				irc_server->nick[n]++;
 				break;
 			}
-			server->nick[n] = '0';
+			irc_server->nick[n] = '0';
 		}
 	}
 
-	cmd = g_strdup_printf("NICK %s", server->nick);
-	irc_send_cmd_now(server, cmd);
+	cmd = g_strdup_printf("NICK %s", irc_server->nick);
+	irc_send_cmd_now(irc_server, cmd);
 	g_free(cmd);
 }
 
-static void event_target_unavailable(IRC_SERVER_REC *server, const char *data)
+static void event_target_unavailable(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
+	IRC_SERVER_REC *irc_server;
 	char *params, *channel;
 
 	g_return_if_fail(data != NULL);
 
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+
 	params = event_get_params(data, 2, NULL, &channel);
 	if (!server_ischannel(SERVER(server), channel)) {
 		/* nick is unavailable. */
-		event_nick_in_use(server, data);
+		event_nick_in_use(server, data, u0, u1);
 	}
 
 	g_free(params);
 }
 
-static void event_nick(IRC_SERVER_REC *server, const char *data,
-		       const char *orignick)
+static void event_nick(SERVER_REC *server, const char *data,
+		       const char *orignick, const char *u0)
 {
+	IRC_SERVER_REC *irc_server;
 	char *params, *nick;
 
 	g_return_if_fail(data != NULL);
 	g_return_if_fail(orignick != NULL);
 
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+
 	params = event_get_params(data, 1, &nick);
 
-	if (g_ascii_strcasecmp(orignick, server->nick) == 0) {
+	if (g_ascii_strcasecmp(orignick, irc_server->nick) == 0) {
 		/* You changed your nick */
-		if (server->last_nick != NULL &&
-		    g_ascii_strcasecmp(server->last_nick, nick) == 0) {
+		if (irc_server->last_nick != NULL &&
+		    g_ascii_strcasecmp(irc_server->last_nick, nick) == 0) {
                         /* changed with /NICK - keep it as wanted nick */
-			g_free(server->connrec->nick);
-			server->connrec->nick = g_strdup(nick);
+			g_free(irc_server->connrec->nick);
+			irc_server->connrec->nick = g_strdup(nick);
 		}
 
 		server_change_nick(SERVER(server), nick);
@@ -420,7 +445,7 @@ static void event_nick(IRC_SERVER_REC *server, const char *data,
 	g_free(params);
 }
 
-static void event_userhost(SERVER_REC *server, const char *data)
+static void event_userhost(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
 	char *params, *hosts, **phosts, **pos, *ptr;
 	int oper;
@@ -447,7 +472,7 @@ static void event_userhost(SERVER_REC *server, const char *data)
 	g_free(params);
 }
 
-static void sig_usermode(SERVER_REC *server)
+static void sig_usermode(SERVER_REC *server, const char *u0)
 {
 	g_return_if_fail(IS_SERVER(server));
 
@@ -464,30 +489,30 @@ static const char *get_nick_flags(SERVER_REC *server)
 	return prefix == NULL ? "" : prefix+1;
 }
 
-static void sig_connected(IRC_SERVER_REC *server)
+static void sig_connected(SERVER_REC *server)
 {
 	if (IS_IRC_SERVER(server))
-		server->get_nick_flags = get_nick_flags;
+		((IRC_SERVER_REC *)server)->get_nick_flags = get_nick_flags;
 }
 
 void irc_nicklist_init(void)
 {
-	signal_add_first__event_nick(event_nick);
-	signal_add_first__event_352(event_who);
+	signal_add_first__event_("nick", event_nick);
+	signal_add_first__event_("352", event_who);
 	signal_add__silent_event_who(event_who);
 	signal_add__silent_event_whois(event_whois);
-	signal_add_first__event_311(event_whois);
+	signal_add_first__event_("311", event_whois);
 	signal_add_first__whois_away(event_whois_away);
 	signal_add_first__whois_oper(event_whois_ircop);
-	signal_add_first__event_306(event_own_away);
-	signal_add_first__event_305(event_own_unaway);
-	signal_add_first__event_353(event_names_list);
-	signal_add_first__event_366(event_end_of_names);
-	signal_add_first__event_432(event_nick_invalid);
-	signal_add_first__event_433(event_nick_in_use);
-	signal_add_first__event_437(event_target_unavailable);
-	signal_add_first__event_302(event_userhost);
-	signal_add__userhost_event(event_userhost);
+	signal_add_first__event_("306", event_own_away);
+	signal_add_first__event_("305", event_own_unaway);
+	signal_add_first__event_("353", event_names_list);
+	signal_add_first__event_("366", event_end_of_names);
+	signal_add_first__event_("432", event_nick_invalid);
+	signal_add_first__event_("433", event_nick_in_use);
+	signal_add_first__event_("437", event_target_unavailable);
+	signal_add_first__event_("302", event_userhost);
+	//signal_add__userhost_event(event_userhost);
 	signal_add__user_mode_changed(sig_usermode);
 	signal_add__server_connected(sig_connected);
 }
@@ -509,7 +534,7 @@ void irc_nicklist_deinit(void)
 	signal_remove__event_("433", event_nick_in_use);
 	signal_remove__event_("437", event_target_unavailable);
 	signal_remove__event_("302", event_userhost);
-	signal_remove__userhost_event(event_userhost);
+	//signal_remove__userhost_event(event_userhost);
 	signal_remove__user_mode_changed(sig_usermode);
 	signal_remove__server_connected(sig_connected);
 }

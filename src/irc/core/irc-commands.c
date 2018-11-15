@@ -458,43 +458,59 @@ static void cmd_whois(const char *data, IRC_SERVER_REC *server,
 	cmd_params_free(free_arg);
 }
 
-static void event_whois(IRC_SERVER_REC *server, const char *data,
+static void event_whois(SERVER_REC *server, const char *data,
                         const char *nick, const char *addr)
 {
-	server->whois_found = TRUE;
-	signal_emit__event_("311", (SERVER_REC *)server, data, nick, addr);
+	IRC_SERVER_REC *irc_server;
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+
+	irc_server->whois_found = TRUE;
+	signal_emit__event_("311", server, data, nick, addr);
 }
 
-static void sig_whois_try_whowas(IRC_SERVER_REC *server, const char *data)
+static void sig_whois_try_whowas(SERVER_REC *server, const char *data, const char *u0, const char *u1)
 {
+	IRC_SERVER_REC *irc_server;
 	char *params, *nick;
 
 	g_return_if_fail(data != NULL);
 
 	params = event_get_params(data, 2, NULL, &nick);
 
-	server->whowas_found = FALSE;
-	server_redirect_event(server, "whowas", 1, nick, -1, NULL,
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+
+	irc_server->whowas_found = FALSE;
+	server_redirect_event(irc_server, "whowas", 1, nick, -1, NULL,
 	                      "event 314", "whowas event",
 	                      "event 369", "whowas event end",
 	                      "event 406", "event empty", NULL);
-	irc_send_cmdv(server, "WHOWAS %s 1", nick);
+	irc_send_cmdv(irc_server, "WHOWAS %s 1", nick);
 
 	g_free(params);
 }
 
-static void event_end_of_whois(IRC_SERVER_REC *server, const char *data,
+static void event_end_of_whois(SERVER_REC *server, const char *data,
                                const char *nick, const char *addr)
 {
-	signal_emit__event_("318", (SERVER_REC *)server, data, nick, addr);
-	server->whois_found = FALSE;
+	IRC_SERVER_REC *irc_server;
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+
+	signal_emit__event_("318", server, data, nick, addr);
+	irc_server->whois_found = FALSE;
 }
 
-static void event_whowas(IRC_SERVER_REC *server, const char *data,
+static void event_whowas(SERVER_REC *server, const char *data,
                          const char *nick, const char *addr)
 {
-	server->whowas_found = TRUE;
-	signal_emit__event_("314", (SERVER_REC *)server, data, nick, addr);
+	IRC_SERVER_REC *irc_server;
+	if ((irc_server = IRC_SERVER(server)) == NULL)
+		return;
+
+	irc_server->whowas_found = TRUE;
+	signal_emit__event_("314", server, data, nick, addr);
 }
 
 /* SYNTAX: WHOWAS [<nicks> [<count> [server]]] */
@@ -876,19 +892,20 @@ static void sig_server_disconnected(SERVER_REC *server)
 }
 
 /* destroy all knockouts in channel */
-static void sig_channel_destroyed(IRC_CHANNEL_REC *channel)
+static void sig_channel_destroyed(CHANNEL_REC *channel)
 {
+	IRC_CHANNEL_REC *irc_channel;
 	GSList *tmp, *next;
 
-	if (!IS_IRC_CHANNEL(channel) || !IS_IRC_SERVER(channel->server))
+	if ((irc_channel = IRC_CHANNEL(channel)) == NULL)
 		return;
 
-	for (tmp = channel->server->knockoutlist; tmp != NULL; tmp = next) {
+	for (tmp = irc_channel->server->knockoutlist; tmp != NULL; tmp = next) {
 		KNOCKOUT_REC *rec = tmp->data;
 
 		next = tmp->next;
-		if (rec->channel == channel)
-			knockout_destroy(channel->server, rec);
+		if (rec->channel == irc_channel)
+			knockout_destroy(irc_channel->server, rec);
 	}
 }
 
