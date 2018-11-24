@@ -104,7 +104,7 @@ void sig_message_private(SERVER_REC *server, const char *msg, const char *nick, 
 		 */
 		if (strncmp(new_msg, OTR_IRC_MARKER_ME, OTR_IRC_MARKER_ME_LEN) == 0) {
 			signal_stop();
-			signal_emit__message_irc_action((IRC_SERVER_REC *)server, new_msg + OTR_IRC_MARKER_ME_LEN, nick, address, nick);
+			SIGNAL_EMIT(message_irc_action, (IRC_SERVER_REC *)server, new_msg + OTR_IRC_MARKER_ME_LEN, nick, address, nick);
 		} else {
 			/* OTR received message */
 			signal_continue(5, server, new_msg, nick, address, target);
@@ -170,7 +170,7 @@ static void cmd_me(const char *data, IRC_SERVER_REC *server,
 		otrl_message_free(otrmsg);
 	}
 
-	signal_emit__message_irc_own__action((IRC_SERVER_REC *)server, data, item->visible_name);
+	SIGNAL_EMIT(message_irc_own__action, (IRC_SERVER_REC *)server, data, item->visible_name);
 }
 
 /*

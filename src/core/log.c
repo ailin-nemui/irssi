@@ -137,7 +137,7 @@ int log_start_logging(LOG_REC *log)
 		     log_file_create_mode);
 #endif
 	if (log->handle == -1) {
-		signal_emit__log_create_failed(log);
+		SIGNAL_EMIT(log_create_failed, log);
 		log->failed = TRUE;
 		return FALSE;
 	}
@@ -146,7 +146,7 @@ int log_start_logging(LOG_REC *log)
 	if (fcntl(log->handle, F_SETLK, &lock) == -1 && errno == EACCES) {
 		close(log->handle);
 		log->handle = -1;
-		signal_emit__log_locked(log);
+		SIGNAL_EMIT(log_locked, log);
 		log->failed = TRUE;
 		return FALSE;
 	}
@@ -157,7 +157,7 @@ int log_start_logging(LOG_REC *log)
 			    settings_get_str("log_open_string"),
 			    "\n", log->last);
 
-	signal_emit__log_started(log);
+	SIGNAL_EMIT(log_started, log);
 	log->failed = FALSE;
 	return TRUE;
 }
@@ -171,7 +171,7 @@ void log_stop_logging(LOG_REC *log)
 	if (log->handle == -1)
 		return;
 
-	signal_emit__log_stopped(log);
+	SIGNAL_EMIT(log_stopped, log);
 
 	log_write_timestamp(log->handle,
 			    settings_get_str("log_close_string"),
@@ -199,7 +199,7 @@ static void log_rotate_check(LOG_REC *log)
 	if (g_strcmp0(new_fname, log->real_fname) != 0) {
 		/* rotate log */
 		log_stop_logging(log);
-		signal_emit__log_rotated(log);
+		SIGNAL_EMIT(log_rotated, log);
 
 		log_start_logging(log);
 	}
@@ -251,7 +251,7 @@ void log_write_rec(LOG_REC *log, const char *str, int level)
 		write_buffer(log->handle, str, strlen(str));
 	write_buffer(log->handle, "\n", 1);
 
-	signal_emit__log_written(log, str);
+	SIGNAL_EMIT(log_written, log, str);
 
         g_free_not_null(colorstr);
 }
@@ -383,7 +383,7 @@ static void log_update_config(LOG_REC *log)
 	if (log->items != NULL)
 		log_items_update_config(log, node);
 
-	signal_emit__log_config_save(log, node);
+	SIGNAL_EMIT(log_config_save, log, node);
 }
 
 static void log_remove_config(LOG_REC *log)
@@ -438,7 +438,7 @@ void log_update(LOG_REC *log)
 	}
 
 	log_update_config(log);
-	signal_emit__log_new(log);
+	SIGNAL_EMIT(log_new, log);
 }
 
 void log_item_destroy(LOG_REC *log, LOG_ITEM_REC *item)
@@ -458,7 +458,7 @@ static void log_destroy(LOG_REC *log)
 		log_stop_logging(log);
 
 	logs = g_slist_remove(logs, log);
-	signal_emit__log_remove(log);
+	SIGNAL_EMIT(log_remove, log);
 
 	while (log->items != NULL)
 		log_item_destroy(log, log->items->data);
@@ -557,7 +557,7 @@ static void log_read_config(void)
 		log->autoopen = config_node_get_bool(node, "auto_open", FALSE);
 		log->level = level2bits(config_node_get_str(node, "level", 0), NULL);
 
-		signal_emit__log_config_read(log, node);
+		SIGNAL_EMIT(log_config_read, log, node);
 
 		node = iconfig_node_section(node, "items", -1);
 		if (node != NULL)

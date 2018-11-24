@@ -1273,7 +1273,7 @@ void textbuffer_view_remove_line(TEXT_BUFFER_VIEW_REC *view, LINE_REC *line)
 	g_return_if_fail(view != NULL);
 	g_return_if_fail(line != NULL);
 
-	signal_emit__gui_textbuffer_line_removed(view, line, line->prev);
+	SIGNAL_EMIT(gui_textbuffer_line_removed, view, line, line->prev);
 
         linecount = view_get_linecount(view, line);
         update_counter = view->cache->update_counter+1;

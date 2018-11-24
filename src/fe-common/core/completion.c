@@ -213,7 +213,7 @@ char *word_complete(WINDOW_REC *window, const char *line, int *pos, int erase, i
 	}
 
 	if (erase) {
-		signal_emit__complete_erase(window, word, linestart);
+		SIGNAL_EMIT(complete_erase, window, word, linestart);
 
                 /* jump to next completion */
                 startpos = old_startpos;
@@ -234,7 +234,7 @@ char *word_complete(WINDOW_REC *window, const char *line, int *pos, int erase, i
 		free_completions();
 
 		want_space = TRUE;
-		signal_emit__complete_word(&complist, window, word, linestart, &want_space);
+		SIGNAL_EMIT(complete_word, &complist, window, word, linestart, &want_space);
 		last_want_space = want_space;
 
 		if (complist != NULL) {
@@ -682,7 +682,7 @@ static void sig_complete_word(GList **list, WINDOW_REC *window,
 
 	/* complete parameters */
 	signal = g_strconcat("complete command ", cmd, NULL);
-	signal_emit__complete_command_(cmd, list, window, word, args, want_space);
+	SIGNAL_EMIT_(complete_command, cmd, list, window, word, args, want_space);
 
 	if (command_have_sub(line)) {
 		/* complete subcommand */
@@ -723,7 +723,7 @@ static void sig_complete_erase(WINDOW_REC *window, const char *word,
 	}
 
 	signal = g_strconcat("complete erase command ", cmd, NULL);
-	signal_emit__complete_erase_command_(cmd, window, word, args);
+	SIGNAL_EMIT_(complete_erase_command, cmd, window, word, args);
 
         g_free(signal);
 	g_free(cmd);
@@ -851,7 +851,7 @@ static void cmd_completion(const char *data)
 			    TXT_COMPLETION_REMOVED, key);
 
 		iconfig_set_str("completions", key, NULL);
-		signal_emit__completion_removed(key);
+		SIGNAL_EMIT(completion_removed, key);
 	} else if (*key != '\0' && *value != '\0') {
 		int automatic = g_hash_table_lookup(optlist, "auto") != NULL;
 
@@ -866,7 +866,7 @@ static void cmd_completion(const char *data)
 			    TXT_COMPLETION_LINE,
 			    key, value, automatic ? "yes" : "no");
 
-		signal_emit__completion_added(key);
+		SIGNAL_EMIT(completion_added, key);
 	} else {
 		printformat(NULL, NULL, MSGLEVEL_CLIENTCRAP,
 			    TXT_COMPLETION_HEADER);

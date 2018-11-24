@@ -167,11 +167,11 @@ static void session_restore_channel(IRC_CHANNEL_REC *channel)
 {
 	char *data;
 
-	signal_emit__event_("join", (SERVER_REC *)channel->server, channel->name,
+	SIGNAL_EMIT_(event, "join", (SERVER_REC *)channel->server, channel->name,
 		    channel->server->nick, channel->server->userhost);
 
 	data = g_strconcat(channel->server->nick, " ", channel->name, NULL);
-	signal_emit__event_("366", (SERVER_REC *)channel->server, data, NULL, NULL);
+	SIGNAL_EMIT_(event, "366", (SERVER_REC *)channel->server, data, NULL, NULL);
 	g_free(data);
 }
 
@@ -189,7 +189,7 @@ static void sig_connected(IRC_SERVER_REC *server)
 	   free()'s the server->real_address and then tries to strdup() the
 	   given origin again */
 	addr = g_strdup(server->real_address);
-	signal_emit__event_("001", (SERVER_REC *)server, str, addr, NULL);
+	SIGNAL_EMIT_(event, "001", (SERVER_REC *)server, str, addr, NULL);
         g_free(addr);
         g_free(str);
 

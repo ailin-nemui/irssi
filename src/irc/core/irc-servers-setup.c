@@ -161,7 +161,7 @@ static void init_userinfo(void)
 		}
 	}
 
-	signal_emit__irssi_init_userinfo_changed(GUINT_TO_POINTER(changed));
+	SIGNAL_EMIT(irssi_init_userinfo_changed, GUINT_TO_POINTER(changed));
 }
 
 static void sig_server_setup_read(IRC_SERVER_SETUP_REC *rec, CONFIG_NODE *node)

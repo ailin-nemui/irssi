@@ -270,7 +270,7 @@ static void paste_send_line(char *text)
 	/* we need to get the current history every time because it might change between calls */
 	command_history_add(command_history_current(active_win), text);
 
-	signal_emit__send_command(text, active_win->active_server, active_win->active);
+	SIGNAL_EMIT(send_command, text, active_win->active_server, active_win->active);
 }
 
 static void paste_send(void)
@@ -493,7 +493,7 @@ static void key_send_line(void)
 	}
 
 	if (redir == NULL) {
-		signal_emit__send_command(str,
+		SIGNAL_EMIT(send_command, str,
 			    active_win->active_server,
 			    active_win->active);
 	} else {
@@ -740,7 +740,7 @@ static gboolean paste_timeout(gpointer data)
 
 		for (i = 0; i < paste_buffer->len; i++) {
 			unichar key = g_array_index(paste_buffer, unichar, i);
-			signal_emit__gui_key_pressed(GINT_TO_POINTER(key));
+			SIGNAL_EMIT(gui_key_pressed, GINT_TO_POINTER(key));
 		}
 		g_array_set_size(paste_buffer, 0);
 	} else if (paste_verify_line_count > 0 &&
@@ -852,7 +852,7 @@ static void sig_input(void)
 
 			for (i = 0; i < paste_buffer->len; i++) {
 				unichar key = g_array_index(paste_buffer, unichar, i);
-				signal_emit__gui_key_pressed(GINT_TO_POINTER(key));
+				SIGNAL_EMIT(gui_key_pressed, GINT_TO_POINTER(key));
 
 				if (paste_bracketed_mode) {
 					/* just enabled by the signal, remove what was processed so far */
@@ -891,17 +891,17 @@ static void key_scroll_forward(void)
 
 static void key_scroll_start(void)
 {
-	signal_emit__command_("scrollback home", NULL, active_win->active_server, active_win->active);
+	SIGNAL_EMIT_(command, "scrollback home", NULL, active_win->active_server, active_win->active);
 }
 
 static void key_scroll_end(void)
 {
-	signal_emit__command_("scrollback end", NULL, active_win->active_server, active_win->active);
+	SIGNAL_EMIT_(command, "scrollback end", NULL, active_win->active_server, active_win->active);
 }
 
 static void key_change_window(const char *data)
 {
-	signal_emit__command_("window goto", data, active_win->active_server, active_win->active);
+	SIGNAL_EMIT_(command, "window goto", data, active_win->active_server, active_win->active);
 }
 
 static void key_completion(int erase, int backward)
@@ -951,37 +951,37 @@ static void key_check_replaces(void)
 
 static void key_previous_window(void)
 {
-	signal_emit__command_("window previous", "", active_win->active_server, active_win->active);
+	SIGNAL_EMIT_(command, "window previous", "", active_win->active_server, active_win->active);
 }
 
 static void key_next_window(void)
 {
-	signal_emit__command_("window next", "", active_win->active_server, active_win->active);
+	SIGNAL_EMIT_(command, "window next", "", active_win->active_server, active_win->active);
 }
 
 static void key_left_window(void)
 {
-	signal_emit__command_("window _left", "", active_win->active_server, active_win->active);
+	SIGNAL_EMIT_(command, "window _left", "", active_win->active_server, active_win->active);
 }
 
 static void key_right_window(void)
 {
-	signal_emit__command_("window right", "", active_win->active_server, active_win->active);
+	SIGNAL_EMIT_(command, "window right", "", active_win->active_server, active_win->active);
 }
 
 static void key_upper_window(void)
 {
-	signal_emit__command_("window up", "", active_win->active_server, active_win->active);
+	SIGNAL_EMIT_(command, "window up", "", active_win->active_server, active_win->active);
 }
 
 static void key_lower_window(void)
 {
-	signal_emit__command_("window down", "", active_win->active_server, active_win->active);
+	SIGNAL_EMIT_(command, "window down", "", active_win->active_server, active_win->active);
 }
 
 static void key_active_window(void)
 {
-	signal_emit__command_("window goto", "active", active_win->active_server, active_win->active);
+	SIGNAL_EMIT_(command, "window goto", "active", active_win->active_server, active_win->active);
 }
 
 static SERVER_REC *get_prev_server(SERVER_REC *current)
@@ -1050,7 +1050,7 @@ static void key_previous_window_item(void)
 	SERVER_REC *server;
 
 	if (active_win->items != NULL) {
-		signal_emit__command_("window item prev", "",
+		SIGNAL_EMIT_(command, "window item prev", "",
 			    active_win->active_server, active_win->active);
 	} else if (servers != NULL || lookup_servers != NULL) {
 		/* change server */
@@ -1058,7 +1058,7 @@ static void key_previous_window_item(void)
 		if (server == NULL)
 			server = active_win->connect_server;
 		server = get_prev_server(server);
-		signal_emit__command_("window server", server->tag,
+		SIGNAL_EMIT_(command, "window server", server->tag,
 			    active_win->active_server, active_win->active);
 	}
 }
@@ -1068,7 +1068,7 @@ static void key_next_window_item(void)
 	SERVER_REC *server;
 
 	if (active_win->items != NULL) {
-		signal_emit__command_("window item next", "",
+		SIGNAL_EMIT_(command, "window item next", "",
 			    active_win->active_server, active_win->active);
 	} else if (servers != NULL || lookup_servers != NULL) {
 		/* change server */
@@ -1076,7 +1076,7 @@ static void key_next_window_item(void)
 		if (server == NULL)
 			server = active_win->connect_server;
 		server = get_next_server(server);
-		signal_emit__command_("window server", server->tag,
+		SIGNAL_EMIT_(command, "window server", server->tag,
 			    active_win->active_server, active_win->active);
 	}
 }

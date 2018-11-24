@@ -59,7 +59,7 @@ static void cmd_echo(const char *data, void *server, WI_ITEM_REC *item)
 
 static void sig_public(SERVER_REC *server, const char *msg, const char *nick, const char *address, const char *target)
 {
-	signal_emit__send_command("/eval echo $tag", server, NULL);
+	SIGNAL_EMIT(send_command, "/eval echo $tag", server, NULL);
 }
 
 static void print_disconnect(SERVER_REC *server)
@@ -79,7 +79,7 @@ static void server_destroy_flood_set_up(ServerDestroyFloodData *fixture, const v
 	irc_init();
 	fe_common_core_init();
 	fe_common_irc_init();
-	signal_emit__irssi_init_finished();
+	SIGNAL_EMIT(irssi_init_finished);
 	command_bind("echo", NULL, (SIGNAL_FUNC) cmd_echo);
 	signal_add__message_public(sig_public);
 	signal_add__server_destroyed(print_destroyed);
@@ -153,7 +153,7 @@ static void test_server_destroy_flood(ServerDestroyFloodData *fixture, const voi
 	*/
 
 	server_ref(server);
-	signal_emit__event_("privmsg", (SERVER_REC *)server, "#someroom :test message", "nick", "user@host");
+	SIGNAL_EMIT_(event, "privmsg", (SERVER_REC *)server, "#someroom :test message", "nick", "user@host");
 	server_unref(server);
 
 	g_log_set_always_fatal(loglev);

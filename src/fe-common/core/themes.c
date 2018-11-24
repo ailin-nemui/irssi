@@ -60,7 +60,7 @@ THEME_REC *theme_create(const char *path, const char *name)
 	rec->modules = g_hash_table_new((GHashFunc) g_istr_hash,
 					(GCompareFunc) g_istr_equal);
 	themes = g_slist_append(themes, rec);
-	signal_emit__theme_created(rec);
+	SIGNAL_EMIT(theme_created, rec);
 
 	return rec;
 }
@@ -110,7 +110,7 @@ static void theme_unref(THEME_REC *rec)
 void theme_destroy(THEME_REC *rec)
 {
 	themes = g_slist_remove(themes, rec);
-	signal_emit__theme_destroyed(rec);
+	SIGNAL_EMIT(theme_destroyed, rec);
 
 	theme_unref(rec);
 }
@@ -811,7 +811,7 @@ static void sig_print_errors(void)
 	init_finished = TRUE;
 
 	if (init_errors != NULL) {
-		signal_emit__gui_dialog("error", init_errors);
+		SIGNAL_EMIT(gui_dialog, "error", init_errors);
                 g_free(init_errors);
 	}
 }
@@ -1368,7 +1368,7 @@ static void change_theme(const char *name, int verbose)
 	rec = theme_load(name);
 	if (rec != NULL) {
 		current_theme = rec;
-                signal_emit__theme_changed(rec);
+                SIGNAL_EMIT(theme_changed, rec);
 
 		if (verbose) {
 			printformat(NULL, NULL, MSGLEVEL_CLIENTNOTICE,

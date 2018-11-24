@@ -60,7 +60,7 @@ static void ctcp_ping_msg(IRC_SERVER_REC *server, const char *data,
 			  const char *nick, const char *addr,
 			  const char *target)
 {
-	signal_emit__message_irc_ctcp(server, "PING",
+	SIGNAL_EMIT(message_irc_ctcp, server, "PING",
 		    data, nick, addr, target);
 }
 
@@ -68,7 +68,7 @@ static void ctcp_version_msg(IRC_SERVER_REC *server, const char *data,
 			     const char *nick, const char *addr,
 			     const char *target)
 {
-	signal_emit__message_irc_ctcp(server, "VERSION",
+	SIGNAL_EMIT(message_irc_ctcp, server, "VERSION",
 		    data, nick, addr, target);
 }
 
@@ -76,7 +76,7 @@ static void ctcp_time_msg(IRC_SERVER_REC *server, const char *data,
 			  const char *nick, const char *addr,
 			  const char *target)
 {
-	signal_emit__message_irc_ctcp(server, "TIME",
+	SIGNAL_EMIT(message_irc_ctcp, server, "TIME",
 		    data, nick, addr, target);
 }
 
@@ -84,7 +84,7 @@ static void ctcp_userinfo_msg(IRC_SERVER_REC *server, const char *data,
 			  const char *nick, const char *addr,
 			  const char *target)
 {
-	signal_emit__message_irc_ctcp(server, "USERINFO",
+	SIGNAL_EMIT(message_irc_ctcp, server, "USERINFO",
 		    data, nick, addr, target);
 }
 
@@ -92,7 +92,7 @@ static void ctcp_clientinfo_msg(IRC_SERVER_REC *server, const char *data,
 			  const char *nick, const char *addr,
 			  const char *target)
 {
-	signal_emit__message_irc_ctcp(server, "CLIENTINFO",
+	SIGNAL_EMIT(message_irc_ctcp, server, "CLIENTINFO",
 		    data, nick, addr, target);
 }
 

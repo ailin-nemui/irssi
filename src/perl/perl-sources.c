@@ -83,7 +83,7 @@ static int perl_source_event(PERL_SOURCE_REC *rec)
 
 	if (SvTRUE(ERRSV)) {
                 char *error = g_strdup(SvPV_nolen(ERRSV));
-		signal_emit__script_error(rec->script, error);
+		SIGNAL_EMIT(script_error, rec->script, error);
                 g_free(error);
 	}
 

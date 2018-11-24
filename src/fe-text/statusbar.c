@@ -548,7 +548,7 @@ STATUSBAR_REC *statusbar_create(STATUSBAR_GROUP_REC *group,
 	g_free(value);
 
         statusbars_recalc_ypos(bar);
-        signal_emit__statusbar_created(bar);
+        SIGNAL_EMIT(statusbar_created, bar);
 
         /* create the items to statusbar */
 	for (tmp = config->items; tmp != NULL; tmp = tmp->next) {
@@ -571,7 +571,7 @@ void statusbar_destroy(STATUSBAR_REC *bar)
 			g_slist_remove(bar->parent_window->statusbars, bar);
 	}
 
-        signal_emit__statusbar_destroyed(bar);
+        SIGNAL_EMIT(statusbar_destroyed, bar);
 
 	while (bar->items != NULL)
 		statusbar_item_destroy(bar->items->data);
@@ -915,7 +915,7 @@ SBAR_ITEM_REC *statusbar_item_create(STATUSBAR_REC *bar,
 	rec->dirty = TRUE;
 	bar->dirty = TRUE;
 
-        signal_emit__statusbar_item_created(rec);
+        SIGNAL_EMIT(statusbar_item_created, rec);
 	return rec;
 }
 
@@ -960,7 +960,7 @@ void statusbar_item_destroy(SBAR_ITEM_REC *item)
         else
 		g_hash_table_insert(named_sbar_items, item->config->name, list);
 
-        signal_emit__statusbar_item_destroyed(item);
+        SIGNAL_EMIT(statusbar_item_destroyed, item);
 
 	list = g_hash_table_lookup(sbar_item_signals, item);
         g_hash_table_remove(sbar_item_signals, item);

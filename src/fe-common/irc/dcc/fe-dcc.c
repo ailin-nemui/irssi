@@ -143,7 +143,7 @@ static void cmd_dcc_list(const char *data)
 
 	printformat(NULL, NULL, MSGLEVEL_DCC, IRCTXT_DCC_LIST_HEADER);
 	for (tmp = dcc_conns; tmp != NULL; tmp = tmp->next)
-		signal_emit__dcc_list_print(tmp->data);
+		SIGNAL_EMIT(dcc_list_print, tmp->data);
 	printformat(NULL, NULL, MSGLEVEL_DCC, IRCTXT_DCC_LIST_FOOTER);
 }
 

@@ -160,7 +160,7 @@ static void channel_change_topic(IRC_SERVER_REC *server, const char *channel,
 		chanrec->topic_time = settime;
 	}
 
-	signal_emit__channel_topic_changed(chanrec);
+	SIGNAL_EMIT(channel_topic_changed, chanrec);
 }
 
 static void event_topic_get(SERVER_REC *server, const char *data, const char *u0, const char *u1)

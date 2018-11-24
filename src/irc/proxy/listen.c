@@ -108,7 +108,7 @@ static void remove_client(CLIENT_REC *rec)
 	proxy_clients = g_slist_remove(proxy_clients, rec);
 	rec->listen->clients = g_slist_remove(rec->listen->clients, rec);
 
-	signal_emit__proxy_client_disconnected(rec);
+	SIGNAL_EMIT(proxy_client_disconnected, rec);
 	printtext(rec->server, NULL, MSGLEVEL_CLIENTNOTICE,
 	          "Proxy: Client %s disconnected", rec->addr);
 
@@ -220,7 +220,7 @@ static void handle_client_connect_cmd(CLIENT_REC *client,
 			/* client didn't send us PASS, kill it */
 			remove_client(client);
 		} else {
-			signal_emit__proxy_client_connected(client);
+			SIGNAL_EMIT(proxy_client_connected, client);
 			printtext(client->server, NULL, MSGLEVEL_CLIENTNOTICE,
 			          "Proxy: Client %s connected",
 			          client->addr);
@@ -286,7 +286,7 @@ static void handle_client_cmd(CLIENT_REC *client, char *cmd, char *args,
 			proxy_outdata(client, ":%s NOTICE %s :Proxy is now handling itself CTCPs sent to %s\r\n",
 			              client->proxy_address, client->nick, client->listen->ircnet);
 		} else {
-			signal_emit__proxy_client_command(client, args, data);
+			SIGNAL_EMIT(proxy_client_command, client, args, data);
 		}
 		return;
 	}
@@ -366,7 +366,7 @@ static void handle_client_cmd(CLIENT_REC *client, char *cmd, char *args,
 		} else if (strncmp(msg+1, "ACTION ", 7) == 0) {
 			/* action */
 			msg[strlen(msg)-1] = '\0';
-			signal_emit__message_irc_own_action(client->server, msg+8, target);
+			SIGNAL_EMIT(message_irc_own_action, client->server, msg+8, target);
 		} else {
 			/* CTCP */
 			char *p;
@@ -375,7 +375,7 @@ static void handle_client_cmd(CLIENT_REC *client, char *cmd, char *args,
 			p = strchr(msg, ' ');
 			if (p != NULL) *p++ = '\0'; else p = "";
 
-			signal_emit__message_irc_own_ctcp(client->server, msg+1, p, target);
+			SIGNAL_EMIT(message_irc_own_ctcp, client->server, msg+1, p, target);
 		}
 		ignore_next = FALSE;
 		g_free(params);
@@ -472,7 +472,7 @@ static void sig_listen(LISTEN_REC *listen)
 	proxy_clients = g_slist_prepend(proxy_clients, rec);
 	listen->clients = g_slist_prepend(listen->clients, rec);
 
-	signal_emit__proxy_client_connecting(rec);
+	SIGNAL_EMIT(proxy_client_connecting, rec);
 	printtext(rec->server, NULL, MSGLEVEL_CLIENTNOTICE,
 	          "Proxy: New client %s on port %s (%s)",
 	          rec->addr, listen->port_or_path, listen->ircnet);

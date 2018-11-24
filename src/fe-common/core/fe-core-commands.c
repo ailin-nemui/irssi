@@ -170,7 +170,7 @@ static void cmd_cat(const char *data)
 /* SYNTAX: BEEP */
 static void cmd_beep(void)
 {
-        signal_emit__beep();
+        SIGNAL_EMIT(beep);
 }
 
 static void cmd_nick(const char *data, SERVER_REC *server)
@@ -259,7 +259,7 @@ static void event_default_command(const char *data, void *server,
 			/* command character inside command .. we probably
 			   want to send this text to channel. for example
 			   when pasting a path /usr/bin/xxx. */
-			signal_emit__send_text(current_cmdline, server, item);
+			SIGNAL_EMIT(send_text, current_cmdline, server, item);
 			return;
 		}
 		ptr++;
@@ -269,7 +269,7 @@ static void event_default_command(const char *data, void *server,
 	   last line */
 	diff = get_timeval_diff(&time_command_now, &time_command_last);
 	if (item != NULL && !last_command_cmd && diff < PASTE_CHECK_SPEED) {
-		signal_emit__send_text(current_cmdline, active_win->active_server, active_win->active);
+		SIGNAL_EMIT(send_text, current_cmdline, active_win->active_server, active_win->active);
 		command_cmd = FALSE;
 		return;
 	}
@@ -279,7 +279,7 @@ static void event_default_command(const char *data, void *server,
 	p = strchr(cmd, ' ');
 	if (p != NULL) *p = '\0';
 
-	signal_emit__error_command(GINT_TO_POINTER(CMDERR_UNKNOWN), cmd);
+	SIGNAL_EMIT(error_command, GINT_TO_POINTER(CMDERR_UNKNOWN), cmd);
 
 	g_free(cmd);
 }

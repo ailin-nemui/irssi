@@ -179,7 +179,7 @@ static void process_destroy(PROCESS_REC *rec, int status)
 {
 	processes = g_slist_remove(processes, rec);
 
-	signal_emit__exec_remove(rec, GINT_TO_POINTER(status));
+	SIGNAL_EMIT(exec_remove, rec, GINT_TO_POINTER(status));
 
 	if (rec->read_tag != -1)
 		g_source_remove(rec->read_tag);
@@ -258,7 +258,7 @@ static int cmd_options_get_signal(const char *cmd,
 
 	if (signum == -1 || list->next != NULL) {
 		/* unknown option (not a signal) */
-		signal_emit__error_command(GINT_TO_POINTER(CMDERR_OPTION_UNKNOWN),
+		SIGNAL_EMIT(error_command, GINT_TO_POINTER(CMDERR_OPTION_UNKNOWN),
 			    signum == -1 ? list->data : list->next->data);
 		signal_stop();
                 return -2;
@@ -370,7 +370,7 @@ static void sig_exec_input_reader(PROCESS_REC *rec)
 		}
 
 		if (ret > 0) {
-			signal_emit__exec_input(rec, str);
+			SIGNAL_EMIT(exec_input, rec, str);
                         if (recvlen > 0) recvlen = 0;
 		}
 	} while (ret > 0);
@@ -531,7 +531,7 @@ static void handle_exec(const char *args, GHashTable *optlist,
 	if (rec->target == NULL && interactive)
 		rec->target_item = exec_wi_create(active_win, rec);
 
-	signal_emit__exec_new(rec);
+	SIGNAL_EMIT(exec_new, rec);
 }
 
 /* SYNTAX: EXEC [-] [-nosh] [-out | -msg <target> | -notice <target>]
@@ -567,7 +567,7 @@ static void sig_pidwait(void *pid, void *statusp)
 	/* process exited - print the last line if
 	   there wasn't a newline at end. */
 	if (line_split("\n", 1, &str, &rec->databuf) > 0 && *str != '\0')
-		signal_emit__exec_input(rec, str);
+		SIGNAL_EMIT(exec_input, rec, str);
 
 	if (!rec->silent) {
 		if (WIFSIGNALED(status)) {
@@ -615,7 +615,7 @@ static void sig_exec_input(PROCESS_REC *rec, const char *text)
 		str = g_strconcat(rec->target_nick ? "-nick " :
 				  rec->target_channel ? "-channel " : "",
 				  rec->target, " ", *text == '\0' ? " " : text, NULL);
-		signal_emit__command_(rec->notice ? "notice" : "msg",
+		SIGNAL_EMIT_(command, rec->notice ? "notice" : "msg",
 			    str, server, item);
                 g_free(str);
 	} else if (rec->target_item != NULL) {

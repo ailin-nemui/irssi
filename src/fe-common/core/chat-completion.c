@@ -1181,7 +1181,7 @@ static void event_text(const char *data, SERVER_REC *server, WI_ITEM_REC *item)
 			      target, line);
 	g_free(target);
 
-	signal_emit__command_("msg", str, server, item);
+	SIGNAL_EMIT_(command, "msg", str, server, item);
 
 	g_free(str);
 	g_free(line);

@@ -187,7 +187,7 @@ static void ops_handle_msg_event(void *opdata, OtrlMessageEvent msg_event, ConnC
 			 * submit a patch or email me a better way.
 			 */
 			signal_remove__message_private(sig_message_private);
-			signal_emit__message_private(server, message, username, server->connrec->address, server->nick);
+			SIGNAL_EMIT(message_private, server, message, username, server->connrec->address, server->nick);
 			signal_add_first__message_private(sig_message_private);
 			break;
 		case OTRL_MSGEVENT_RCVDMSG_UNRECOGNIZED:

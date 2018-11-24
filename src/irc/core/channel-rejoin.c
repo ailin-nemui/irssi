@@ -43,7 +43,7 @@ static void rejoin_destroy(IRC_SERVER_REC *server, REJOIN_REC *rec)
 	server->rejoin_channels =
 		g_slist_remove(server->rejoin_channels, rec);
 
-	signal_emit__channel_rejoin_remove((SERVER_REC *)server, rec);
+	SIGNAL_EMIT(channel_rejoin_remove, (SERVER_REC *)server, rec);
 
 	g_free(rec->channel);
 	g_free_not_null(rec->key);
@@ -105,7 +105,7 @@ static int channel_rejoin(IRC_SERVER_REC *server, const char *channel)
 
 		server->rejoin_channels =
 			g_slist_append(server->rejoin_channels, rec);
-		signal_emit__channel_rejoin_new((SERVER_REC *)server, rec);
+		SIGNAL_EMIT(channel_rejoin_new, (SERVER_REC *)server, rec);
 	}
 
 	chanrec->left = TRUE;

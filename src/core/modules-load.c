@@ -151,7 +151,7 @@ static char *module_get_func(const char *rootmodule, const char *submodule,
 }
 
 #define module_error(error, text, rootmodule, submodule) \
-	signal_emit__module_error(GINT_TO_POINTER(error), text, \
+	SIGNAL_EMIT(module_error, GINT_TO_POINTER(error), text, \
 		    rootmodule, submodule)
 
 /* Returns 1 if ok, 0 if error in module and
@@ -244,7 +244,7 @@ static int module_load_name(const char *path, const char *rootmodule,
 
 	settings_check_module(rec->defined_module_name);
 
-	signal_emit__module_loaded(rec->root, rec);
+	SIGNAL_EMIT(module_loaded, rec->root, rec);
 	return 1;
 }
 
@@ -413,7 +413,7 @@ void module_file_unload(MODULE_FILE_REC *file)
 	root->files = g_slist_remove(root->files, file);
 
         if (file->initialized)
-		signal_emit__module_unloaded(file->root, file);
+		SIGNAL_EMIT(module_unloaded, file->root, file);
 
 #ifdef HAVE_GMODULE
 	if (file->gmodule != NULL)
@@ -434,7 +434,7 @@ void module_unload(MODULE_REC *module)
 
 	modules = g_slist_remove(modules, module);
 
-	signal_emit__module_unloaded(module, NULL);
+	SIGNAL_EMIT(module_unloaded, module, NULL);
 
 	while (module->files != NULL)
                 module_file_unload(module->files->data);

@@ -886,7 +886,7 @@ int irssi_ssl_handshake(GIOChannel *handle)
 	set_server_temporary_key_info(tls, chan->ssl);
 
 	/* Emit the TLS rec. */
-	signal_emit__tls_handshake_finished(chan->server, tls);
+	SIGNAL_EMIT(tls_handshake_finished, chan->server, tls);
 
 	ret = 1;
 

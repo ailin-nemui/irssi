@@ -57,7 +57,7 @@ void reconnect_save_status(SERVER_CONNECT_REC *conn, SERVER_REC *server)
 			g_strdup(server->connrec->channels);
 	}
 
-	signal_emit__server_reconnect_save_status(conn, server);
+	SIGNAL_EMIT(server_reconnect_save_status, conn, server);
 }
 
 static void server_reconnect_add(SERVER_CONNECT_REC *conn,
@@ -84,7 +84,7 @@ void server_reconnect_destroy(RECONNECT_REC *rec)
 
 	reconnects = g_slist_remove(reconnects, rec);
 
-	signal_emit__server_reconnect_remove(rec);
+	SIGNAL_EMIT(server_reconnect_remove, rec);
 	server_connect_unref(rec->conn);
 	g_free(rec);
 
@@ -168,7 +168,7 @@ server_connect_copy_skeleton(SERVER_CONNECT_REC *src, int connect_info)
 	SERVER_CONNECT_REC *dest;
 
         dest = NULL;
-	signal_emit__server_connect_copy(&dest, src);
+	SIGNAL_EMIT(server_connect_copy, &dest, src);
 	g_return_val_if_fail(dest != NULL, NULL);
 
         server_connect_ref(dest);
@@ -416,7 +416,7 @@ static void cmd_reconnect(const char *data, SERVER_REC *server)
 
 		msg = g_strconcat("* ", *msg == '\0' ?
 				  "Reconnecting" : msg, NULL);
-		signal_emit__command_("disconnect", msg, server, NULL);
+		SIGNAL_EMIT_(command, "disconnect", msg, server, NULL);
 		g_free(msg);
 
 		conn->reconnection = TRUE;
@@ -447,7 +447,7 @@ static void cmd_reconnect(const char *data, SERVER_REC *server)
 	}
 
 	if (rec == NULL) {
-		signal_emit__server_reconnect_not_found(data);
+		SIGNAL_EMIT(server_reconnect_not_found, data);
 	} else {
 		conn = rec->conn;
 		server_connect_ref(conn);
@@ -469,7 +469,7 @@ static void cmd_disconnect(const char *data, SERVER_REC *server)
 	rec = reconnect_find_tag(atoi(data+6));
 
 	if (rec == NULL)
-		signal_emit__server_reconnect_not_found(data);
+		SIGNAL_EMIT(server_reconnect_not_found, data);
 	else
 		server_reconnect_destroy(rec);
 	signal_stop();

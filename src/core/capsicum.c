@@ -412,7 +412,7 @@ static void cmd_capsicum_enter(void)
 
 	inited = irssi_ssl_init();
 	if (!inited) {
-		signal_emit__capability_mode_failed(strerror(errno));
+		SIGNAL_EMIT(capability_mode_failed, strerror(errno));
 		return;
 	}
 
@@ -432,13 +432,13 @@ static void cmd_capsicum_enter(void)
 	irclogs_fd = open(irclogs_path, O_DIRECTORY | O_CLOEXEC);
 	if (irclogs_fd < 0) {
 		g_warning("Unable to open %s: %s", irclogs_path, strerror(errno));
-		signal_emit__capability_mode_failed(strerror(errno));
+		SIGNAL_EMIT(capability_mode_failed, strerror(errno));
 		return;
 	}
 
 	error = start_symbiont();
 	if (error != 0) {
-		signal_emit__capability_mode_failed(strerror(errno));
+		SIGNAL_EMIT(capability_mode_failed, strerror(errno));
 		return;
 	}
 
@@ -452,13 +452,13 @@ static void cmd_capsicum_enter(void)
 	if (limit_stdio_fd(STDIN_FILENO) != 0 ||
 	    limit_stdio_fd(STDOUT_FILENO) != 0 ||
 	    limit_stdio_fd(STDERR_FILENO) != 0) {
-		signal_emit__capability_mode_failed(strerror(errno));
+		SIGNAL_EMIT(capability_mode_failed, strerror(errno));
 		return;
 	}
 
 	error = cap_enter();
 	if (error != 0) {
-		signal_emit__capability_mode_failed(strerror(errno));
+		SIGNAL_EMIT(capability_mode_failed, strerror(errno));
 	} else {
 		signal_emit("capability mode enabled", 0);
 	}
@@ -471,7 +471,7 @@ static void cmd_capsicum_status(void)
 
 	error = cap_getmode(&mode);
 	if (error != 0) {
-		signal_emit__capability_mode_failed(strerror(errno));
+		SIGNAL_EMIT(capability_mode_failed, strerror(errno));
 	} else if (mode == 0) {
 		signal_emit("capability mode disabled", 0);
 	} else {

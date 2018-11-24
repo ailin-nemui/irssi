@@ -304,7 +304,7 @@ static void perl_call_signal(PERL_SCRIPT_REC *script, SV *func,
 
 	if (SvTRUE(ERRSV)) {
 		char *error = g_strdup(SvPV_nolen(ERRSV));
-		signal_emit__script_error(script, error);
+		SIGNAL_EMIT(script_error, script, error);
                 g_free(error);
                 rec = NULL;
 	}

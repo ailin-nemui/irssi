@@ -49,7 +49,7 @@ static void chatnet_config_save(CHATNET_REC *chatnet)
 	iconfig_node_set_str(node, "host", chatnet->own_host);
 	iconfig_node_set_str(node, "autosendcmd", chatnet->autosendcmd);
 
-        signal_emit__chatnet_saved(chatnet, node);
+        SIGNAL_EMIT(chatnet_saved, chatnet, node);
 }
 
 static void chatnet_config_remove(CHATNET_REC *chatnet)
@@ -69,14 +69,14 @@ void chatnet_create(CHATNET_REC *chatnet)
 		chatnets = g_slist_append(chatnets, chatnet);
 
 	chatnet_config_save(chatnet);
-	signal_emit__chatnet_created(chatnet);
+	SIGNAL_EMIT(chatnet_created, chatnet);
 }
 
 void chatnet_remove(CHATNET_REC *chatnet)
 {
 	g_return_if_fail(IS_CHATNET(chatnet));
 
-	signal_emit__chatnet_removed(chatnet);
+	SIGNAL_EMIT(chatnet_removed, chatnet);
 
 	chatnet_config_remove(chatnet);
 	chatnet_destroy(chatnet);
@@ -87,7 +87,7 @@ void chatnet_destroy(CHATNET_REC *chatnet)
 	g_return_if_fail(IS_CHATNET(chatnet));
 
 	chatnets = g_slist_remove(chatnets, chatnet);
-	signal_emit__chatnet_destroyed(chatnet);
+	SIGNAL_EMIT(chatnet_destroyed, chatnet);
 
 	g_free_not_null(chatnet->nick);
 	g_free_not_null(chatnet->username);
@@ -159,7 +159,7 @@ static void chatnet_read(CONFIG_NODE *node)
 	rec->autosendcmd = g_strdup(config_node_get_str(node, "autosendcmd", NULL));
 
 	chatnets = g_slist_append(chatnets, rec);
-        signal_emit__chatnet_read(rec, node);
+        SIGNAL_EMIT(chatnet_read, rec, node);
 }
 
 static void read_chatnets(void)

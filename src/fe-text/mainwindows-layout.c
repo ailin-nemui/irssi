@@ -259,7 +259,7 @@ static void sig_layout_restore(void)
 			if (node2->key == NULL) continue;
 
 			/* create a new window + mainwindow */
-			signal_emit__gui_window_create_override(GINT_TO_POINTER(window == NULL ? MAIN_WINDOW_TYPE_SPLIT : MAIN_WINDOW_TYPE_RSPLIT));
+			SIGNAL_EMIT(gui_window_create_override, GINT_TO_POINTER(window == NULL ? MAIN_WINDOW_TYPE_SPLIT : MAIN_WINDOW_TYPE_RSPLIT));
 
 			new_win = window_create(NULL, TRUE);
 

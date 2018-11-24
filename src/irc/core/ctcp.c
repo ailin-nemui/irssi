@@ -227,7 +227,7 @@ static void ctcp_msg(IRC_SERVER_REC *server, const char *data,
 
 	if (g_ascii_strncasecmp(data, "ACTION ", 7) == 0) {
                 /* special treatment for actions */
-		signal_emit__ctcp_action(server, data+7,
+		SIGNAL_EMIT(ctcp_action, server, data+7,
 			    nick, addr, target);
                 return;
 	}
@@ -240,8 +240,8 @@ static void ctcp_msg(IRC_SERVER_REC *server, const char *data,
 	if (args != NULL) *args++ = '\0'; else args = "";
 
 	ascii_strdown(str+9);
-	if (!signal_emit__ctcp_msg_(data, server, args, nick, addr, target)) {
-		signal_emit__default_ctcp_msg(server, data, nick, addr, target);
+	if (!SIGNAL_EMIT_(ctcp_msg, data, server, args, nick, addr, target)) {
+		SIGNAL_EMIT(default_ctcp_msg, server, data, nick, addr, target);
 	}
 	g_free(str);
 }
@@ -259,8 +259,8 @@ static void ctcp_reply(IRC_SERVER_REC *server, const char *data,
 	if (args != NULL) *args++ = '\0'; else args = "";
 
 	ascii_strdown(str+11);
-	if (!signal_emit__ctcp_reply_(data, server, args, nick, addr, target)) {
-		signal_emit__default_ctcp_reply(server, data, nick, addr, target);
+	if (!SIGNAL_EMIT_(ctcp_reply, data, server, args, nick, addr, target)) {
+		SIGNAL_EMIT(default_ctcp_reply, server, data, nick, addr, target);
 	}
 	g_free(str);
 }
@@ -286,7 +286,7 @@ static void event_privmsg(SERVER_REC *server, const char *data,
 		if (msg[len-1] == '\001')
 			msg[len-1] = '\0';
 
-		signal_emit__ctcp_msg((IRC_SERVER_REC *) server, msg, nick, addr, target);
+		SIGNAL_EMIT(ctcp_msg, (IRC_SERVER_REC *) server, msg, nick, addr, target);
 		signal_stop();
 	}
 
@@ -310,7 +310,7 @@ static void event_notice(SERVER_REC *server, const char *data,
 		ptr = strrchr(++msg, 1);
 		if (ptr != NULL) *ptr = '\0';
 
-		signal_emit__ctcp_reply((IRC_SERVER_REC *) server, msg, nick, addr, target);
+		SIGNAL_EMIT(ctcp_reply, (IRC_SERVER_REC *) server, msg, nick, addr, target);
 		signal_stop();
 	}
 

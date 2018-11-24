@@ -558,7 +558,7 @@ void perl_command(const char *cmd, SERVER_REC *server, WI_ITEM_REC *item)
 		remove_newlines(sendcmd);
 	}
 
-	signal_emit__send_command(sendcmd, server, item);
+	SIGNAL_EMIT(send_command, sendcmd, server, item);
 	if (sendcmd != cmd) g_free(sendcmd);
 }
 

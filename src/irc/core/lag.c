@@ -62,7 +62,7 @@ static void lag_event_pong(IRC_SERVER_REC *server, const char *data,
 	server->lag = (int) get_timeval_diff(&now, &server->lag_sent);
 	memset(&server->lag_sent, 0, sizeof(server->lag_sent));
 
-	signal_emit__server_lag((SERVER_REC *)server);
+	SIGNAL_EMIT(server_lag, (SERVER_REC *)server);
 }
 
 static void sig_unknown_command(IRC_SERVER_REC *server, const char *data)
@@ -107,7 +107,7 @@ static int sig_check_lag(void)
 			/* waiting for lag reply */
 			if (max_lag > 1 && now-rec->lag_sent.tv_sec > max_lag) {
 				/* too much lag, disconnect */
-				signal_emit__server_lag_disconnect((SERVER_REC *)rec);
+				SIGNAL_EMIT(server_lag_disconnect, (SERVER_REC *)rec);
 				rec->connection_lost = TRUE;
 				server_disconnect((SERVER_REC *) rec);
 			}

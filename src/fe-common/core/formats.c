@@ -854,7 +854,7 @@ void format_newline(WINDOW_REC *window)
 {
 	g_return_if_fail(window != NULL);
 
-	signal_emit__gui_print_text(window,
+	SIGNAL_EMIT(gui_print_text, window,
 		       GINT_TO_POINTER(-1), GINT_TO_POINTER(-1),
 		       GINT_TO_POINTER(GUI_PRINT_FLAG_NEWLINE),
 		       "", NULL);
@@ -1239,7 +1239,7 @@ void format_send_to_gui(TEXT_DEST_REC *dest, const char *text)
 
 	if (*str == '\0') {
 		/* empty line, write line info only */
-		signal_emit__gui_print_text(dest->window, GINT_TO_POINTER(fgcolor),
+		SIGNAL_EMIT(gui_print_text, dest->window, GINT_TO_POINTER(fgcolor),
 		               GINT_TO_POINTER(bgcolor), GINT_TO_POINTER(flags), str, dest);
 	}
 
@@ -1260,7 +1260,7 @@ void format_send_to_gui(TEXT_DEST_REC *dest, const char *text)
 
 		if (*str != '\0' || (flags & GUI_PRINT_FLAG_CLRTOEOL)) {
 			/* send the text to gui handler */
-			signal_emit__gui_print_text(dest->window,
+			SIGNAL_EMIT(gui_print_text, dest->window,
 				       GINT_TO_POINTER(fgcolor),
 				       GINT_TO_POINTER(bgcolor),
 				       GINT_TO_POINTER(flags), str,

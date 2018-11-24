@@ -466,7 +466,7 @@ static void event_whois(SERVER_REC *server, const char *data,
 		return;
 
 	irc_server->whois_found = TRUE;
-	signal_emit__event_("311", server, data, nick, addr);
+	SIGNAL_EMIT_(event, "311", server, data, nick, addr);
 }
 
 static void sig_whois_try_whowas(SERVER_REC *server, const char *data, const char *u0, const char *u1)
@@ -498,7 +498,7 @@ static void event_end_of_whois(SERVER_REC *server, const char *data,
 	if ((irc_server = IRC_SERVER(server)) == NULL)
 		return;
 
-	signal_emit__event_("318", server, data, nick, addr);
+	SIGNAL_EMIT_(event, "318", server, data, nick, addr);
 	irc_server->whois_found = FALSE;
 }
 
@@ -510,7 +510,7 @@ static void event_whowas(SERVER_REC *server, const char *data,
 		return;
 
 	irc_server->whowas_found = TRUE;
-	signal_emit__event_("314", server, data, nick, addr);
+	SIGNAL_EMIT_(event, "314", server, data, nick, addr);
 }
 
 /* SYNTAX: WHOWAS [<nicks> [<count> [server]]] */
@@ -560,7 +560,7 @@ static void cmd_ping(const char *data, IRC_SERVER_REC *server, WI_ITEM_REC *item
 	g_get_current_time(&tv);
 
 	str = g_strdup_printf("%s PING %ld %ld", data, tv.tv_sec, tv.tv_usec);
-	signal_emit__command_("ctcp", str, (SERVER_REC *)server, (WI_ITEM_REC *)item);
+	SIGNAL_EMIT_(command, "ctcp", str, (SERVER_REC *)server, (WI_ITEM_REC *)item);
 	g_free(str);
 }
 
@@ -730,11 +730,11 @@ static void cmd_kickban(const char *data, IRC_SERVER_REC *server,
 	g_free(spacenicks);
 
 	if (settings_get_bool("kick_first_on_kickban")) {
-		signal_emit__command_("kick", kickcmd, (SERVER_REC *)server, (WI_ITEM_REC *)chanrec);
-		signal_emit__command_("ban", bancmd, (SERVER_REC *)server, (WI_ITEM_REC *)chanrec);
+		SIGNAL_EMIT_(command, "kick", kickcmd, (SERVER_REC *)server, (WI_ITEM_REC *)chanrec);
+		SIGNAL_EMIT_(command, "ban", bancmd, (SERVER_REC *)server, (WI_ITEM_REC *)chanrec);
 	} else {
-		signal_emit__command_("ban", bancmd, (SERVER_REC *)server, (WI_ITEM_REC *)chanrec);
-		signal_emit__command_("kick", kickcmd, (SERVER_REC *)server, (WI_ITEM_REC *)chanrec);
+		SIGNAL_EMIT_(command, "ban", bancmd, (SERVER_REC *)server, (WI_ITEM_REC *)chanrec);
+		SIGNAL_EMIT_(command, "kick", kickcmd, (SERVER_REC *)server, (WI_ITEM_REC *)chanrec);
 	}
 	g_free(kickcmd);
 	g_free(bancmd);
@@ -767,7 +767,7 @@ static void knockout_timeout_server(IRC_SERVER_REC *server)
 		next = tmp->next;
 		if (rec->unban_time <= now) {
 			/* timeout, unban. */
-			signal_emit__command_("unban", rec->ban, (SERVER_REC *)server, (WI_ITEM_REC *)rec->channel);
+			SIGNAL_EMIT_(command, "unban", rec->ban, (SERVER_REC *)server, (WI_ITEM_REC *)rec->channel);
 			knockout_destroy(server, rec);
 		}
 	}
@@ -827,13 +827,13 @@ static void cmd_knockout(const char *data, IRC_SERVER_REC *server,
 		g_strdup_printf("%s %s", channel->name, banmasks);
 
 	if (settings_get_bool("kick_first_on_kickban")) {
-		signal_emit__command_("kick", kickcmd, (SERVER_REC *)server, (WI_ITEM_REC *)channel);
+		SIGNAL_EMIT_(command, "kick", kickcmd, (SERVER_REC *)server, (WI_ITEM_REC *)channel);
 		if (bancmd != NULL)
-			signal_emit__command_("ban", bancmd, (SERVER_REC *)server, (WI_ITEM_REC *)channel);
+			SIGNAL_EMIT_(command, "ban", bancmd, (SERVER_REC *)server, (WI_ITEM_REC *)channel);
 	} else {
 		if (bancmd != NULL)
-			signal_emit__command_("ban", bancmd, (SERVER_REC *)server, (WI_ITEM_REC *)channel);
-		signal_emit__command_("kick", kickcmd, (SERVER_REC *)server, (WI_ITEM_REC *)channel);
+			SIGNAL_EMIT_(command, "ban", bancmd, (SERVER_REC *)server, (WI_ITEM_REC *)channel);
+		SIGNAL_EMIT_(command, "kick", kickcmd, (SERVER_REC *)server, (WI_ITEM_REC *)channel);
 	}
 	g_free(kickcmd);
 	g_free_not_null(bancmd);

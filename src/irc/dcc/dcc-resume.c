@@ -140,7 +140,7 @@ static void ctcp_msg_dcc_resume(IRC_SERVER_REC *server, const char *data,
 	int pasv_id = -1;
 
 	if (!dcc_ctcp_resume_parse(DCC_SEND_TYPE, data, nick, &dcc, &size, &pasv_id)) {
-		signal_emit__dcc_error_ctcp("RESUME", data,
+		SIGNAL_EMIT(dcc_error_ctcp, "RESUME", data,
 			    nick, addr, target);
 	} else if (dcc != NULL && dcc_resume_file_check(dcc, server, size)) {
 		if (!dcc_is_passive(dcc)) {
@@ -171,7 +171,7 @@ static void ctcp_msg_dcc_accept(IRC_SERVER_REC *server, const char *data,
 
 	if (!dcc_ctcp_resume_parse(DCC_GET_TYPE, data, nick, &dcc, &size, &pasv_id) ||
 	    (dcc != NULL && DCC_GET(dcc)->get_type != DCC_GET_RESUME)) {
-		signal_emit__dcc_error_ctcp("ACCEPT", data,
+		SIGNAL_EMIT(dcc_error_ctcp, "ACCEPT", data,
 			    nick, addr, target);
 	} else if (dcc != NULL && dcc_resume_file_check(dcc, server, size)) {
 		if (!dcc_is_passive(dcc))
@@ -192,7 +192,7 @@ static void dcc_send_resume(GET_DCC_REC *dcc)
 	dcc->file = dcc_get_download_path(dcc->arg);
 	dcc->fhandle = open(dcc->file, O_WRONLY);
 	if (dcc->fhandle == -1) {
-		signal_emit__dcc_error_file_open(dcc->nick, dcc->file,
+		SIGNAL_EMIT(dcc_error_file_open, dcc->nick, dcc->file,
 			    GINT_TO_POINTER(errno));
 		return;
 	}

@@ -341,10 +341,10 @@ static void irc_server_event(SERVER_REC *server, const char *line,
         /* emit it */
 	current_server_event = event+6;
 	emitted = signal == NULL ?
-		signal_emit__event_(line, server, args, nick, address) :
+		SIGNAL_EMIT_(event, line, server, args, nick, address) :
 		signal_emit_raw(signal, 4, irc_server, args, nick, address);
 	if (!emitted)
-		signal_emit__default_event(server, line, nick, address);
+		SIGNAL_EMIT(default_event, server, line, nick, address);
 	current_server_event = NULL;
 
 	g_free(event);
@@ -401,7 +401,7 @@ static void irc_parse_incoming_line(SERVER_REC *server, char *line)
 	
 	line = irc_parse_prefix(line, &nick, &address);
 	if (*line != '\0')
-		signal_emit__server_event(server, line, nick, address);
+		SIGNAL_EMIT(server_event, server, line, nick, address);
 }
 
 /* input function: handle incoming server messages */
@@ -422,7 +422,7 @@ static void irc_parse_incoming(SERVER_REC *server)
 	while (!server->disconnected &&
 	       (ret = net_sendbuffer_receive_line(server->handle, &str, count < MAX_SOCKET_READS)) > 0) {
 		rawlog_input(server->rawlog, str);
-		signal_emit__server_incoming(server, str);
+		SIGNAL_EMIT(server_incoming, server, str);
 
 		if (server->connection_lost)
 			server_disconnect(server);

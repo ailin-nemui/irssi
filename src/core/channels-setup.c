@@ -86,7 +86,7 @@ void channel_setup_create(CHANNEL_SETUP_REC *channel)
 		setupchannels = g_slist_append(setupchannels, channel);
 	channel_setup_save(channel);
 
-	signal_emit__channel_setup_created(channel, NULL);
+	SIGNAL_EMIT(channel_setup_created, channel, NULL);
 }
 
 static void channel_config_remove(CHANNEL_SETUP_REC *channel)
@@ -113,7 +113,7 @@ static void channel_setup_destroy(CHANNEL_SETUP_REC *channel)
 	g_return_if_fail(channel != NULL);
 
 	setupchannels = g_slist_remove(setupchannels, channel);
-	signal_emit__channel_setup_destroyed(channel);
+	SIGNAL_EMIT(channel_setup_destroyed, channel);
 
 	g_free_not_null(channel->chatnet);
 	g_free_not_null(channel->password);
@@ -190,7 +190,7 @@ static CHANNEL_SETUP_REC *channel_setup_read(CONFIG_NODE *node)
 	rec->autosendcmd = g_strdup(config_node_get_str(node, "autosendcmd", NULL));
 
 	setupchannels = g_slist_append(setupchannels, rec);
-	signal_emit__channel_setup_created(rec, node);
+	SIGNAL_EMIT(channel_setup_created, rec, node);
 	return rec;
 }
 

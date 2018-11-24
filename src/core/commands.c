@@ -172,13 +172,13 @@ void command_bind_full(const char *module, int priority, const char *cmd,
 		g_free(str);
 	}
 
-	signal_emit__commandlist_new(rec);
+	SIGNAL_EMIT(commandlist_new, rec);
 }
 
 static void command_free(COMMAND_REC *rec)
 {
 	commands = g_slist_remove(commands, rec);
-	signal_emit__commandlist_remove(rec);
+	SIGNAL_EMIT(commandlist_remove, rec);
 
 	g_free_not_null(rec->category);
 	g_strfreev(rec->options);
@@ -286,7 +286,7 @@ static const char *command_expand(char *cmd)
 	}
 
 	if (multiple) {
-		signal_emit__error_command(GINT_TO_POINTER(CMDERR_AMBIGUOUS), cmd);
+		SIGNAL_EMIT(error_command, GINT_TO_POINTER(CMDERR_AMBIGUOUS), cmd);
 		return NULL;
 	}
 
@@ -305,7 +305,7 @@ void command_runsub(const char *cmd, const char *data,
 
 	if (*data == '\0') {
                 /* no subcommand given - list the subcommands */
-		signal_emit__list_subcommands(cmd);
+		SIGNAL_EMIT(list_subcommands, cmd);
 		return;
 	}
 
@@ -329,7 +329,7 @@ void command_runsub(const char *cmd, const char *data,
 	if (!signal_emit_raw(subcmd, 3, args, server, item)) {
 		defcmd = g_strdup_printf("default command %s", cmd);
 		if (!signal_emit_raw(defcmd, 3, data, server, item)) {
-			signal_emit__error_command(GINT_TO_POINTER(CMDERR_UNKNOWN), subcmd+8);
+			SIGNAL_EMIT(error_command, GINT_TO_POINTER(CMDERR_UNKNOWN), subcmd+8);
 		}
                 g_free(defcmd);
 	}
@@ -768,7 +768,7 @@ int cmd_get_params(const char *data, gpointer *free_me, int count, ...)
 	va_end(args);
 
 	if (error) {
-                signal_emit__error_command(GINT_TO_POINTER(error), datad);
+                SIGNAL_EMIT(error_command, GINT_TO_POINTER(error), datad);
 		signal_stop();
 
                 cmd_params_free(rec);
@@ -890,7 +890,7 @@ static void parse_command(const char *command, int expand_aliases,
 	if (rec != NULL && !cmd_protocol_match(rec, server)) {
 		g_free(orig);
 
-		signal_emit__error_command(GINT_TO_POINTER(server == NULL ?
+		SIGNAL_EMIT(error_command, GINT_TO_POINTER(server == NULL ?
 					    CMDERR_NOT_CONNECTED :
 					    CMDERR_ILLEGAL_PROTO), NULL);
 		return;
@@ -903,7 +903,7 @@ static void parse_command(const char *command, int expand_aliases,
 	current_command = cmd+8;
         if (server != NULL) server_ref(server);
         if (!signal_emit_raw(cmd, 3, args, server, item)) {
-		signal_emit__default_command(
+		SIGNAL_EMIT(default_command, 
 			       command, server, item);
 	}
 	if (server != NULL) {
@@ -933,7 +933,7 @@ static void event_command(const char *line, SERVER_REC *server, WI_ITEM_REC *ite
 	}
 	if (cmdchar == NULL) {
 		/* non-command - let someone else handle this */
-		signal_emit__send_text(line, server, item);
+		SIGNAL_EMIT(send_text, line, server, item);
 		return;
 	}
 

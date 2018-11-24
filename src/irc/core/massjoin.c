@@ -212,7 +212,7 @@ static void massjoin_send(IRC_CHANNEL_REC *channel)
 	g_hash_table_foreach(channel->nicks, (GHFunc) massjoin_send_hash, &list);
 
 	channel->massjoins = 0;
-	signal_emit__massjoin((CHANNEL_REC *)channel, list);
+	SIGNAL_EMIT(massjoin, (CHANNEL_REC *)channel, list);
 	g_slist_free(list);
 }
 

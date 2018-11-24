@@ -86,7 +86,7 @@ void nicklist_insert(CHANNEL_REC *channel, NICK_REC *nick)
         nick->chat_type = channel->chat_type;
 
         nick_hash_add(channel, nick);
-	signal_emit__nicklist_new(channel, nick);
+	SIGNAL_EMIT(nicklist_new, channel, nick);
 }
 
 /* Set host address for nick */
@@ -99,12 +99,12 @@ void nicklist_set_host(CHANNEL_REC *channel, NICK_REC *nick, const char *host)
         g_free_not_null(nick->host);
 	nick->host = g_strdup(host);
 
-        signal_emit__nicklist_host_changed(channel, nick);
+        SIGNAL_EMIT(nicklist_host_changed, channel, nick);
 }
 
 static void nicklist_destroy(CHANNEL_REC *channel, NICK_REC *nick)
 {
-	signal_emit__nicklist_remove(channel, nick);
+	SIGNAL_EMIT(nicklist_remove, channel, nick);
 
 	if (channel->ownnick == nick)
                 channel->ownnick = NULL;
@@ -150,7 +150,7 @@ static void nicklist_rename_list(SERVER_REC *server, void *new_nick_id,
 		/* add new nick to hash table */
                 nick_hash_add(channel, nickrec);
 
-		signal_emit__nicklist_changed(channel, nickrec, old_nick);
+		SIGNAL_EMIT(nicklist_changed, channel, nickrec, old_nick);
 	}
 	g_slist_free(nicks);
 }
@@ -396,12 +396,12 @@ static void nicklist_update_flags_list(SERVER_REC *server, int gone,
 
 		if (gone != -1 && (int)rec->gone != gone) {
 			rec->gone = gone;
-			signal_emit__nicklist_gone_changed(channel, rec);
+			SIGNAL_EMIT(nicklist_gone_changed, channel, rec);
 		}
 
 		if (serverop != -1 && (int)rec->serverop != serverop) {
 			rec->serverop = serverop;
-			signal_emit__nicklist_serverop_changed(channel, rec);
+			SIGNAL_EMIT(nicklist_serverop_changed, channel, rec);
 		}
 	}
 	g_slist_free(nicks);

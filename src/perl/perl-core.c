@@ -430,8 +430,8 @@ static void sig_script_error(PERL_SCRIPT_REC *script, const char *error)
 	if (print_script_errors) {
 		str = g_strdup_printf("Script '%s' error:",
 				      script == NULL ? "??" : script->name);
-		signal_emit__gui_dialog("error", str);
-		signal_emit__gui_dialog("error", error);
+		SIGNAL_EMIT(gui_dialog, "error", str);
+		SIGNAL_EMIT(gui_dialog, "error", error);
                 g_free(str);
 	}
 

@@ -49,14 +49,14 @@ int cap_toggle (IRC_SERVER_REC *server, char *cap, int enable)
 		if (!g_hash_table_lookup_extended(server->cap_supported, cap, NULL, NULL))
 			return FALSE;
 
-		signal_emit__server_cap_req(server, cap);
+		SIGNAL_EMIT(server_cap_req, server, cap);
 		irc_send_cmdv(server, "CAP REQ %s", cap);
 		return TRUE;
 	}
 	else if (!enable && gslist_find_string(server->cap_active, cap)) {
 		char *negcap = g_strdup_printf("-%s", cap);
 
-		signal_emit__server_cap_req(server, negcap);
+		SIGNAL_EMIT(server_cap_req, server, negcap);
 		irc_send_cmdv(server, "CAP REQ %s", negcap);
 
 		g_free(negcap);
@@ -74,7 +74,7 @@ void cap_finish_negotiation (IRC_SERVER_REC *server)
 	server->cap_complete = TRUE;
 	irc_send_cmd_now(server, "CAP END");
 
-	signal_emit__server_cap_end(server);
+	SIGNAL_EMIT(server_cap_end, server);
 }
 
 static gboolean parse_cap_name(char *name, char **key, char **val)
@@ -193,7 +193,7 @@ static void event_cap (IRC_SERVER_REC *server, char *args, char *nick, char *add
 
 				/* If the server doesn't support any cap we requested close the negotiation here */
 				if (avail_caps > 0) {
-					signal_emit__server_cap_req(server, cmd->str + sizeof("CAP REQ :") - 1);
+					SIGNAL_EMIT(server_cap_req, server, cmd->str + sizeof("CAP REQ :") - 1);
 					irc_send_cmd_now(server, cmd->str);
 				} else {
 					cap_finish_negotiation(server);
@@ -218,7 +218,7 @@ static void event_cap (IRC_SERVER_REC *server, char *args, char *nick, char *add
 			if (!strcmp(caps[i], "sasl"))
 				got_sasl = TRUE;
 
-			signal_emit__server_cap_ack_(caps[i], server);
+			SIGNAL_EMIT_(server_cap_ack, caps[i], server);
 		}
 
 		/* Hopefully the server has ack'd all the caps requested and we're ready to terminate the
@@ -233,7 +233,7 @@ static void event_cap (IRC_SERVER_REC *server, char *args, char *nick, char *add
 		/* A NAK'd request means that a required cap can't be enabled or disabled, don't update the
 		 * list of active caps and notify the listeners. */
 		for (i = 0; i < caps_length; i++)
-			signal_emit__server_cap_nak_(caps[i], server);
+			SIGNAL_EMIT_(server_cap_nak, caps[i], server);
 	}
 	else if (!g_ascii_strcasecmp(evt, "NEW")) {
 		for (i = 0; i < caps_length; i++) {
@@ -245,7 +245,7 @@ static void event_cap (IRC_SERVER_REC *server, char *args, char *nick, char *add
 			}
 
 			g_hash_table_insert(server->cap_supported, key, val);
-			signal_emit__server_cap_new_(key, server);
+			SIGNAL_EMIT_(server_cap_new, key, server);
 		}
 	}
 	else if (!g_ascii_strcasecmp(evt, "DEL")) {
@@ -258,7 +258,7 @@ static void event_cap (IRC_SERVER_REC *server, char *args, char *nick, char *add
 			}
 
 			g_hash_table_remove(server->cap_supported, key);
-			signal_emit__server_cap_delete_(key, server);
+			SIGNAL_EMIT_(server_cap_delete, key, server);
 			/* The server removed this CAP, remove it from the list
 			 * of the active ones if we had requested it */
 			server->cap_active = gslist_delete_string(server->cap_active, key, g_free);

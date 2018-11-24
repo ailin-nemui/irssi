@@ -80,7 +80,7 @@ static void perl_statusbar_event(char *function, SBAR_ITEM_REC *item,
 		}
 
 		error = g_strdup(SvPV_nolen(ERRSV));
-		signal_emit__script_error(script, error);
+		SIGNAL_EMIT(script_error, script, error);
 		g_free(error);
 	} else {
 		/* min_size and max_size can be changed, move them to SBAR_ITEM_REC */

@@ -326,7 +326,7 @@ static void read_settings(void)
 	g_free_not_null(default_ban_type_str);
 	default_ban_type = parse_ban_type(settings_get_str("ban_type"));
 	if (default_ban_type <= 0 || default_ban_type_str != NULL) {
-		signal_emit__ban_type_changed(GINT_TO_POINTER(default_ban_type));
+		SIGNAL_EMIT(ban_type_changed, GINT_TO_POINTER(default_ban_type));
 	}
 
 	if (default_ban_type <= 0)

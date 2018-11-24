@@ -731,7 +731,7 @@ static void event_connected(SERVER_REC *server, const char *data, const char *fr
 		irc_server->wanted_usermode = g_strdup(irc_server->connrec->usermode);
 	}
 
-	signal_emit__event_connected((SERVER_REC *)server);
+	SIGNAL_EMIT(event_connected, (SERVER_REC *)server);
 	g_free(params);
 }
 

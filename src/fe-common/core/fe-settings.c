@@ -198,7 +198,7 @@ static void cmd_set(char *data)
 				/* Unpossible! */
 				break;
 			}
-			signal_emit__setup_changed();
+			SIGNAL_EMIT(setup_changed);
 			printformat(NULL, NULL, MSGLEVEL_CLIENTCRAP, TXT_SET_TITLE, rec->section);
 			set_print(rec);
 		} else
@@ -229,7 +229,7 @@ static void cmd_toggle(const char *data)
 	else {
 		set_boolean(key, *value != '\0' ? value : "TOGGLE");
 		set_print(settings_get_record(key));
-		signal_emit__setup_changed();
+		SIGNAL_EMIT(setup_changed);
 	}
 
 	cmd_params_free(free_arg);
@@ -286,7 +286,7 @@ static void alias_remove(const char *alias)
 		printformat(NULL, NULL, MSGLEVEL_CLIENTNOTICE, TXT_ALIAS_REMOVED, alias);
 		iconfig_set_str("aliases", alias, NULL);
 
-		signal_emit__alias_removed(alias);
+		SIGNAL_EMIT(alias_removed, alias);
 	}
 }
 
@@ -308,7 +308,7 @@ static void cmd_alias(const char *data)
 	else {
 		printformat(NULL, NULL, MSGLEVEL_CLIENTNOTICE, TXT_ALIAS_ADDED, alias);
 		iconfig_set_str("aliases", alias, value);
-		signal_emit__alias_added(alias, value);
+		SIGNAL_EMIT(alias_added, alias, value);
 	}
         cmd_params_free(free_arg);
 }

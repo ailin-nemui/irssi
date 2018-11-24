@@ -97,7 +97,7 @@ void dcc_init_rec(DCC_REC *dcc, IRC_SERVER_REC *server, CHAT_DCC_REC *chat,
 	dcc->pasv_id = -1; /* Not a passive DCC */
 
 	dcc_conns = g_slist_append(dcc_conns, dcc);
-	signal_emit__dcc_created(dcc);
+	SIGNAL_EMIT(dcc_created, dcc);
 }
 
 /* Destroy DCC record */
@@ -109,7 +109,7 @@ void dcc_destroy(DCC_REC *dcc)
 	dcc_conns = g_slist_remove(dcc_conns, dcc);
 
 	dcc->destroyed = TRUE;
-	signal_emit__dcc_destroyed(dcc);
+	SIGNAL_EMIT(dcc_destroyed, dcc);
 
 	if (dcc->handle != NULL) net_disconnect(dcc->handle);
 	if (dcc->tagconn != -1) g_source_remove(dcc->tagconn);
@@ -339,7 +339,7 @@ static void ctcp_msg(IRC_SERVER_REC *server, const char *data,
                 return;
 	data += 4;
 
-	signal_emit__ctcp_msg_("dcc", server, data, nick, addr, target);
+	SIGNAL_EMIT_(ctcp_msg, "dcc", server, data, nick, addr, target);
         signal_stop();
 }
 
@@ -352,7 +352,7 @@ static void ctcp_reply(IRC_SERVER_REC *server, const char *data,
                 return;
 	data += 4;
 
-	signal_emit__ctcp_reply_("dcc", server, data, nick, addr, target);
+	SIGNAL_EMIT_(ctcp_reply, "dcc", server, data, nick, addr, target);
         signal_stop();
 }
 
@@ -371,8 +371,8 @@ static void ctcp_msg_dcc(IRC_SERVER_REC *server, const char *data,
 	if (args != NULL) *args++ = '\0'; else args = "";
 
 	ascii_strdown(str+13);
-	if (!signal_emit__ctcp_msg_dcc_(data, server, args, nick, addr, target, chat)) {
-		signal_emit__default_ctcp_msg_dcc(server, data, nick, addr, target, chat);
+	if (!SIGNAL_EMIT_(ctcp_msg_dcc, data, server, args, nick, addr, target, chat)) {
+		SIGNAL_EMIT(default_ctcp_msg_dcc, server, data, nick, addr, target, chat);
 	}
 	g_free(str);
 }
@@ -392,8 +392,8 @@ static void ctcp_reply_dcc(IRC_SERVER_REC *server, const char *data,
 	if (args != NULL) *args++ = '\0'; else args = "";
 
 	ascii_strdown(str+15);
-	if (!signal_emit__ctcp_reply_dcc_(data, server, args, nick, addr, target)) {
-		signal_emit__default_ctcp_reply_dcc(server, data, nick, addr, target);
+	if (!SIGNAL_EMIT_(ctcp_reply_dcc, data, server, args, nick, addr, target)) {
+		SIGNAL_EMIT(default_ctcp_reply_dcc, server, data, nick, addr, target);
 	}
 	g_free(str);
 }
@@ -418,7 +418,7 @@ static void ctcp_reply_dcc_reject(IRC_SERVER_REC *server, const char *data,
 
 void dcc_close(DCC_REC *dcc)
 {
-	signal_emit__dcc_closed(dcc);
+	SIGNAL_EMIT(dcc_closed, dcc);
         dcc_destroy(dcc);
 }
 
@@ -427,7 +427,7 @@ void dcc_reject(DCC_REC *dcc, IRC_SERVER_REC *server)
 {
 	g_return_if_fail(dcc != NULL);
 
-	signal_emit__dcc_rejected(dcc);
+	SIGNAL_EMIT(dcc_rejected, dcc);
 
 	if (dcc->server != NULL)
 		server = dcc->server;
@@ -506,7 +506,7 @@ static void cmd_dcc_close(char *data, IRC_SERVER_REC *server)
 	ascii_strup(typestr);
 	type = dcc_str2type(typestr);
 	if (type == -1) {
-		signal_emit__dcc_error_unknown_type(typestr);
+		SIGNAL_EMIT(dcc_error_unknown_type, typestr);
 		cmd_params_free(free_arg);
 		return;
 	}
@@ -526,7 +526,7 @@ static void cmd_dcc_close(char *data, IRC_SERVER_REC *server)
 	}
 
 	if (!found) {
-		signal_emit__dcc_error_close_not_found(typestr, nick, arg);
+		SIGNAL_EMIT(dcc_error_close_not_found, typestr, nick, arg);
 	}
 
 	cmd_params_free(free_arg);

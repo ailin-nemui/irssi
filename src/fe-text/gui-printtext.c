@@ -139,7 +139,7 @@ void gui_printtext_after_time(TEXT_DEST_REC *dest, LINE_REC *prev, const char *s
 	gui->insert_after_time = time;
 	format_send_to_gui(dest, str);
 	gui->use_insert_after = FALSE;
-	signal_emit__gui_print_text_after_finished(dest->window, gui->insert_after, prev);
+	SIGNAL_EMIT(gui_print_text_after_finished, dest->window, gui->insert_after, prev);
 }
 
 void gui_printtext_after(TEXT_DEST_REC *dest, LINE_REC *prev, const char *str)

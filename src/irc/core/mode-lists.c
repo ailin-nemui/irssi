@@ -85,7 +85,7 @@ BAN_REC *banlist_add(IRC_CHANNEL_REC *channel, const char *ban,
 
 	channel->banlist = g_slist_append(channel->banlist, rec);
 
-	signal_emit__ban_new((CHANNEL_REC *)channel, rec);
+	SIGNAL_EMIT(ban_new, (CHANNEL_REC *)channel, rec);
 	return rec;
 }
 
@@ -98,7 +98,7 @@ void banlist_remove(IRC_CHANNEL_REC *channel, const char *ban, const char *nick)
 
 	rec = banlist_find(channel->banlist, ban);
 	if (rec != NULL) {
-		signal_emit__ban_remove((CHANNEL_REC *)channel, rec, nick);
+		SIGNAL_EMIT(ban_remove, (CHANNEL_REC *)channel, rec, nick);
 		ban_free(&channel->banlist, rec);
 	}
 }

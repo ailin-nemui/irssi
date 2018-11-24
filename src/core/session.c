@@ -75,7 +75,7 @@ static void cmd_upgrade(const char *data)
 	session = config_open(session_file, 0600);
         unlink(session_file);
 
-	signal_emit__session_save(session);
+	SIGNAL_EMIT(session_save, session);
         config_write(session, NULL, -1);
         config_close(session);
 
@@ -88,7 +88,7 @@ static void cmd_upgrade(const char *data)
         session_args = g_strsplit(str, " ", -1);
         g_free(str);
 
-	signal_emit__gui_exit();
+	SIGNAL_EMIT(gui_exit);
 }
 
 static void session_save_nick(CHANNEL_REC *channel, NICK_REC *nick,
@@ -103,7 +103,7 @@ static void session_save_nick(CHANNEL_REC *channel, NICK_REC *nick,
 
 	config_node_set_str(config, node, "prefixes", nick->prefixes);
 
-	signal_emit__session_save_nick(channel, nick, config, node);
+	SIGNAL_EMIT(session_save_nick, channel, nick, config, node);
 }
 
 static void session_save_channel_nicks(CHANNEL_REC *channel, CONFIG_REC *config,
@@ -130,7 +130,7 @@ static void session_save_channel(CHANNEL_REC *channel, CONFIG_REC *config,
 	config_node_set_int(config, node, "topic_time", channel->topic_time);
 	config_node_set_str(config, node, "key", channel->key);
 
-	signal_emit__session_save_channel(channel, config, node);
+	SIGNAL_EMIT(session_save_channel, channel, config, node);
 }
 
 static void session_save_server_channels(SERVER_REC *server,
@@ -173,7 +173,7 @@ static void session_save_server(SERVER_REC *server, CONFIG_REC *config,
 	handle = g_io_channel_unix_get_fd(net_sendbuffer_handle(server->handle));
 	config_node_set_int(config, node, "handle", handle);
 
-	signal_emit__session_save_server(server, config, node);
+	SIGNAL_EMIT(session_save_server, server, config, node);
 
 	/* fake the server disconnection */
 	g_io_channel_unref(net_sendbuffer_handle(server->handle));
@@ -195,7 +195,7 @@ static void session_restore_channel_nicks(CHANNEL_REC *channel,
 	if (node != NULL && node->type == NODE_TYPE_LIST) {
 		tmp = config_node_first(node->value);
 		for (; tmp != NULL; tmp = config_node_next(tmp)) {
-			signal_emit__session_restore_nick(channel, tmp->data);
+			SIGNAL_EMIT(session_restore_nick, channel, tmp->data);
 		}
 	}
 }
@@ -217,7 +217,7 @@ static void session_restore_channel(SERVER_REC *server, CONFIG_NODE *node)
         channel->key = g_strdup(config_node_get_str(node, "key", NULL));
         channel->session_rejoin = TRUE;
 
-	signal_emit__session_restore_channel(channel, node);
+	SIGNAL_EMIT(session_restore_channel, channel, node);
 }
 
 static void session_restore_server_channels(SERVER_REC *server,
@@ -268,7 +268,7 @@ static void session_restore_server(CONFIG_NODE *node)
 		server = proto->server_init_connect(conn);
 		server->version = g_strdup(config_node_get_str(node, "version", NULL));
 		server->session_reconnect = TRUE;
-		signal_emit__session_restore_server(server, node);
+		SIGNAL_EMIT(session_restore_server, server, node);
 
 		proto->server_connect(server);
 	}
@@ -326,7 +326,7 @@ static void sig_init_finished(void)
 		return;
 
 	config_parse(session);
-        signal_emit__session_restore(session);
+        SIGNAL_EMIT(session_restore, session);
 	config_close(session);
 
 	unlink(session_file);

@@ -342,7 +342,7 @@ static void autoconnect_servers(void)
 		else
 			str = g_strdup_printf("%s %d %s", autocon_server, autocon_port, autocon_password);
 
-		signal_emit__command_("connect", str, NULL, NULL);
+		SIGNAL_EMIT_(command, "connect", str, NULL, NULL);
 		g_free(str);
 		return;
 	}
@@ -367,7 +367,7 @@ static void autoconnect_servers(void)
 				str = g_strdup_printf("%s %d", rec->address, rec->port);
 			}
 
-			signal_emit__command_("connect", str, NULL, NULL);
+			SIGNAL_EMIT_(command, "connect", str, NULL, NULL);
 			g_free(str);
 		}
 	}
@@ -438,7 +438,7 @@ void fe_common_core_finish_init(void)
 {
 	int setup_changed;
 
-	signal_emit__irssi_init_read_settings();
+	SIGNAL_EMIT(irssi_init_read_settings);
 
 #ifdef SIGPIPE
 	signal(SIGPIPE, SIG_IGN);
@@ -464,7 +464,7 @@ void fe_common_core_finish_init(void)
 	g_log_set_default_handler((GLogFunc) glog_func, NULL);
 
 	if (setup_changed)
-                signal_emit__setup_changed();
+                SIGNAL_EMIT(setup_changed);
 
 	autorun_startup();
 	autoconnect_servers();

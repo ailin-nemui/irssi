@@ -102,14 +102,14 @@ static void window_add_items(WINDOW_REC *window, CONFIG_NODE *node)
 
 		type = config_node_get_str(node, "type", NULL);
 		if (type != NULL) {
-			signal_emit__layout_restore_item(window, type, node);
+			SIGNAL_EMIT(layout_restore_item, window, type, node);
 		}
 	}
 }
 
 void windows_layout_restore(void)
 {
-	signal_emit__layout_restore();
+	SIGNAL_EMIT(layout_restore);
 }
 
 static void sig_layout_restore(void)
@@ -143,7 +143,7 @@ static void sig_layout_restore(void)
 			window->theme = theme_load(window->theme_name);
 
 		window_add_items(window, iconfig_node_section(node, "items", -1));
-		signal_emit__layout_restore_window(window, node);
+		SIGNAL_EMIT(layout_restore_window, window, node);
 	}
 }
 
@@ -186,7 +186,7 @@ static void window_save_items(WINDOW_REC *window, CONFIG_NODE *node)
 
 	node = iconfig_node_section(node, "items", NODE_TYPE_LIST);
 	for (tmp = window->items; tmp != NULL; tmp = tmp->next)
-		signal_emit__layout_save_item(window, tmp->data, node);
+		SIGNAL_EMIT(layout_save_item, window, tmp->data, node);
 }
 
 static void window_save(WINDOW_REC *window, CONFIG_NODE *node)
@@ -223,7 +223,7 @@ static void window_save(WINDOW_REC *window, CONFIG_NODE *node)
 	if (window->items != NULL)
 		window_save_items(window, node);
 
-	signal_emit__layout_save_window(window, node);
+	SIGNAL_EMIT(layout_save_window, window, node);
 }
 
 void windows_layout_save(void)
@@ -237,7 +237,7 @@ void windows_layout_save(void)
 	sorted = windows_get_sorted();
 	g_slist_foreach(sorted, (GFunc) window_save, node);
 	g_slist_free(sorted);
-	signal_emit__layout_save();
+	SIGNAL_EMIT(layout_save);
 
 	printformat(NULL, NULL, MSGLEVEL_CLIENTNOTICE,
 		    TXT_WINDOWS_LAYOUT_SAVED);
@@ -254,7 +254,7 @@ void windows_layout_reset(void)
 	}
 
 	iconfig_set_str(NULL, "windows", NULL);
-	signal_emit__layout_reset();
+	SIGNAL_EMIT(layout_reset);
 
 	printformat(NULL, NULL, MSGLEVEL_CLIENTNOTICE,
 		    TXT_WINDOWS_LAYOUT_RESET);

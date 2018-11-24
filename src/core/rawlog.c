@@ -74,7 +74,7 @@ static void rawlog_add(RAWLOG_REC *rawlog, char *str)
 	}
 
 	g_queue_push_tail(rawlog->lines, str);
-	signal_emit__rawlog(rawlog, str);
+	SIGNAL_EMIT(rawlog, rawlog, str);
 }
 
 void rawlog_input(RAWLOG_REC *rawlog, const char *str)

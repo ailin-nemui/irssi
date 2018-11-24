@@ -80,13 +80,13 @@ void irc_proxy_init(void)
 
 	if (*settings_get_str("irssiproxy_password") == '\0') {
 		/* no password - bad idea! */
-		signal_emit__gui_dialog("warning",
+		SIGNAL_EMIT(gui_dialog, "warning",
 			    "Warning!! Password not specified, everyone can "
 			    "use this proxy! Use /set irssiproxy_password "
 			    "<password> to set it");
 	}
 	if (*settings_get_str("irssiproxy_ports") == '\0') {
-		signal_emit__gui_dialog("warning",
+		SIGNAL_EMIT(gui_dialog, "warning",
 			    "No proxy ports specified. Use /SET "
 			    "irssiproxy_ports <ircnet>=<port> <ircnet2>=<port2> "
 			    "... to set them.");
