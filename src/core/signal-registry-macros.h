@@ -142,8 +142,8 @@ inline static void signal_register_fix_name(char *var)
 
 #define STYPE(TYPE) typedef struct _ ## TYPE TYPE
 
-#define SIGNAL_EMIT(SIGNAL, ...) signal_emit__ ## SIGNAL ( ## __VA_ARGS__ )
-#define SIGNAL_EMIT_(SIGNAL, ...) signal_emit__ ## SIGNAL ## _ ( ## __VA_ARGS__ )
+#define SIGNAL_EMIT(SIGNAL, ...) signal_emit__ ## SIGNAL ( __VA_ARGS__  )
+#define SIGNAL_EMIT_(SIGNAL, ...) signal_emit__ ## SIGNAL ## _ (  __VA_ARGS__ )
 
 typedef void *int_in_ptr;
 typedef void *mem_ptr;	
