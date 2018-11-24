@@ -69,3 +69,9 @@ pkginc_fe_common_core_HEADERS = \
 	window-items.h \
 	windows-layout.h \
 	fe-windows.h
+
+BUILT_SOURCES = \
+	signal-registry.def
+
+signal-registry.def: signal-registry.def.in
+	$(top_srcdir)/utils/signals-to-reg.pl $^ > $@

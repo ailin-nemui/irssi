@@ -40,3 +40,9 @@ noinst_HEADERS = \
 	otr-formats.h \
 	otr-fe.h \
 	otr.h
+
+BUILT_SOURCES = \
+	signal-registry.def
+
+signal-registry.def: signal-registry.def.in
+	$(top_srcdir)/utils/signals-to-reg.pl $^ > $@

@@ -42,6 +42,12 @@ pkginc_fe_common_irc_HEADERS = \
 	module.h \
 	module-formats.h
 
+BUILT_SOURCES = \
+	signal-registry.def
+
+signal-registry.def: signal-registry.def.in
+	$(top_srcdir)/utils/signals-to-reg.pl $^ > $@
+
 DISTFILES = $(DIST_COMMON) $(real_sources) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 distclean-generic:

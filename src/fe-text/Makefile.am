@@ -70,5 +70,11 @@ noinst_HEADERS = \
 	module.h \
 	module-formats.h
 
+BUILT_SOURCES = \
+	signal-registry.def
+
+signal-registry.def: signal-registry.def.in
+	$(top_srcdir)/utils/signals-to-reg.pl $^ > $@
+
 EXTRA_DIST = \
 	$(terminfo_sources)

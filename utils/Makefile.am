@@ -3,4 +3,5 @@ EXTRA_DIST = \
 	irssi-version.sh \
 	syntax.pl \
 	tap-driver.sh \
-	tap-test
+	tap-test \
+	signals-to-reg.pl

@@ -58,4 +58,11 @@ pkginc_irc_core_HEADERS = \
 	module.h \
         netsplit.h \
         servers-idle.h \
-        servers-redirect.h
+        servers-redirect.h \
+	signal-registry.h
+
+BUILT_SOURCES = \
+	signal-registry.def
+
+signal-registry.def: signal-registry.def.in
+	$(top_srcdir)/utils/signals-to-reg.pl $^ > $@

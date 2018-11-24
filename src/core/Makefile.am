@@ -116,4 +116,12 @@ pkginc_core_HEADERS = \
 	window-item-def.h \
 	tls.h \
 	write-buffer.h \
+	signal-registry-macros.h \
+	signal-registry.h \
 	$(structure_headers)
+
+BUILT_SOURCES = \
+	signal-registry.def
+
+signal-registry.def: signal-registry.def.in
+	$(top_srcdir)/utils/signals-to-reg.pl $^ > $@

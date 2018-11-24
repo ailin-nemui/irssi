@@ -20,6 +20,6 @@ typedef struct SERVER_DCC_REC SERVER_DCC_REC;
 typedef void *int_in_ptr;
 typedef void *uint_in_ptr;
 
-#include "signal-registry.def"
+#include "irc/core/signal-registry.def"
 
 #endif

@@ -162,7 +162,7 @@ SIGNAL_REGISTER(server_connect_failed, 2, (SERVER_REC *server, const char *msg),
 	 server, msg)
 SIGNAL_REGISTER(server_disconnected, 1, (SERVER_REC *server),
 	 server)
-SIGNAL_REGISTER(server_quit, 2, (SERVER_REC *server, char *msg),
+SIGNAL_REGISTER(server_quit, 2, (SERVER_REC *server, const char *msg),
 	 server, msg)
 SIGNAL_REGISTER(server_sendmsg, 4, (SERVER_REC *server, const char *target, const char *msg, int_in_ptr target_type),
 	 server, target, msg, target_type)

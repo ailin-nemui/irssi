@@ -97,7 +97,7 @@
  "server connecting", SERVER_REC, mem_ptr ip
  "server connect failed", SERVER_REC, const char *msg
  "server disconnected", SERVER_REC
- "server quit", SERVER_REC, char *msg
+ "server quit", SERVER_REC, const char *msg
  "server sendmsg", SERVER_REC, const char *target, const char *msg, int target_type
  "server destroyed", SERVER_REC
 
