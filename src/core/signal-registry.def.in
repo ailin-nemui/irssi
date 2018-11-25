@@ -122,7 +122,7 @@
  "session save nick", CHANNEL_REC, NICK_REC, CONFIG_REC, CONFIG_NODE
  "session save channel", CHANNEL_REC, CONFIG_REC, CONFIG_NODE
  "session save server", SERVER_REC, CONFIG_REC, CONFIG_NODE
- "session restore nick", CHANNEL_REC, NICK_REC
+ "session restore nick", CHANNEL_REC, CONFIG_NODE
  "session restore channel", CHANNEL_REC, CONFIG_NODE
  "session restore server", SERVER_REC, CONFIG_NODE
  "session restore", CONFIG_REC

@@ -206,8 +206,8 @@ SIGNAL_REGISTER(session_save_channel, 3, (CHANNEL_REC *channel, CONFIG_REC *conf
 	 channel, config, node)
 SIGNAL_REGISTER(session_save_server, 3, (SERVER_REC *server, CONFIG_REC *config, CONFIG_NODE *node),
 	 server, config, node)
-SIGNAL_REGISTER(session_restore_nick, 2, (CHANNEL_REC *channel, NICK_REC *nick),
-	 channel, nick)
+SIGNAL_REGISTER(session_restore_nick, 2, (CHANNEL_REC *channel, CONFIG_NODE *node),
+	 channel, node)
 SIGNAL_REGISTER(session_restore_channel, 2, (CHANNEL_REC *channel, CONFIG_NODE *node),
 	 channel, node)
 SIGNAL_REGISTER(session_restore_server, 2, (SERVER_REC *server, CONFIG_NODE *node),

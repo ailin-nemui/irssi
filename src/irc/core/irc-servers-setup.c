@@ -32,11 +32,14 @@
 #include "sasl.h"
 
 /* Fill information to connection from server setup record */
-static void sig_server_setup_fill_reconn(IRC_SERVER_CONNECT_REC *conn,
-					 IRC_SERVER_SETUP_REC *sserver)
+static void sig_server_setup_fill_reconn(SERVER_CONNECT_REC *gconn,
+					 SERVER_SETUP_REC *gsserver)
 {
-        if (!IS_IRC_SERVER_CONNECT(conn) ||
-	    !IS_IRC_SERVER_SETUP(sserver))
+	IRC_SERVER_CONNECT_REC *conn;
+	IRC_SERVER_SETUP_REC *sserver;
+
+        if ((conn = IRC_SERVER_CONNECT(gconn)) == NULL ||
+	    (sserver = IRC_SERVER_SETUP(gsserver)) == NULL)
 		return;
 
 	if (sserver->cmd_queue_speed > 0)
@@ -47,11 +50,12 @@ static void sig_server_setup_fill_reconn(IRC_SERVER_CONNECT_REC *conn,
 		conn->max_query_chans = sserver->max_query_chans;
 }
 
-static void sig_server_setup_fill_connect(IRC_SERVER_CONNECT_REC *conn)
+static void sig_server_setup_fill_connect(SERVER_CONNECT_REC *gconn)
 {
+	IRC_SERVER_CONNECT_REC *conn;
 	const char *value;
 
-	if (!IS_IRC_SERVER_CONNECT(conn))
+	if ((conn = IRC_SERVER_CONNECT(gconn)) == NULL)
 		return;
 
 	value = settings_get_str("alternate_nick");
@@ -63,12 +67,16 @@ static void sig_server_setup_fill_connect(IRC_SERVER_CONNECT_REC *conn)
 		g_strdup(value) : NULL;
 }
 
-static void sig_server_setup_fill_chatnet(IRC_SERVER_CONNECT_REC *conn,
-					  IRC_CHATNET_REC *ircnet)
+static void sig_server_setup_fill_chatnet(SERVER_CONNECT_REC *gconn,
+					  CHATNET_REC *gircnet)
 {
-	if (!IS_IRC_SERVER_CONNECT(conn))
+	IRC_SERVER_CONNECT_REC *conn;
+	IRC_CHATNET_REC *ircnet;
+
+	if ((conn = IRC_SERVER_CONNECT(gconn)) == NULL)
 		return;
-	g_return_if_fail(IS_IRCNET(ircnet));
+	if ((ircnet = IRCNET(gircnet)) == NULL)
+		return;
 
 	if (ircnet->alternate_nick != NULL) {
 		g_free_and_null(conn->alternate_nick);
@@ -164,12 +172,13 @@ static void init_userinfo(void)
 	SIGNAL_EMIT(irssi_init_userinfo_changed, GUINT_TO_POINTER(changed));
 }
 
-static void sig_server_setup_read(IRC_SERVER_SETUP_REC *rec, CONFIG_NODE *node)
+static void sig_server_setup_read(SERVER_SETUP_REC *grec, CONFIG_NODE *node)
 {
+	IRC_SERVER_SETUP_REC *rec;
 	g_return_if_fail(rec != NULL);
 	g_return_if_fail(node != NULL);
 
-	if (!IS_IRC_SERVER_SETUP(rec))
+	if ((rec = IRC_SERVER_SETUP(grec)) == NULL)
 		return;
 
 	rec->max_cmds_at_once = config_node_get_int(node, "cmds_max_at_once", 0);
@@ -177,10 +186,11 @@ static void sig_server_setup_read(IRC_SERVER_SETUP_REC *rec, CONFIG_NODE *node)
 	rec->max_query_chans = config_node_get_int(node, "max_query_chans", 0);
 }
 
-static void sig_server_setup_saved(IRC_SERVER_SETUP_REC *rec,
+static void sig_server_setup_saved(SERVER_SETUP_REC *grec,
 				   CONFIG_NODE *node)
 {
-	if (!IS_IRC_SERVER_SETUP(rec))
+	IRC_SERVER_SETUP_REC *rec;
+	if ((rec = IRC_SERVER_SETUP(grec)) == NULL)
 		return;
 
 	if (rec->max_cmds_at_once > 0)

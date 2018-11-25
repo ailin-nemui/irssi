@@ -302,9 +302,10 @@ static void sasl_disconnected(IRC_SERVER_REC *server)
 	sasl_timeout_stop(server);
 }
 
-static void sig_sasl_over(IRC_SERVER_REC *server)
+static void sig_sasl_over(SERVER_REC *gserver, const char *u0, const char *u1, const char *u2)
 {
-	if (!IS_IRC_SERVER(server))
+	IRC_SERVER_REC *server;
+	if ((server = IRC_SERVER(gserver)) == NULL)
 		return;
 
 	/* The negotiation has now been terminated, if we didn't manage to
@@ -333,18 +334,18 @@ void sasl_init(void)
 {
 	settings_add_bool("server", "sasl_disconnect_on_failure", TRUE);
 
-	signal_add_first__event_001(sig_sasl_over);
+	signal_add_first__event_("001", sig_sasl_over);
 	/* this event can get us connected on broken ircds, see irc-servers.c */
-	signal_add_first__event_375(sig_sasl_over);
+	signal_add_first__event_("375", sig_sasl_over);
 	signal_add_first__server_cap_ack_sasl(sasl_start);
 	signal_add_first__server_cap_end(sig_sasl_over);
 	signal_add_first__event_authenticate(sasl_step);
-	signal_add_first__event_903(sasl_success);
-	signal_add_first__event_902(sasl_fail);
-	signal_add_first__event_904(sasl_fail);
-	signal_add_first__event_905(sasl_fail);
-	signal_add_first__event_906(sasl_fail);
-	signal_add_first__event_907(sasl_already);
+	signal_add_first__event_("903", sasl_success);
+	signal_add_first__event_("902", sasl_fail);
+	signal_add_first__event_("904", sasl_fail);
+	signal_add_first__event_("905", sasl_fail);
+	signal_add_first__event_("906", sasl_fail);
+	signal_add_first__event_("907", sasl_already);
 	signal_add_first__server_disconnected(sasl_disconnected);
 }
 

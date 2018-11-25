@@ -98,8 +98,9 @@ static gboolean parse_cap_name(char *name, char **key, char **val)
 	return TRUE;
 }
 
-static void event_cap (IRC_SERVER_REC *server, char *args, char *nick, char *address)
+static void event_cap (SERVER_REC *gserver, const char *args, const char *nick, const char *address)
 {
+	IRC_SERVER_REC *server;
 	GSList *tmp;
 	GString *cmd;
 	char *params, *evt, *list, *star, **caps;
@@ -107,6 +108,9 @@ static void event_cap (IRC_SERVER_REC *server, char *args, char *nick, char *add
 
 	params = event_get_params(args, 4, NULL, &evt, &star, &list);
 	if (params == NULL)
+		return;
+
+	if ((server = IRC_SERVER(gserver)) == NULL)
 		return;
 
 	/* Multiline responses have an additional parameter and we have to do
@@ -279,8 +283,12 @@ static void event_cap (IRC_SERVER_REC *server, char *args, char *nick, char *add
 	g_free(params);
 }
 
-static void event_invalid_cap (IRC_SERVER_REC *server, const char *data, const char *from)
+static void event_invalid_cap (SERVER_REC *gserver, const char *data, const char *from, const char *u0)
 {
+	IRC_SERVER_REC *server;
+	if ((server = IRC_SERVER(gserver)) == NULL)
+		return;
+
 	/* The server didn't understand one (or more) requested caps, terminate the negotiation.
 	 * This could be handled in a graceful way but since it shouldn't really ever happen this seems a
 	 * good way to deal with 410 errors. */
@@ -290,8 +298,8 @@ static void event_invalid_cap (IRC_SERVER_REC *server, const char *data, const c
 
 void cap_init (void)
 {
-	signal_add_first__event_cap(event_cap);
-	signal_add_first__event_410(event_invalid_cap);
+	signal_add_first__event_("cap", event_cap);
+	signal_add_first__event_("410", event_invalid_cap);
 }
 
 void cap_deinit (void)

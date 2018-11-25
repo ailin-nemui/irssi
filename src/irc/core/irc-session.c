@@ -21,6 +21,7 @@
 #include "module.h"
 #include "signals.h"
 #include "signal-registry.h"
+#include "core/signal-registry.h"
 #include "net-sendbuffer.h"
 #include "lib-config/iconfig.h"
 #include "misc.h"
@@ -38,14 +39,15 @@ static void session_isupport_foreach(char *key, char *value, struct _isupport_da
         config_node_set_str(data->config, data->node, key, value);
 }
 
-static void sig_session_save_server(IRC_SERVER_REC *server, CONFIG_REC *config,
+static void sig_session_save_server(SERVER_REC *gserver, CONFIG_REC *config,
 				    CONFIG_NODE *node)
 {
+	IRC_SERVER_REC *server;
         GSList *tmp;
 	CONFIG_NODE *isupport;
 	struct _isupport_data isupport_data;
 
-	if (!IS_IRC_SERVER(server))
+	if ((server = IRC_SERVER(gserver)) == NULL)
 		return;
 
         /* send all non-redirected commands to server immediately */
@@ -80,12 +82,13 @@ static void sig_session_save_server(IRC_SERVER_REC *server, CONFIG_REC *config,
         g_hash_table_foreach(server->isupport, (GHFunc) session_isupport_foreach, &isupport_data);
 }
 
-static void sig_session_restore_server(IRC_SERVER_REC *server,
+static void sig_session_restore_server(SERVER_REC *gserver,
 				       CONFIG_NODE *node)
 {
+	IRC_SERVER_REC *server;
 	GSList *tmp;
 
-	if (!IS_IRC_SERVER(server))
+	if ((server = IRC_SERVER(gserver)) == NULL)
 		return;
 
         if (server->real_address == NULL)
@@ -126,15 +129,16 @@ static void sig_session_restore_server(IRC_SERVER_REC *server,
 
 }
 
-static void sig_session_restore_nick(IRC_CHANNEL_REC *channel,
+static void sig_session_restore_nick(CHANNEL_REC *gchannel,
 				     CONFIG_NODE *node)
 {
+	IRC_CHANNEL_REC *channel;
 	const char *nick, *prefixes;
         int op, halfop, voice;
 	char newprefixes[MAX_USER_PREFIXES + 1];
 	int i;
 
-	if (!IS_IRC_CHANNEL(channel))
+	if ((channel = IRC_CHANNEL(gchannel)) == NULL)
 		return;
 
 	nick = config_node_get_str(node, "nick", NULL);
@@ -175,12 +179,13 @@ static void session_restore_channel(IRC_CHANNEL_REC *channel)
 	g_free(data);
 }
 
-static void sig_connected(IRC_SERVER_REC *server)
+static void sig_connected(SERVER_REC *gserver)
 {
+	IRC_SERVER_REC *server;
 	GSList *tmp;
         char *str, *addr;
 
-	if (!IS_IRC_SERVER(server) || !server->session_reconnect)
+	if ((server = IRC_SERVER(gserver)) == NULL || !server->session_reconnect)
 		return;
 
 	str = g_strdup_printf("%s :Restoring connection to %s",
