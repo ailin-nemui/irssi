@@ -3,17 +3,19 @@ before_install:
     - make dist
     - cd ..
     - tar xaf */irssi-*.tar.*
-    - cd irssi-*
 
 install:
+    - cd ../irssi-*
     - ./configure --with-proxy=module --with-bot --with-perl=module --with-otr=module --prefix=$HOME/irssi-build --enable-always-build-tests
     - make CFLAGS="-Wall -Werror -Werror=declaration-after-statement"
     - make install
 
 unit_tests:
+    - cd ../irssi-*
     - make -C tests -sk check
 
 after_unit_tests:
+    - cd ../irssi-*
     - find -name test-suite.log -exec cat {} +
 
 before_script:
@@ -32,6 +34,7 @@ before_script:
     - echo ^quit >> irssi-test/startup
 
 script:
+    - cd $HOME
     - irssi-build/bin/irssi --home irssi-test
 
 after_script:
