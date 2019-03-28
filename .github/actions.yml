@@ -2,16 +2,19 @@ before_install:
     - perl -V
     - ./autogen.sh --with-proxy=module --with-bot --with-perl=module --with-otr=module
     - make dist
+    - pwd && ls -la
     - cd ..
+    - pwd && ls -la
     - tar xaf */irssi-*.tar.*
     - cd irssi-*
 
 install:
-    - ./configure --with-proxy=module --with-bot --with-perl=module --with-otr=module --prefix=$HOME/irssi-build $( $UNITTESTS && echo --enable-always-build-tests )
+    - ./configure --with-proxy=module --with-bot --with-perl=module --with-otr=module --prefix=$HOME/irssi-build --enable-always-build-tests
     - make CFLAGS="-Wall -Werror -Werror=declaration-after-statement"
     - make install
 
 before_script:
+    - pwd && ls -la
     - export SRC_DIR=$(pwd)
     - cd $HOME
     - mkdir irssi-test
@@ -29,9 +32,15 @@ before_script:
 
 script:
     - irssi-build/bin/irssi --home irssi-test
+
+unit_tests:
+    - pwd && ls -la
     - cd $SRC_DIR
-#    - if $UNITTESTS; then make -C tests -sk check; fi
+    - pwd
+    - make -C tests -sk check
+
+after_unit_tests:
+    - find -name test-suite.log -exec cat {} +
 
 after_script:
     - cat ~/irc.log.*
-    - find -name test-suite.log -exec cat {} +
