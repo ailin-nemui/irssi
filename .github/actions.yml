@@ -11,6 +11,8 @@ install:
     - make install
 
 unit_tests:
+    - pwd && ls -la
+    - ls -la ..
     - cd ../irssi-*
     - make -C tests -sk check
 
