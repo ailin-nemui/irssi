@@ -1,10 +1,7 @@
 before_install:
-    - perl -V
     - ./autogen.sh --with-proxy=module --with-bot --with-perl=module --with-otr=module
     - make dist
-    - pwd && ls -la
     - cd ..
-    - pwd && ls -la
     - tar xaf */irssi-*.tar.*
     - cd irssi-*
 
@@ -13,19 +10,23 @@ install:
     - make CFLAGS="-Wall -Werror -Werror=declaration-after-statement"
     - make install
 
+unit_tests:
+    - make -C tests -sk check
+
+after_unit_tests:
+    - find -name test-suite.log -exec cat {} +
+
 before_script:
-    - pwd && ls -la
-    - export SRC_DIR=$(pwd)
     - cd $HOME
     - mkdir irssi-test
     - |
-      echo echo automated irssi launch test > irssi-test/startup;
-      echo ^set settings_autosave off >> irssi-test/startup;
-      echo ^set -clear log_close_string >> irssi-test/startup;
-      echo ^set -clear log_day_changed >> irssi-test/startup;
-      echo ^set -clear log_open_string >> irssi-test/startup;
-      echo ^set log_timestamp '* ' >> irssi-test/startup;
-      echo ^window log on >> irssi-test/startup
+      echo 'echo automated irssi launch test
+      ^set settings_autosave off
+      ^set -clear log_close_string
+      ^set -clear log_day_changed
+      ^set -clear log_open_string
+      ^set log_timestamp * 
+      ^window log on' > irssi-test/startup
     - echo load perl >> irssi-test/startup
     - echo load proxy >> irssi-test/startup
     - echo ^quit >> irssi-test/startup
@@ -33,14 +34,5 @@ before_script:
 script:
     - irssi-build/bin/irssi --home irssi-test
 
-unit_tests:
-    - pwd && ls -la
-    - cd $SRC_DIR
-    - pwd
-    - make -C tests -sk check
-
-after_unit_tests:
-    - find -name test-suite.log -exec cat {} +
-
 after_script:
-    - cat ~/irc.log.*
+    - cat $HOME/irc.log.*
