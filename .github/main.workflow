@@ -3,6 +3,7 @@ workflow "Check Irssi" {
   resolves = [
     "script",
     "unit_tests",
+    "ailin-nemui/actions-irssi/windows@master",
   ]
 }
 
@@ -24,4 +25,8 @@ action "unit_tests" {
   uses = "ailin-nemui/actions-irssi/check-irssi@master"
   needs = ["install"]
   args = "unit_tests after_unit_tests"
+}
+
+action "ailin-nemui/actions-irssi/windows@master" {
+  uses = "ailin-nemui/actions-irssi/windows@master"
 }
