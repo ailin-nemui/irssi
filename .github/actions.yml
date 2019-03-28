@@ -37,7 +37,7 @@ before_script:
 
 script:
     - cd $HOME
-    - irssi-build/bin/irssi --home irssi-test
+    - irssi-build/bin/irssi --home irssi-test | /tools/render.pl
 
 after_script:
     - cat $HOME/irc.log.*
