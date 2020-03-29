@@ -43,6 +43,7 @@
 #include <irssi/src/irc/core/irc-channels.h>
 #include <irssi/src/fe-fuzz/null-logger.h>
 
+#ifdef HAVE_STATIC_IRC
 /* irc.c */
 void irc_init(void);
 void irc_deinit(void);
@@ -54,6 +55,7 @@ void irc_session_deinit(void);
 /* fe-common-irc.c */
 void fe_common_irc_init(void);
 void fe_common_irc_deinit(void);
+#endif
 
 SERVER_REC *server;
 

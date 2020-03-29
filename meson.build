@@ -489,7 +489,7 @@ install_man('docs/irssi.1')
 ###########
 
 subdir('src')
-subdir('tests')
+#subdir('tests')
 subdir('docs')
 subdir('scripts')
 subdir('themes')

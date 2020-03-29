@@ -57,6 +57,7 @@ static int autocon_port;
 static int no_autoconnect;
 static char *cmdline_nick;
 static char *cmdline_hostname;
+static char *cmdline_module;
 
 void fe_core_log_init(void);
 void fe_core_log_deinit(void);
@@ -127,6 +128,7 @@ static void sig_channel_destroyed(CHANNEL_REC *channel)
 void fe_common_core_register_options(void)
 {
 	static GOptionEntry options[] = {
+		{ "module", 'm', 0, G_OPTION_ARG_STRING, &cmdline_module, "Modules to load", "MODULE" },
 		{ "connect", 'c', 0, G_OPTION_ARG_STRING, &autocon_server, "Automatically connect to server/network", "SERVER" },
 		{ "password", 'w', 0, G_OPTION_ARG_STRING, &autocon_password, "Autoconnect password", "PASSWORD" },
 		{ "port", 'p', 0, G_OPTION_ARG_INT, &autocon_port, "Autoconnect port", "PORT" },
@@ -136,6 +138,7 @@ void fe_common_core_register_options(void)
 		{ NULL }
 	};
 
+	cmdline_module = NULL;
 	autocon_server = NULL;
 	autocon_password = NULL;
 	autocon_port = 0;
@@ -149,6 +152,7 @@ void fe_common_core_init(void)
 {
 	const char *str;
 
+	settings_add_str("misc", "autoload_modules", "irc perl python");
 	settings_add_bool("lookandfeel", "timestamps", TRUE);
 	settings_add_level("lookandfeel", "timestamp_level", "ALL");
 	settings_add_time("lookandfeel", "timestamp_timeout", "0");
@@ -432,6 +436,18 @@ static void autorun_startup(void)
 	g_io_channel_unref(handle);
 }
 
+static void autoload_modules(void)
+{
+	char **modules, **tmp;
+
+	modules = g_strsplit(settings_get_str("autoload_modules"), " ", -1);
+	for (tmp = modules; *tmp != NULL; tmp++) {
+		
+	}
+
+	g_strfreev(modules);
+}
+
 void fe_common_core_finish_init(void)
 {
 	int setup_changed;
@@ -442,7 +458,13 @@ void fe_common_core_finish_init(void)
 	signal(SIGPIPE, SIG_IGN);
 #endif
 
-        setup_changed = FALSE;
+	setup_changed = FALSE;
+	if (cmdline_module != NULL) {
+		/* override modules found from setup */
+		settings_set_str("autoload_modules", cmdline_module);
+		setup_changed = TRUE;
+	}
+
 	if (cmdline_nick != NULL && *cmdline_nick != '\0') {
 		/* override nick found from setup */
 		settings_set_str("nick", cmdline_nick);
@@ -465,6 +487,7 @@ void fe_common_core_finish_init(void)
                 signal_emit("setup changed", 0);
 
 	autorun_startup();
+	autoload_modules();
 	autoconnect_servers();
 }
 

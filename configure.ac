@@ -627,6 +627,7 @@ dnl ****************************************
 
 AC_SUBST(CHAT_MODULES)
 AC_SUBST(irc_MODULES)
+AC_DEFINE(HAVE_STATIC_IRC)
 
 CORE_LIBS="../core/libcore.a ../lib-config/libirssi_config.a"
 FE_COMMON_LIBS=""

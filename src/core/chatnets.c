@@ -30,6 +30,7 @@
 #include <irssi/src/core/servers.h>
 
 GSList *chatnets; /* list of available chat networks */
+GSList *chatnets_unknown; /* chatnet where the protocol is not loaded */
 
 static void chatnet_config_save(CHATNET_REC *chatnet)
 {
@@ -136,14 +137,17 @@ static void chatnet_read(CONFIG_NODE *node)
 		return;
 
 	type = config_node_get_str(node, "type", NULL);
-	proto = type == NULL ? NULL : chat_protocol_find(type);
-	if (proto == NULL) {
-		proto = type == NULL ? chat_protocol_get_default() :
-			chat_protocol_get_unknown(type);
-	}
-
 	if (type == NULL)
+		proto = chat_protocol_get_default();
+	else
+		proto = chat_protocol_find(type);
+
+	if (proto == NULL) {
+		proto_unknown = TRUE;
+		proto = chat_protocol_get_unknown(type == NULL ? "unknown" : type);
+	} else if (type == NULL) {
 		iconfig_node_set_str(node, "type", proto->name);
+	}
 
 	rec = proto->create_chatnet();
 	rec->type = module_get_uniq_id("CHATNET", 0);
@@ -155,8 +159,12 @@ static void chatnet_read(CONFIG_NODE *node)
 	rec->own_host = g_strdup(config_node_get_str(node, "host", NULL));
 	rec->autosendcmd = g_strdup(config_node_get_str(node, "autosendcmd", NULL));
 
-	chatnets = g_slist_append(chatnets, rec);
-        signal_emit("chatnet read", 2, rec, node);
+	if (proto->not_initialized) {
+		chatnets_unknown = g_slist_append(chatnets_unknown, rec);
+	} else {
+		chatnets = g_slist_append(chatnets, rec);
+	}
+	signal_emit("chatnet read", 2, rec, node);
 }
 
 static void read_chatnets(void)

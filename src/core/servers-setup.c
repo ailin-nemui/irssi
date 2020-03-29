@@ -389,6 +389,10 @@ static SERVER_SETUP_REC *server_setup_read(CONFIG_NODE *node)
 	rec = NULL;
 
 	chatnetrec = chatnet == NULL ? NULL : chatnet_find(chatnet);
+	if (chatnetrec == NULL && chat_protocol_get_default() == NULL) {
+		return NULL;
+	}
+
 	if (chatnetrec == NULL && chatnet != NULL) {
                 /* chat network not found, create it. */
 		chatnetrec = chat_protocol_get_default()->create_chatnet();
