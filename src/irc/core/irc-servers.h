@@ -26,6 +26,7 @@
 #define CAP_CHGHOST "chghost"
 #define CAP_ACCOUNT_NOTIFY "account-notify"
 #define CAP_SELF_MESSAGE "znc.in/self-message"
+#define CAP_STARTTLS "tls"
 
 /* returns IRC_SERVER_REC if it's IRC server, NULL if it isn't */
 #define IRC_SERVER(server) \
@@ -41,6 +42,7 @@
 #define IS_IRC_SERVER_CONNECT(conn) \
 	(IRC_SERVER_CONNECT(conn) ? TRUE : FALSE)
 
+/* clang-format off */
 /* all strings should be either NULL or dynamically allocated */
 /* address and nick are mandatory, rest are optional */
 struct _IRC_SERVER_CONNECT_REC {
@@ -58,7 +60,10 @@ struct _IRC_SERVER_CONNECT_REC {
 	int max_query_chans;
 
 	int max_kicks, max_msgs, max_modes, max_whois;
+	int no_starttls:1;
+	int starttls:1;
 };
+/* clang-format on */
 
 #define STRUCT_SERVER_CONNECT_REC IRC_SERVER_CONNECT_REC
 struct _IRC_SERVER_REC {
@@ -135,6 +140,7 @@ struct _IRC_SERVER_REC {
 	GSList *rejoin_channels; /* try to join to these channels after a while -
 	                            channels go here if they're "temporarily unavailable"
 				    because of netsplits */
+	guint starttls_tag;      /* Holds the source id of the running timeout */
 	void *chanqueries;
 
 	GHashTable *isupport;
@@ -154,6 +160,7 @@ void irc_server_purge_output(IRC_SERVER_REC *server, const char *target);
    like "#a,#b,#c,#d x,b_chan_key,x,x" or just "#e,#f,#g" */
 char *irc_server_get_channels(IRC_SERVER_REC *server);
 
+void irc_server_send_starttls(IRC_SERVER_REC *server);
 /* INTERNAL: */
 void irc_server_send_action(IRC_SERVER_REC *server, const char *target,
 			    const char *data);
