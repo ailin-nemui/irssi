@@ -26,6 +26,7 @@
 #include <irssi/src/core/nicklist.h>
 #include <irssi/src/irc/core/irc-servers.h>
 #include <irssi/src/irc/core/irc-queries.h>
+#include <irssi/src/fe-common/core/fe-queries.h>
 #include <irssi/src/fe-common/core/fe-windows.h>
 
 int query_type;
@@ -95,26 +96,10 @@ static void event_privmsg(SERVER_REC *server, const char *data,
 
 static void sig_window_bound_query(SERVER_REC *server)
 {
-	GSList *wtmp, *btmp, *bounds;
-
 	if (!IS_IRC_SERVER(server))
 		return;
 
-	for (wtmp = windows; wtmp != NULL; wtmp = wtmp->next) {
-		WINDOW_REC *win = wtmp->data;
-		bounds = g_slist_copy(win->bound_items);
-
-		for (btmp = bounds; btmp != NULL; btmp = btmp->next) {
-			WINDOW_BIND_REC *bound = btmp->data;
-
-			if (bound->type == query_type &&
-			    g_strcmp0(server->tag, bound->servertag) == 0) {
-				irc_query_create(bound->servertag, bound->name, TRUE);
-			}
-		}
-
-		g_slist_free(bounds);
-	}
+	i_queries_restore_bound(server, irc_query_create);
 }
 
 void fe_irc_queries_init(void)

@@ -57,6 +57,31 @@ QUERY_REC *privmsg_get_query(SERVER_REC *server, const char *nick,
 	return query;
 }
 
+void i_queries_restore_bound(SERVER_REC *server,
+                             QUERY_REC *(query_create_func) (const char *, const char *, int) )
+{
+	int query_type;
+	GSList *wtmp, *btmp, *bounds;
+
+	query_type = module_get_uniq_id_str("WINDOW ITEM TYPE", "QUERY");
+
+	for (wtmp = windows; wtmp != NULL; wtmp = wtmp->next) {
+		WINDOW_REC *win = wtmp->data;
+		bounds = g_slist_copy(win->bound_items);
+
+		for (btmp = bounds; btmp != NULL; btmp = btmp->next) {
+			WINDOW_BIND_REC *bound = btmp->data;
+
+			if (bound->type == query_type &&
+			    g_strcmp0(server->tag, bound->servertag) == 0) {
+				query_create_func(bound->servertag, bound->name, TRUE);
+			}
+		}
+
+		g_slist_free(bounds);
+	}
+}
+
 static void signal_query_created(QUERY_REC *query, gpointer automatic)
 {
         TEXT_DEST_REC dest;
